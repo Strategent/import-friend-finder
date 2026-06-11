@@ -414,10 +414,13 @@
   padding: 10px 28px;
   font-size: 15px;
 }
-/* White brief panel — raised (top 10% → 2%) to maximize visible content at
-   banner height without resizing the card or compressing type/spacing. */
+/* White brief panel — bottom-aligned paper preview, matching the reference. */
 [data-density="compact"] > section > div:nth-child(2) {
-  top: 2%;
+  top: auto;
+  bottom: 0;
+  height: 77%;
+  width: 33%;
+  right: 5.5%;
   padding: 26px 28px;
 }
 [data-density="compact"] > section > div:nth-child(2) > p:first-child {
