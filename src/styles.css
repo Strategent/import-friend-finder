@@ -414,65 +414,63 @@
   padding: 10px 28px;
   font-size: 15px;
 }
-/* White brief panel — bottom-aligned paper preview, matching the reference. */
-[data-density="compact"] > section > div:nth-child(2) {
-  top: auto;
+.daily-brief-document {
   bottom: 0;
+  right: 5.5%;
   height: 77%;
   width: 33%;
-  right: 5.5%;
   padding: 26px 28px;
 }
-[data-density="compact"] > section > div:nth-child(2) > p:first-child {
+[data-density="compact"] .daily-brief-document > p:first-child {
   font-size: 10px;
 }
-[data-density="compact"] > section > div:nth-child(2) > h2 {
+[data-density="compact"] .daily-brief-document > h2 {
   margin-top: 10px;
   font-size: 22px;
 }
-[data-density="compact"] > section > div:nth-child(2) > h2 + p {
+[data-density="compact"] .daily-brief-document > h2 + p {
   margin-top: 6px;
   font-size: 12.5px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div.grid {
+[data-density="compact"] .daily-brief-document > div.grid {
   margin-top: 18px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div.grid > div > div:first-child {
+[data-density="compact"] .daily-brief-document > div.grid > div > div:first-child {
   font-size: 21px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div.grid > div > div:last-child {
+[data-density="compact"] .daily-brief-document > div.grid > div > div:last-child {
   margin-top: 1px;
   font-size: 11px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div.grid + p {
+[data-density="compact"] .daily-brief-document > div.grid + p {
   margin-top: 20px;
   font-size: 10px;
 }
 /* Priorities list */
-[data-density="compact"] > section > div:nth-child(2) > div:last-child {
+[data-density="compact"] .daily-brief-document > div:last-child {
   margin-top: 10px;
   gap: 14px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div:last-child span:nth-child(2) {
+[data-density="compact"] .daily-brief-document > div:last-child span:nth-child(2) {
   font-size: 10.5px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div:last-child span:last-child {
+[data-density="compact"] .daily-brief-document > div:last-child span:last-child {
   font-size: 13px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div:last-child p {
+[data-density="compact"] .daily-brief-document > div:last-child p {
   font-size: 12px;
 }
-[data-density="compact"] > section > div:nth-child(2) > div:last-child p:nth-of-type(2) {
+[data-density="compact"] .daily-brief-document > div:last-child p:nth-of-type(2) {
   font-size: 11px;
 }
 /* No mid-line cut-offs at banner height: content stops cleanly after the
    first priority's title row — its description/meta and the deeper items
    would clip at the card edge, so they're hidden whole here. All strings
    stay in the data/DOM and render at full density. */
-[data-density="compact"] > section > div:nth-child(2) > div:last-child > div:first-child > p {
+[data-density="compact"] .daily-brief-document > div:last-child > div:first-child > p {
   display: none;
 }
-[data-density="compact"] > section > div:nth-child(2) > div:last-child > div:nth-child(n + 2) {
+[data-density="compact"] .daily-brief-document > div:last-child > div:nth-child(n + 2) {
   display: none;
 }
 
