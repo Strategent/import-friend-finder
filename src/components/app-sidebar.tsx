@@ -13,7 +13,7 @@ import {
   CalendarDays,
   Plug,
   LifeBuoy,
-  Sparkle,
+  
 } from "lucide-react";
 import {
   Sidebar,
@@ -151,30 +151,6 @@ export function AppSidebar() {
         {renderGroup("Operations", operations)}
       </SidebarContent>
       <SidebarFooter className="px-5 pb-7 pt-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:pb-7 group-data-[collapsible=icon]:pt-3">
-        {/* Persistent "Ask anything" Syra entry, pinned to the bottom (Origin pattern) */}
-        <Link
-          to="/syra"
-          aria-label="Ask Syra anything"
-          className={`mb-3 flex items-center rounded-full border transition-all hover:scale-[1.01] ${
-            collapsed ? "h-9 w-9 justify-center self-center p-0" : "h-9 gap-2 px-3"
-          }`}
-          style={{
-            background: "var(--sparkle-soft)",
-            borderColor: "var(--sparkle-border)",
-          }}
-        >
-          <Sparkle
-            className="h-4 w-4 shrink-0"
-            strokeWidth={1.75}
-            fill="currentColor"
-            style={{ color: "var(--sparkle)" }}
-          />
-          {!collapsed && (
-            <span className="text-[12.5px] font-medium tracking-tight text-foreground/90">
-              Ask anything
-            </span>
-          )}
-        </Link>
         {!collapsed ? (
           <div className="flex flex-col items-start gap-1.5">
             <span className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground/55">
