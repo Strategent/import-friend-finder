@@ -13,7 +13,7 @@ import {
   CalendarDays,
   Plug,
   LifeBuoy,
-  Sparkle,
+  
 } from "lucide-react";
 import {
   Sidebar,
