@@ -85,27 +85,27 @@ export function DailyBriefHero({
       {/* Left zone */}
       <div className="relative z-10 flex flex-col px-7 py-8 lg:max-w-[54%] lg:px-12 lg:py-12">
         <div className="flex flex-wrap items-baseline gap-1.5">
-          <span className="font-serif-display text-[14.5px] uppercase tracking-[0.18em] text-white/90">
+          <span className="font-serif-display text-[12px] uppercase tracking-[0.18em] text-white/90 lg:text-[13px]">
             Syra <span className="mx-1.5">→</span> Daily Brief
           </span>
-          <span className="ml-6 text-[15px] normal-case tracking-normal text-white/70">
+          <span className="ml-6 text-[12px] normal-case tracking-normal text-white/70 lg:text-[13px]">
             Updated just now
           </span>
         </div>
 
         <h1
-          className="font-serif-display mt-10 font-normal leading-[1.05] text-white"
-          style={{ fontSize: "clamp(44px, 5vw, 72px)" }}
+          className="font-serif-display mt-7 font-normal leading-[1.05] text-white lg:mt-8"
+          style={{ fontSize: "clamp(34px, 4vw, 56px)" }}
         >
           Welcome back, John.
         </h1>
 
-        <p className="mt-7 max-w-[34rem] text-[20px] leading-relaxed text-white/85">{summary}</p>
+        <p className="mt-5 max-w-[32rem] text-[15px] leading-relaxed text-white/85 lg:text-[16px]">{summary}</p>
 
         <button
           type="button"
           onClick={onReadBrief}
-          className="mt-12 w-fit rounded-full bg-[#6e6fae] px-9 py-4 text-[18px] text-white transition-colors hover:bg-[#7b7cbd]"
+          className="mt-9 w-fit rounded-full bg-[#6e6fae] px-7 py-3 text-[15px] text-white transition-colors hover:bg-[#7b7cbd] lg:text-[16px]"
         >
           Read daily brief
         </button>
