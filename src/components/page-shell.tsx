@@ -87,7 +87,9 @@ export function PageHeader({
 export function PageShell({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5">{children}</div>
+      <div className="min-h-screen bg-slate-950 px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5">
+        {children}
+      </div>
       <SyraChatWidget />
     </>
   );
