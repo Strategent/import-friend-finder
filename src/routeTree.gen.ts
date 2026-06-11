@@ -9,8 +9,86 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as SyraRouteImport } from './routes/syra'
+import { Route as SupportRouteImport } from './routes/support'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as CrmRouteImport } from './routes/crm'
+import { Route as ConnectorsRouteImport } from './routes/connectors'
+import { Route as ChannelsRouteImport } from './routes/channels'
+import { Route as CallsRouteImport } from './routes/calls'
+import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TasksRoute = TasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SyraRoute = SyraRouteImport.update({
+  id: '/syra',
+  path: '/syra',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InboxRoute = InboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmRoute = CrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectorsRoute = ConnectorsRouteImport.update({
+  id: '/connectors',
+  path: '/connectors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChannelsRoute = ChannelsRouteImport.update({
+  id: '/channels',
+  path: '/channels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CallsRoute = CallsRouteImport.update({
+  id: '/calls',
+  path: '/calls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +97,214 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/billing': typeof BillingRoute
+  '/calendar': typeof CalendarRoute
+  '/calls': typeof CallsRoute
+  '/channels': typeof ChannelsRoute
+  '/connectors': typeof ConnectorsRoute
+  '/crm': typeof CrmRoute
+  '/documents': typeof DocumentsRoute
+  '/inbox': typeof InboxRoute
+  '/settings': typeof SettingsRoute
+  '/support': typeof SupportRoute
+  '/syra': typeof SyraRoute
+  '/tasks': typeof TasksRoute
+  '/team': typeof TeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/billing': typeof BillingRoute
+  '/calendar': typeof CalendarRoute
+  '/calls': typeof CallsRoute
+  '/channels': typeof ChannelsRoute
+  '/connectors': typeof ConnectorsRoute
+  '/crm': typeof CrmRoute
+  '/documents': typeof DocumentsRoute
+  '/inbox': typeof InboxRoute
+  '/settings': typeof SettingsRoute
+  '/support': typeof SupportRoute
+  '/syra': typeof SyraRoute
+  '/tasks': typeof TasksRoute
+  '/team': typeof TeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/billing': typeof BillingRoute
+  '/calendar': typeof CalendarRoute
+  '/calls': typeof CallsRoute
+  '/channels': typeof ChannelsRoute
+  '/connectors': typeof ConnectorsRoute
+  '/crm': typeof CrmRoute
+  '/documents': typeof DocumentsRoute
+  '/inbox': typeof InboxRoute
+  '/settings': typeof SettingsRoute
+  '/support': typeof SupportRoute
+  '/syra': typeof SyraRoute
+  '/tasks': typeof TasksRoute
+  '/team': typeof TeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/billing'
+    | '/calendar'
+    | '/calls'
+    | '/channels'
+    | '/connectors'
+    | '/crm'
+    | '/documents'
+    | '/inbox'
+    | '/settings'
+    | '/support'
+    | '/syra'
+    | '/tasks'
+    | '/team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/billing'
+    | '/calendar'
+    | '/calls'
+    | '/channels'
+    | '/connectors'
+    | '/crm'
+    | '/documents'
+    | '/inbox'
+    | '/settings'
+    | '/support'
+    | '/syra'
+    | '/tasks'
+    | '/team'
+  id:
+    | '__root__'
+    | '/'
+    | '/billing'
+    | '/calendar'
+    | '/calls'
+    | '/channels'
+    | '/connectors'
+    | '/crm'
+    | '/documents'
+    | '/inbox'
+    | '/settings'
+    | '/support'
+    | '/syra'
+    | '/tasks'
+    | '/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BillingRoute: typeof BillingRoute
+  CalendarRoute: typeof CalendarRoute
+  CallsRoute: typeof CallsRoute
+  ChannelsRoute: typeof ChannelsRoute
+  ConnectorsRoute: typeof ConnectorsRoute
+  CrmRoute: typeof CrmRoute
+  DocumentsRoute: typeof DocumentsRoute
+  InboxRoute: typeof InboxRoute
+  SettingsRoute: typeof SettingsRoute
+  SupportRoute: typeof SupportRoute
+  SyraRoute: typeof SyraRoute
+  TasksRoute: typeof TasksRoute
+  TeamRoute: typeof TeamRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/syra': {
+      id: '/syra'
+      path: '/syra'
+      fullPath: '/syra'
+      preLoaderRoute: typeof SyraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inbox': {
+      id: '/inbox'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm': {
+      id: '/crm'
+      path: '/crm'
+      fullPath: '/crm'
+      preLoaderRoute: typeof CrmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connectors': {
+      id: '/connectors'
+      path: '/connectors'
+      fullPath: '/connectors'
+      preLoaderRoute: typeof ConnectorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/channels': {
+      id: '/channels'
+      path: '/channels'
+      fullPath: '/channels'
+      preLoaderRoute: typeof ChannelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calls': {
+      id: '/calls'
+      path: '/calls'
+      fullPath: '/calls'
+      preLoaderRoute: typeof CallsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +317,19 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BillingRoute: BillingRoute,
+  CalendarRoute: CalendarRoute,
+  CallsRoute: CallsRoute,
+  ChannelsRoute: ChannelsRoute,
+  ConnectorsRoute: ConnectorsRoute,
+  CrmRoute: CrmRoute,
+  DocumentsRoute: DocumentsRoute,
+  InboxRoute: InboxRoute,
+  SettingsRoute: SettingsRoute,
+  SupportRoute: SupportRoute,
+  SyraRoute: SyraRoute,
+  TasksRoute: TasksRoute,
+  TeamRoute: TeamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

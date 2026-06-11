@@ -1,0 +1,58 @@
+/*
+ * Origin-inspired design tokens.
+ *
+ * Theme-independent values (typography, gradients, accents, layout metrics)
+ * live here. Semantic dark/light color values stay in styles.css (:root / .dark),
+ * where this file's tokens are referenced.
+ *
+ * The look adopts Origin Financial's calm dark aesthetic — near-black surfaces,
+ * hairline borders, mono caps section labels, serif display headlines, an indigo
+ * ✦ sparkle accent, and white pill CTAs — while keeping Strategent's blue brand.
+ */
+:root {
+  /* ---- Typography ---- */
+  /* Serif for big display headlines (hero greeting, feature-card titles). */
+  --font-serif:
+    "Newsreader", "Iowan Old Style", "Apple Garamond", Georgia, "Times New Roman", serif;
+  /* Condensed mono for the signature ALL-CAPS › section labels. */
+  --font-label:
+    ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+
+  /* ---- AI sparkle accent (indigo/purple ✦) ---- */
+  --sparkle: #7c6cff;
+  --sparkle-soft: color-mix(in oklab, #7c6cff 14%, transparent);
+  --sparkle-border: color-mix(in oklab, #7c6cff 32%, transparent);
+
+  /* ---- Section label color (muted gray) ---- */
+  --label-fg: #8a8a8e;
+
+  /* ---- Raised sub-surface overlay (draft cards, stat tiles, queue rows) ---- */
+  --surface-raised: rgba(255, 255, 255, 0.035);
+  --surface-raised-hover: rgba(255, 255, 255, 0.06);
+
+  /* ---- Strategent brand spotlight gradient (recolored from Origin's green) ---- */
+  --spotlight: linear-gradient(
+    135deg,
+    #2a2f7a 0%,
+    #2e36a3 22%,
+    #3a45c7 46%,
+    #4753dc 66%,
+    #4a55de 100%
+  );
+  --spotlight-feature: linear-gradient(150deg, #1c2270 0%, #28319f 52%, #3b46cf 100%);
+
+  /* ---- Graded score bar (Very Poor → Excellent) ---- */
+  --score-gradient: linear-gradient(
+    90deg,
+    #e5484d 0%,
+    #f76808 24%,
+    #ffb224 48%,
+    #46a758 74%,
+    #5a6ce8 100%
+  );
+
+  /* ---- Layout metrics ---- */
+  --rail-w: 370px;
+  --shell-gap: 20px;
+}

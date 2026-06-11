@@ -10,6 +10,10 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Topbar } from "@/components/page-shell";
+import { ThemeProvider } from "@/components/theme-provider";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -77,16 +81,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Harwick & Sterne — Private Wealth Admin" },
+      {
+        name: "description",
+        content:
+          "Private wealth admin console for Harwick & Sterne: portfolios, client meetings, planner, documents and the Syra agent.",
+      },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Harwick & Sterne — Private Wealth Admin" },
+      {
+        property: "og:description",
+        content:
+          "Private wealth admin console for Harwick & Sterne across portfolios, meetings, planner and the Syra agent.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -101,9 +123,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-slim">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('nexus-theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body>
         {children}
@@ -118,8 +154,26 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ThemeProvider>
+        <SidebarProvider>
+          <div className="min-h-screen flex w-full bg-background text-foreground">
+            <div
+              className="pointer-events-none fixed inset-0 opacity-40"
+              style={{
+                background:
+                  "radial-gradient(60% 50% at 20% 0%, oklch(0.3 0.15 270 / 0.35), transparent), radial-gradient(40% 40% at 100% 30%, oklch(0.3 0.18 295 / 0.25), transparent)",
+              }}
+            />
+            <AppSidebar />
+            <div className="relative flex-1 min-w-0 flex flex-col">
+              <Topbar />
+              <main className="flex-1 min-w-0">
+                <Outlet />
+              </main>
+            </div>
+          </div>
+        </SidebarProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

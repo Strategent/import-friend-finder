@@ -1,0 +1,155 @@
+import { memo, useEffect, useRef } from "react";
+import type { ReactNode } from "react";
+import { GridStack, type GridStackOptions } from "gridstack";
+// gridstack base CSS is imported in styles.css (before our Origin overrides).
+import { cn } from "@/lib/utils";
+
+/** Drag/resize is disabled and cards stack below this viewport width. */
+const STATIC_QUERY = "(max-width: 1023px)";
+
+export type BentoItem = {
+  id: string;
+  /** Width in columns. */
+  w: number;
+  /** Height in rows (rows are `cellHeight` px tall). */
+  h: number;
+  x?: number;
+  y?: number;
+  minW?: number;
+  minH?: number;
+  node: ReactNode;
+};
+
+/**
+ * BentoGridStack — a gridstack.js-powered region whose cards can be dragged to
+ * reorder (via their `.bento-drag-handle` header) and resized by their
+ * corner/edge handles. Layout persists to localStorage under `storageKey`.
+ *
+ * Below 1024px the grid goes fully static (no drag/resize) and collapses to a
+ * single column so it never fights touch scrolling.
+ *
+ * The grid initializes once; the parent must pass a stable `items` array (and
+ * must not re-render on a timer) or gridstack and React will fight over the same
+ * DOM. This component is memoized to help enforce that.
+ */
+function BentoGridStackImpl({
+  items,
+  column,
+  cellHeight = 76,
+  storageKey,
+  float = false,
+  resizeHandles = "e, se, s",
+  className,
+}: {
+  items: BentoItem[];
+  column: number;
+  cellHeight?: number;
+  storageKey: string;
+  float?: boolean;
+  resizeHandles?: string;
+  className?: string;
+}) {
+  const elRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<GridStack | null>(null);
+
+  useEffect(() => {
+    if (!elRef.current) return;
+
+    const opts: GridStackOptions = {
+      column,
+      cellHeight,
+      margin: 10,
+      float,
+      handle: ".bento-drag-handle",
+      draggable: { cancel: ".cancel-drag" },
+      resizable: { handles: resizeHandles },
+      animate: true,
+      // Collapse a multi-column region to one column on small screens.
+      columnOpts:
+        column > 1 ? { breakpointForWindow: true, breakpoints: [{ w: 1024, c: 1 }] } : undefined,
+    };
+
+    // Seed each rendered item's gridstack attributes from its layout before
+    // init (set imperatively to keep the JSX free of untyped gs-* props).
+    const layout = new Map(items.map((it) => [it.id, it]));
+    elRef.current.querySelectorAll<HTMLElement>(".grid-stack-item").forEach((el) => {
+      const it = layout.get(el.dataset.gsId ?? "");
+      if (!it) return;
+      el.setAttribute("gs-id", it.id);
+      const set = (k: string, v: number | undefined) => {
+        if (v != null) el.setAttribute(k, String(v));
+      };
+      set("gs-w", it.w);
+      set("gs-h", it.h);
+      set("gs-x", it.x);
+      set("gs-y", it.y);
+      set("gs-min-w", it.minW);
+      set("gs-min-h", it.minH);
+    });
+
+    const grid = GridStack.init(opts, elRef.current);
+    gridRef.current = grid;
+
+    // Snapshot the seeded default layout so "Reset layout" can restore it.
+    const defaultLayout = grid.save(false);
+
+    // Restore a previously saved layout (positions only; match by id).
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) grid.load(JSON.parse(raw), false);
+    } catch {
+      /* ignore malformed/absent layout */
+    }
+
+    const persist = () => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(grid.save(false)));
+      } catch {
+        /* storage may be unavailable */
+      }
+    };
+    grid.on("change", persist);
+
+    // Disable drag/resize on small screens; re-enable above the breakpoint.
+    const mq = window.matchMedia(STATIC_QUERY);
+    const applyStatic = () => grid.setStatic(mq.matches);
+    applyStatic();
+    mq.addEventListener("change", applyStatic);
+
+    // Reset to the default layout (and clear storage) on demand — no reload.
+    const onReset = () => {
+      try {
+        localStorage.removeItem(storageKey);
+      } catch {
+        /* ignore */
+      }
+      grid.load(defaultLayout as Parameters<typeof grid.load>[0], false);
+    };
+    window.addEventListener("bento:reset", onReset);
+
+    return () => {
+      grid.off("change");
+      mq.removeEventListener("change", applyStatic);
+      window.removeEventListener("bento:reset", onReset);
+      // Keep the DOM so React can unmount its own nodes cleanly.
+      grid.destroy(false);
+      gridRef.current = null;
+    };
+    // Init once — `items` must be stable (see component doc).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div ref={elRef} className={cn("grid-stack", className)}>
+      {items.map((it) => (
+        <div key={it.id} className="grid-stack-item" data-gs-id={it.id}>
+          <div className="grid-stack-item-content">
+            <div className="h-full w-full">{it.node}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export const BentoGridStack = memo(BentoGridStackImpl);
