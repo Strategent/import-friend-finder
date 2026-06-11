@@ -112,10 +112,7 @@ export function DailyBriefHero({
       </div>
 
       {/* Right zone — white brief document, bottom-aligned like a paper preview */}
-      <div
-        className="absolute z-10 hidden overflow-hidden rounded-none bg-white p-8 shadow-[0_-12px_40px_rgba(0,0,0,0.25)] lg:block"
-        style={{ bottom: 0, right: "5.5%", top: "auto", height: "77%", width: "33%" }}
-      >
+      <div className="daily-brief-document absolute z-10 hidden overflow-hidden rounded-none bg-white p-8 shadow-[0_-12px_40px_rgba(0,0,0,0.25)] lg:block">
         <p className="font-label text-[6px] uppercase tracking-[0.12em] text-neutral-500">
           {brief.date} · {brief.workspace}
         </p>
