@@ -112,7 +112,7 @@ export function DailyBriefHero({
       </div>
 
       {/* Right zone — floating white brief document, bleeds off right/bottom */}
-      <div className="absolute bottom-0 right-8 top-16 z-10 hidden w-[40%] overflow-hidden rounded-none bg-white p-7 shadow-[0_-12px_40px_rgba(0,0,0,0.25)] lg:block">
+      <div className="absolute bottom-0 right-8 top-40 z-10 hidden w-[38%] overflow-hidden rounded-none bg-white p-6 shadow-[0_-12px_40px_rgba(0,0,0,0.25)] lg:block">
         <p className="font-label text-[10px] uppercase tracking-[0.12em] text-neutral-500">
           {brief.date} · {brief.workspace}
         </p>
