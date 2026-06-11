@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { GridStack, type GridStackOptions } from "gridstack";
+import type { GridStack, GridStackOptions } from "gridstack";
 // gridstack base CSS is imported in styles.css (before our Origin overrides).
 import { cn } from "@/lib/utils";
 
@@ -87,53 +87,65 @@ function BentoGridStackImpl({
       set("gs-min-h", it.minH);
     });
 
-    const grid = GridStack.init(opts, elRef.current);
-    gridRef.current = grid;
+    let disposed = false;
+    let cleanupGrid = () => {};
 
-    // Snapshot the seeded default layout so "Reset layout" can restore it.
-    const defaultLayout = grid.save(false);
+    void import("gridstack").then(({ GridStack }) => {
+      if (disposed || !elRef.current) return;
 
-    // Restore a previously saved layout (positions only; match by id).
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (raw) grid.load(JSON.parse(raw), false);
-    } catch {
-      /* ignore malformed/absent layout */
-    }
+      const grid = GridStack.init(opts, elRef.current);
+      gridRef.current = grid;
 
-    const persist = () => {
+      // Snapshot the seeded default layout so "Reset layout" can restore it.
+      const defaultLayout = grid.save(false);
+
+      // Restore a previously saved layout (positions only; match by id).
       try {
-        localStorage.setItem(storageKey, JSON.stringify(grid.save(false)));
+        const raw = localStorage.getItem(storageKey);
+        if (raw) grid.load(JSON.parse(raw), false);
       } catch {
-        /* storage may be unavailable */
+        /* ignore malformed/absent layout */
       }
-    };
-    grid.on("change", persist);
+
+      const persist = () => {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(grid.save(false)));
+        } catch {
+          /* storage may be unavailable */
+        }
+      };
+      grid.on("change", persist);
 
     // Disable drag/resize on small screens; re-enable above the breakpoint.
-    const mq = window.matchMedia(STATIC_QUERY);
-    const applyStatic = () => grid.setStatic(mq.matches);
-    applyStatic();
-    mq.addEventListener("change", applyStatic);
+      const mq = window.matchMedia(STATIC_QUERY);
+      const applyStatic = () => grid.setStatic(mq.matches);
+      applyStatic();
+      mq.addEventListener("change", applyStatic);
 
     // Reset to the default layout (and clear storage) on demand — no reload.
-    const onReset = () => {
-      try {
-        localStorage.removeItem(storageKey);
-      } catch {
-        /* ignore */
-      }
-      grid.load(defaultLayout as Parameters<typeof grid.load>[0], false);
-    };
-    window.addEventListener("bento:reset", onReset);
+      const onReset = () => {
+        try {
+          localStorage.removeItem(storageKey);
+        } catch {
+          /* ignore */
+        }
+        grid.load(defaultLayout as Parameters<typeof grid.load>[0], false);
+      };
+      window.addEventListener("bento:reset", onReset);
+
+      cleanupGrid = () => {
+        grid.off("change");
+        mq.removeEventListener("change", applyStatic);
+        window.removeEventListener("bento:reset", onReset);
+        // Keep the DOM so React can unmount its own nodes cleanly.
+        grid.destroy(false);
+        gridRef.current = null;
+      };
+    });
 
     return () => {
-      grid.off("change");
-      mq.removeEventListener("change", applyStatic);
-      window.removeEventListener("bento:reset", onReset);
-      // Keep the DOM so React can unmount its own nodes cleanly.
-      grid.destroy(false);
-      gridRef.current = null;
+      disposed = true;
+      cleanupGrid();
     };
     // Init once — `items` must be stable (see component doc).
     // eslint-disable-next-line react-hooks/exhaustive-deps
