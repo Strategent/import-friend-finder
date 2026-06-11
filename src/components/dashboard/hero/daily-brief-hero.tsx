@@ -112,46 +112,45 @@ export function DailyBriefHero({
       </div>
 
       {/* Right zone — floating white brief document, bleeds off right/bottom */}
-      <div className="absolute bottom-[-4%] right-[-2%] top-[16%] z-10 hidden w-[46%] overflow-hidden rounded-[20px] bg-white p-10 shadow-[0_24px_80px_rgba(0,0,0,0.35)] lg:block">
-        <p className="font-label text-[11px] uppercase tracking-[0.12em] text-neutral-500">
+      <div className="absolute bottom-8 right-8 top-8 z-10 hidden w-[40%] overflow-hidden rounded-sm bg-white p-7 shadow-[0_24px_80px_rgba(0,0,0,0.35)] lg:block">
+        <p className="font-label text-[10px] uppercase tracking-[0.12em] text-neutral-500">
           {brief.date} · {brief.workspace}
         </p>
-        <h2 className="font-serif-display mt-3.5 text-[29px] text-neutral-900">{brief.greeting}</h2>
-        <p className="mt-2 text-[14px] leading-relaxed text-neutral-600">{brief.summary}</p>
+        <h2 className="font-serif-display mt-2.5 text-[22px] text-neutral-900">{brief.greeting}</h2>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-600">{brief.summary}</p>
 
-        <div className="mt-7 grid grid-cols-3 gap-4">
+        <div className="mt-5 grid grid-cols-3 gap-3">
           {brief.stats.map((s) => (
             <div key={s.label}>
-              <div className="text-[26px] font-semibold text-neutral-900">{s.value}</div>
-              <div className="mt-0.5 text-[12px] text-neutral-500">{s.label}</div>
+              <div className="text-[20px] font-semibold text-neutral-900">{s.value}</div>
+              <div className="mt-0.5 text-[10.5px] text-neutral-500">{s.label}</div>
             </div>
           ))}
         </div>
 
-        <p className="font-label mt-8 text-[11px] uppercase tracking-[0.12em] text-neutral-500">
+        <p className="font-label mt-5 text-[10px] uppercase tracking-[0.12em] text-neutral-500">
           Priorities
         </p>
-        {/* The last item clipping at the card's bottom edge is intentional. */}
-        <div className="mt-4 flex flex-col gap-[22px]">
+        <div className="mt-2.5 flex flex-col gap-3">
           {brief.priorities.map((p) => {
             const s = STATUS_STYLES[p.status];
             return (
               <div key={p.title}>
-                <div className="flex items-center gap-2">
-                  <span className={cn("h-[7px] w-[7px] shrink-0 rounded-full", s.dot)} />
+                <div className="flex items-center gap-1.5">
+                  <span className={cn("h-[6px] w-[6px] shrink-0 rounded-full", s.dot)} />
                   <span
-                    className={cn("rounded-md px-1.5 py-0.5 text-[11px] font-medium", s.badge)}
+                    className={cn("rounded-sm px-1.5 py-0.5 text-[10px] font-medium", s.badge)}
                   >
                     {s.label}
                   </span>
-                  <span className="truncate text-[14px] font-semibold text-neutral-900">
+                  <span className="truncate text-[12px] font-semibold text-neutral-900">
                     {p.title}
                   </span>
                 </div>
-                <p className="mt-1 pl-[15px] text-[13px] leading-snug text-neutral-600">
+                <p className="mt-1 pl-[13px] text-[11px] leading-snug text-neutral-600">
                   {p.description}
                 </p>
-                {p.meta && <p className="mt-1 pl-[15px] text-[12px] text-neutral-500">{p.meta}</p>}
+                {p.meta && <p className="mt-0.5 pl-[13px] text-[10.5px] text-neutral-500">{p.meta}</p>}
               </div>
             );
           })}
