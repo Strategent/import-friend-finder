@@ -415,58 +415,59 @@
   font-size: 15px;
 }
 .daily-brief-document {
-  bottom: 0;
+  bottom: -14%;
   right: 5.5%;
-  height: 77%;
-  width: 33%;
-  padding: 26px 28px;
+  height: 82%;
+  width: 30%;
+  padding: 22px 24px;
 }
 [data-density="compact"] .daily-brief-document > p:first-child {
-  font-size: 7px;
+  font-size: 6px;
+  letter-spacing: 0.14em;
 }
 [data-density="compact"] .daily-brief-document > h2 {
-  margin-top: 8px;
-  font-size: 13px;
+  margin-top: 10px;
+  font-size: 11px;
 }
 [data-density="compact"] .daily-brief-document > h2 + p {
-  margin-top: 4px;
-  font-size: 7.5px;
+  margin-top: 5px;
+  font-size: 6.5px;
+  line-height: 1.55;
 }
 [data-density="compact"] .daily-brief-document > div.grid {
-  margin-top: 14px;
+  margin-top: 16px;
 }
 [data-density="compact"] .daily-brief-document > div.grid > div > div:first-child {
-  font-size: 13px;
+  font-size: 11px;
 }
 [data-density="compact"] .daily-brief-document > div.grid > div > div:last-child {
-  margin-top: 1px;
-  font-size: 6px;
+  margin-top: 2px;
+  font-size: 5.5px;
 }
 [data-density="compact"] .daily-brief-document > div.grid + p {
-  margin-top: 14px;
-  font-size: 7px;
+  margin-top: 16px;
+  font-size: 6px;
+  letter-spacing: 0.14em;
 }
 /* Priorities list */
 [data-density="compact"] .daily-brief-document > div:last-child {
-  margin-top: 8px;
-  gap: 8px;
+  margin-top: 10px;
+  gap: 9px;
 }
 [data-density="compact"] .daily-brief-document > div:last-child span:nth-child(2) {
-  font-size: 6.5px;
+  font-size: 5.5px;
 }
 [data-density="compact"] .daily-brief-document > div:last-child span:last-child {
-  font-size: 7.5px;
-}
-[data-density="compact"] .daily-brief-document > div:last-child p {
   font-size: 6.5px;
 }
-[data-density="compact"] .daily-brief-document > div:last-child p:nth-of-type(2) {
-  font-size: 6px;
+[data-density="compact"] .daily-brief-document > div:last-child p {
+  font-size: 5.5px;
 }
-/* No mid-line cut-offs at banner height: content stops cleanly after the
-   first priority's title row — its description/meta and the deeper items
-   would clip at the card edge, so they're hidden whole here. All strings
-   stay in the data/DOM and render at full density. */
+[data-density="compact"] .daily-brief-document > div:last-child p:nth-of-type(2) {
+  font-size: 5px;
+}
+/* Bottom clips off-card — hide deeper priorities and per-item description/
+   meta so nothing is mid-line truncated by the card edge. */
 [data-density="compact"] .daily-brief-document > div:last-child > div:first-child > p {
   display: none;
 }
