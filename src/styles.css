@@ -395,178 +395,140 @@
 [data-density="compact"] > section > div:nth-child(1) {
   box-sizing: border-box;
   height: 100%;
-  padding: clamp(18px, 7cqh, 24px) clamp(30px, 5cqw, 46px);
+  padding: clamp(18px, 7cqh, 28px) clamp(30px, 5cqw, 56px);
 }
-[data-density="compact"] > section > div:nth-child(1) > div:first-child > span:first-child {
-  font-size: clamp(10px, 3.8cqh, 12px);
-}
-[data-density="compact"] > section > div:nth-child(1) > div:first-child > span:last-child {
-  margin-left: clamp(14px, 3cqw, 28px);
-  font-size: clamp(10px, 3.8cqh, 12px);
+[data-density="compact"] > section > div:nth-child(1) > span:first-child {
+  font-size: clamp(10px, 3.4cqh, 12px);
 }
 [data-density="compact"] > section > div:nth-child(1) > h1 {
-  margin-top: clamp(40px, 18cqh, 96px);
-  /* the card sets its font-size inline (clamp) — !important is the only override */
-  font-size: clamp(28px, min(15cqh, 4cqw), 42px) !important;
+  margin-top: clamp(14px, 5cqh, 24px);
+  font-size: clamp(30px, min(13cqh, 4.2cqw), 48px) !important;
   line-height: 1.04;
 }
 [data-density="compact"] > section > div:nth-child(1) > p {
-  margin-top: clamp(10px, 4cqh, 14px);
+  margin-top: clamp(10px, 3.5cqh, 16px);
   display: -webkit-box;
-  max-width: min(28rem, 48cqw);
+  max-width: min(26rem, 44cqw);
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-  font-size: clamp(12px, min(4.8cqh, 1.35cqw), 14px);
-  line-height: 1.52;
+  font-size: clamp(12px, min(4.2cqh, 1.25cqw), 14px);
+  line-height: 1.55;
 }
-[data-density="compact"] > section > div:nth-child(1) > button {
-  margin-top: clamp(14px, 5cqh, 20px);
-  padding: clamp(8px, 3.2cqh, 10px) clamp(22px, 4cqw, 28px);
-  font-size: clamp(12px, 4.4cqh, 14px);
-}
+
+/* White brief document — top-aligned, floats inside card with margin */
 .daily-brief-document {
-  bottom: -18%;
-  right: 5.5%;
-  height: 82%;
-  width: 30%;
-  padding: 22px 24px;
+  top: clamp(28px, 10cqh, 56px);
+  right: clamp(120px, 14cqw, 200px);
+  width: clamp(280px, 30cqw, 420px);
+  height: clamp(220px, 78cqh, 320px);
+  padding: clamp(16px, 4cqh, 24px) clamp(18px, 3cqw, 28px);
 }
-@container daily-brief-card (max-width: 900px) {
-  [data-density="compact"] > section > div:nth-child(1) {
-    max-width: none !important;
-    padding: clamp(18px, 6cqh, 26px) clamp(24px, 8cqw, 36px);
-  }
-  [data-density="compact"] > section > div:nth-child(1) > p {
-    max-width: 100%;
-  }
+
+/* Dark pill CTA — vertically centered against the doc, far right */
+.daily-brief-cta {
+  top: 50%;
+  right: clamp(20px, 3cqw, 48px);
+  transform: translateY(-50%);
 }
-@container daily-brief-card (max-height: 300px) {
-  [data-density="compact"] > section > div:nth-child(1) > div:first-child > span {
-    font-size: 10px !important;
+
+@container daily-brief-card (max-width: 1100px) {
+  .daily-brief-document {
+    right: clamp(110px, 13cqw, 170px);
+    width: clamp(240px, 28cqw, 340px);
   }
-  [data-density="compact"] > section > div:nth-child(1) > h1 {
-    margin-top: 10px;
-    font-size: clamp(26px, min(13cqh, 4cqw), 36px) !important;
-  }
-  [data-density="compact"] > section > div:nth-child(1) > p {
-    margin-top: 9px;
-    -webkit-line-clamp: 2;
-    font-size: 12px;
-  }
-  [data-density="compact"] > section > div:nth-child(1) > button {
-    margin-top: 12px;
-    padding: 8px 22px;
-    font-size: 12px;
+  .daily-brief-cta {
+    padding: 10px 20px;
+    font-size: 13px;
   }
 }
+
 [data-density="compact"] .daily-brief-document > p:first-child {
-  font-size: 6px;
+  font-size: 7px;
   letter-spacing: 0.14em;
 }
 [data-density="compact"] .daily-brief-document > h2 {
   margin-top: 10px;
-  font-size: 11px;
+  font-size: 16px;
 }
 [data-density="compact"] .daily-brief-document > h2 + p {
-  margin-top: 5px;
-  font-size: 6.5px;
+  margin-top: 6px;
+  font-size: 7.5px;
   line-height: 1.55;
 }
 [data-density="compact"] .daily-brief-document > div.grid {
-  margin-top: 16px;
+  margin-top: 14px;
 }
 [data-density="compact"] .daily-brief-document > div.grid > div > div:first-child {
-  font-size: 11px;
+  font-size: 12px;
 }
 [data-density="compact"] .daily-brief-document > div.grid > div > div:last-child {
   margin-top: 2px;
-  font-size: 5.5px;
+  font-size: 6px;
 }
 [data-density="compact"] .daily-brief-document > div.grid + p {
-  margin-top: 16px;
-  font-size: 6px;
+  margin-top: 14px;
+  font-size: 6.5px;
   letter-spacing: 0.14em;
 }
-/* Priorities list */
 [data-density="compact"] .daily-brief-document > div:last-child {
-  margin-top: 10px;
-  gap: 9px;
+  margin-top: 8px;
+  gap: 8px;
 }
 [data-density="compact"] .daily-brief-document > div:last-child span:nth-child(2) {
   font-size: 5.5px;
 }
 [data-density="compact"] .daily-brief-document > div:last-child span:last-child {
-  font-size: 6.5px;
+  font-size: 7px;
 }
 [data-density="compact"] .daily-brief-document > div:last-child p {
-  font-size: 5.5px;
+  font-size: 6px;
 }
 [data-density="compact"] .daily-brief-document > div:last-child p:nth-of-type(2) {
-  font-size: 5px;
-}
-/* Bottom clips off-card — hide deeper priorities and per-item description/
-   meta so nothing is mid-line truncated by the card edge. */
-[data-density="compact"] .daily-brief-document > div:last-child > div:first-child > p {
-  display: none;
-}
-[data-density="compact"] .daily-brief-document > div:last-child > div:nth-child(n + 2) {
-  display: none;
+  font-size: 5.5px;
 }
 
-/* ---- Daily Brief hero — background gradient -----------------------------
-   Same look as the original two-layer design (near-black left, soft studio
-   glow right-of-center, mid-gray far edge), re-expressed to kill 8-bit
-   banding: eased intermediate stops through the dark range, a multi-stop
-   alpha falloff on the glow, and OKLab interpolation where supported (the
-   first declaration is the sRGB fallback; the later valid one wins). */
+/* ---- Daily Brief hero — purple/indigo gradient background ----------------
+   Dark indigo bottom-left, soft lavender bloom upper-right where the doc
+   sits. OKLab interpolation kills banding; sRGB fallback first. */
 .daily-brief-hero-bg {
   background:
     radial-gradient(
-      ellipse 60% 80% at 68% 55%,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.38) 30%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0.08) 62%,
-      rgba(255, 255, 255, 0) 70%
+      ellipse 55% 70% at 70% 35%,
+      rgba(220, 215, 245, 0.45) 0%,
+      rgba(180, 175, 220, 0.25) 35%,
+      rgba(120, 115, 180, 0.08) 60%,
+      rgba(0, 0, 0, 0) 75%
     ),
     linear-gradient(
-      115deg,
-      #141414 0%,
-      #1a1a1a 35%,
-      #262626 45%,
-      #383838 55%,
-      #515151 65%,
-      #6b6b6b 75%,
-      #7b7b7b 88%,
-      #8a8a8a 100%
+      135deg,
+      #1a1530 0%,
+      #221c40 30%,
+      #2d2552 55%,
+      #3a3168 75%,
+      #4a3f80 100%
     );
   background:
     radial-gradient(
-      ellipse 60% 80% at 68% 55% in oklab,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.38) 30%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0.08) 62%,
-      rgba(255, 255, 255, 0) 70%
+      ellipse 55% 70% at 70% 35% in oklab,
+      rgba(220, 215, 245, 0.45) 0%,
+      rgba(180, 175, 220, 0.25) 35%,
+      rgba(120, 115, 180, 0.08) 60%,
+      rgba(0, 0, 0, 0) 75%
     ),
     linear-gradient(
-      115deg in oklab,
-      #141414 0%,
-      #1a1a1a 35%,
-      #262626 45%,
-      #383838 55%,
-      #515151 65%,
-      #6b6b6b 75%,
-      #7b7b7b 88%,
-      #8a8a8a 100%
+      135deg in oklab,
+      #1a1530 0%,
+      #221c40 30%,
+      #2d2552 55%,
+      #3a3168 75%,
+      #4a3f80 100%
     );
 }
-/* Static fractal-noise tile (inline SVG, 120px, repeated) at dither-only
-   strength — its sole job is breaking band edges the gradient still has. */
 .daily-brief-grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 120px 120px;
-  opacity: 0.035;
+  opacity: 0.04;
   mix-blend-mode: soft-light;
 }
+

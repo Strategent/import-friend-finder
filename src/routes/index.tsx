@@ -115,7 +115,7 @@ function Home() {
         <BentoGridStack
           items={mainItems}
           column={12}
-          storageKey="hs-main-layout-v2"
+          storageKey="hs-main-layout-v3"
           className="-mx-2.5"
         />
       </DashboardShell>
