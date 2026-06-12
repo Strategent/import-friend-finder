@@ -149,14 +149,6 @@ export function DailyBriefHero({
         </div>
       </div>
 
-      {/* Read daily brief — dark pill on the far right */}
-      <button
-        type="button"
-        onClick={onReadBrief}
-        className="daily-brief-cta absolute z-10 hidden items-center justify-center rounded-full bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90 lg:flex"
-      >
-        Read daily brief
-      </button>
 
       <div aria-hidden className="daily-brief-grain pointer-events-none absolute inset-0" />
     </section>
