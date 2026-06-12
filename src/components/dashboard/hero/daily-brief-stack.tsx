@@ -252,13 +252,16 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
   const handleSwipeComplete = (dir: 1 | -1) => {
     setIndex((i) => {
       if (dir === 1 && i >= total - 1) {
-        onOpenChange(false);
-        stackDragX.set(0);
+        // Advance past the end so the just-thrown card is no longer the
+        // top card (hidden=true) — prevents it snapping back to center
+        // when SwipeCard resets x to 0 while the dialog closes.
+        window.setTimeout(() => onOpenChange(false), 80);
         window.setTimeout(() => {
           setIndex(0);
           setClosingAfterSwipe(false);
-        }, 180);
-        return i;
+          stackDragX.set(0);
+        }, 280);
+        return i + 1;
       }
       return Math.max(0, Math.min(total - 1, i + dir));
     });
