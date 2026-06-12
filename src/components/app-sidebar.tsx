@@ -29,6 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import strategentS from "@/assets/strategent-s-cropped.png";
+import johnHarwickAvatar from "@/assets/john-harwick.png.asset.json";
 
 const SyraIcon = ({ className }: { className?: string; strokeWidth?: number }) => (
   <span aria-hidden className={`inline-grid place-items-center ${className ?? ""}`}>
