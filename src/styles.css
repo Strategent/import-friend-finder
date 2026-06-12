@@ -499,38 +499,11 @@
    Dark indigo bottom-left, soft lavender bloom upper-right where the doc
    sits. OKLab interpolation kills banding; sRGB fallback first. */
 .daily-brief-hero-bg {
-  background:
-    radial-gradient(
-      ellipse 55% 70% at 70% 35%,
-      rgba(220, 215, 245, 0.45) 0%,
-      rgba(180, 175, 220, 0.25) 35%,
-      rgba(120, 115, 180, 0.08) 60%,
-      rgba(0, 0, 0, 0) 75%
-    ),
-    linear-gradient(
-      135deg,
-      #1a1530 0%,
-      #221c40 30%,
-      #2d2552 55%,
-      #3a3168 75%,
-      #4a3f80 100%
-    );
-  background:
-    radial-gradient(
-      ellipse 55% 70% at 70% 35% in oklab,
-      rgba(220, 215, 245, 0.45) 0%,
-      rgba(180, 175, 220, 0.25) 35%,
-      rgba(120, 115, 180, 0.08) 60%,
-      rgba(0, 0, 0, 0) 75%
-    ),
-    linear-gradient(
-      135deg in oklab,
-      #1a1530 0%,
-      #221c40 30%,
-      #2d2552 55%,
-      #3a3168 75%,
-      #4a3f80 100%
-    );
+  background-color: #1a1a1d;
+  background-image: url("/__l5e/assets-v1/824dd61b-fdb3-4cb7-b616-84953977a86e/hero-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .daily-brief-grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
