@@ -1,17 +1,22 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Bell, Search, Sun } from "lucide-react";
+import { Bell, Search, Sun, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
 
 export function Topbar() {
   const [now, setNow] = useState<Date | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 30_000);
     return () => clearInterval(id);
   }, []);
+  useEffect(() => {
+    if (searchOpen) inputRef.current?.focus();
+  }, [searchOpen]);
   const time = now
     ? now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })
     : "—";
@@ -19,14 +24,36 @@ export function Topbar() {
     <div className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="px-6 py-3 flex items-center gap-3">
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            placeholder="Search workflows, clients, agents…"
-            className="w-full h-9 pl-9 pr-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-          />
-        </div>
+        <div className="flex-1" />
         <div className="hidden sm:flex items-center gap-3 pr-1">
+          <div className="relative flex items-center">
+            <button
+              type="button"
+              onClick={() => setSearchOpen((v) => !v)}
+              aria-label={searchOpen ? "Close search" : "Open search"}
+              aria-expanded={searchOpen}
+              className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+            >
+              {searchOpen ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
+            </button>
+            <div
+              className={`overflow-hidden transition-[width,margin,opacity] duration-300 ease-out ${
+                searchOpen ? "ml-2 w-64 opacity-100" : "ml-0 w-0 opacity-0"
+              }`}
+            >
+              <input
+                ref={inputRef}
+                placeholder="Search workflows, clients, agents…"
+                onBlur={(e) => {
+                  if (!e.currentTarget.value) setSearchOpen(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setSearchOpen(false);
+                }}
+                className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </div>
+          </div>
           <div
             suppressHydrationWarning
             className="text-[13px] font-medium tracking-tight tabular-nums text-foreground/70 leading-none"
@@ -50,6 +77,7 @@ export function Topbar() {
     </div>
   );
 }
+
 
 export function PageHeader({
   eyebrow,
