@@ -232,9 +232,6 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
             />
           ))}
         </div>
-        <p className="text-center text-[11px] text-white/55 mt-3 tracking-wide">
-          {index < total - 1 ? "Swipe left to continue" : "End of brief · swipe right to revisit"} · {index + 1} / {total}
-        </p>
       </DialogContent>
     </Dialog>
   );
