@@ -169,6 +169,7 @@ function SwipeCard({
       transition={{ type: "spring", stiffness: 260, damping: 26 }}
       drag={isTop ? "x" : false}
       dragElastic={0.7}
+      dragSnapToOrigin
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
       <div className="h-full w-full bg-white rounded-[24px] border border-[#ececec] shadow-[0_24px_70px_rgba(0,0,0,0.28)] px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
