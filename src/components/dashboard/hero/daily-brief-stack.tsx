@@ -138,6 +138,7 @@ function SwipeCard({
   offset,
   hidden,
   isTop,
+  onDragMotion,
   onSwipeIntent,
   onSwipeComplete,
   total,
@@ -146,6 +147,7 @@ function SwipeCard({
   offset: number;
   hidden: boolean;
   isTop: boolean;
+  onDragMotion: (x: number) => void;
   onSwipeIntent: (dir: 1 | -1) => boolean;
   onSwipeComplete: (dir: 1 | -1) => void;
   total: number;
@@ -166,6 +168,7 @@ function SwipeCard({
     const shouldThrow = Math.abs(info.offset.x) > 104 || Math.abs(info.velocity.x) > 520;
 
     if (!shouldThrow || !onSwipeIntent(dir)) {
+      onDragMotion(0);
       animate(x, 0, { type: "spring", stiffness: 520, damping: 38, mass: 0.55 });
       return;
     }
@@ -176,6 +179,7 @@ function SwipeCard({
       ease: [0.2, 0.82, 0.24, 1],
     }).then(() => {
       onSwipeComplete(dir);
+      onDragMotion(0);
       x.set(0);
       isThrowing.current = false;
     });
@@ -195,6 +199,7 @@ function SwipeCard({
       drag={isTop ? "x" : false}
       dragElastic={0.18}
       dragMomentum={false}
+      onDrag={isTop ? (_, info) => onDragMotion(info.offset.x) : undefined}
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
       <div className="h-full w-full bg-white rounded-[24px] border border-[#ececec] shadow-[0_24px_70px_rgba(0,0,0,0.28)] px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
