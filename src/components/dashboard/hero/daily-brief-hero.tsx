@@ -76,7 +76,13 @@ export function DailyBriefHero({
   brief?: DailyBriefData;
   onReadBrief?: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(true);
+    onReadBrief?.();
+  };
   return (
+    <>
     <section className="daily-brief-hero-bg relative min-h-[380px] w-full overflow-hidden rounded-[32px] lg:min-h-[420px]">
       {/* Left zone — eyebrow, headline, summary (no button) */}
       <div className="relative z-10 flex h-full flex-col justify-center px-7 py-8 lg:max-w-[52%] lg:px-12 lg:py-12">
