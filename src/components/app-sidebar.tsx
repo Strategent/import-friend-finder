@@ -28,15 +28,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import strategentS from "@/assets/strategent-s-cropped.png";
 import johnHarwickAvatar from "@/assets/john-harwick.png.asset.json";
+import syraSIcon from "@/assets/syra-s.png.asset.json";
 
 const SyraIcon = ({ className }: { className?: string; strokeWidth?: number }) => (
-  <span aria-hidden className={`inline-grid place-items-center ${className ?? ""}`}>
+  <span aria-hidden className={`relative inline-grid place-items-center overflow-hidden ${className ?? ""}`}>
     <img
-      src={strategentS}
+      src={syraSIcon.url}
       alt=""
-      className="h-full w-full object-contain dark:invert"
+      className="absolute h-full w-full object-contain scale-[3.4] dark:invert"
       style={{ filter: "brightness(0)" }}
     />
   </span>
