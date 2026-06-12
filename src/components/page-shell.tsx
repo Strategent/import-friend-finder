@@ -50,7 +50,7 @@ export function Topbar() {
                 onKeyDown={(e) => {
                   if (e.key === "Escape") setSearchOpen(false);
                 }}
-                className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+                className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-border"
               />
             </div>
           </div>
