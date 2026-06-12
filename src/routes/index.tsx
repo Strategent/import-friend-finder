@@ -16,7 +16,6 @@ import {
   PlannerCard,
   TeamCard,
   ChannelsCard,
-  DocumentsCard,
 } from "@/components/dashboard/widgets";
 
 export const Route = createFileRoute("/")({
