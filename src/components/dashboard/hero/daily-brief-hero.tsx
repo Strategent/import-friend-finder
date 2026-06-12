@@ -92,7 +92,16 @@ export function DailyBriefHero({
         <p className="mt-5 max-w-[28rem] text-[14px] leading-relaxed text-white/85 lg:text-[15px]">
           {summary}
         </p>
+
+        <button
+          type="button"
+          onClick={onReadBrief}
+          className="mt-8 w-fit rounded-full bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90"
+        >
+          Read daily brief
+        </button>
       </div>
+
 
       {/* Right zone — white brief document, top-aligned with margin */}
       <div className="daily-brief-document absolute z-10 hidden overflow-hidden rounded-[6px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] lg:block">
@@ -140,14 +149,6 @@ export function DailyBriefHero({
         </div>
       </div>
 
-      {/* Read daily brief — dark pill on the far right */}
-      <button
-        type="button"
-        onClick={onReadBrief}
-        className="daily-brief-cta absolute z-10 hidden items-center justify-center rounded-full bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90 lg:flex"
-      >
-        Read daily brief
-      </button>
 
       <div aria-hidden className="daily-brief-grain pointer-events-none absolute inset-0" />
     </section>
