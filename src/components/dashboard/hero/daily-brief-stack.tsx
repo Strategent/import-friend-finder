@@ -190,12 +190,24 @@ function SwipeCard({
 
 export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const [index, setIndex] = useState(0);
+  const [exitDirection, setExitDirection] = useState<1 | -1>(1);
+  const [closingAfterSwipe, setClosingAfterSwipe] = useState(false);
   const total = SECTIONS.length;
 
   const handleSwipe = (dir: 1 | -1) => {
+    setExitDirection(dir);
     setIndex((i) => {
       const next = i + dir;
-      if (next < 0 || next >= total) return i;
+      if (next < 0) return i;
+      if (next >= total) {
+        setClosingAfterSwipe(true);
+        window.setTimeout(() => {
+          onOpenChange(false);
+          setIndex(0);
+          setClosingAfterSwipe(false);
+        }, 380);
+        return total;
+      }
       return next;
     });
   };
@@ -221,12 +233,14 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
                   isTop={i === index}
                   onSwipe={handleSwipe}
                   total={total}
+                  exitDirection={exitDirection}
                 />
               );
             })}
           </AnimatePresence>
         </div>
 
+        {!closingAfterSwipe && (
         <div className="flex justify-center gap-1.5 mt-5">
           {SECTIONS.map((_, i) => (
             <button
@@ -241,6 +255,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
             />
           ))}
         </div>
+        )}
       </DialogContent>
     </Dialog>
   );
