@@ -29,6 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import strategentS from "@/assets/strategent-s-cropped.png";
+import johnHarwickAvatar from "@/assets/john-harwick.png.asset.json";
 
 const SyraIcon = ({ className }: { className?: string; strokeWidth?: number }) => (
   <span aria-hidden className={`inline-grid place-items-center ${className ?? ""}`}>
@@ -132,8 +133,12 @@ export function AppSidebar() {
           </div>
         )}
         <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 shrink-0 rounded-xl grid place-items-center bg-foreground/[0.06] border border-border text-[11px] font-semibold tracking-tight text-foreground/90">
-            JH
+          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-border bg-foreground/[0.06]">
+            <img
+              src={johnHarwickAvatar.url}
+              alt="John Harwick"
+              className="h-full w-full object-cover"
+            />
           </div>
           {!collapsed && (
             <div className="min-w-0">
