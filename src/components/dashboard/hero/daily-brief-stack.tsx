@@ -206,55 +206,59 @@ function SwipeCard({
 
 export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const [index, setIndex] = useState(0);
-  const [exitDirection, setExitDirection] = useState<1 | -1>(1);
   const [closingAfterSwipe, setClosingAfterSwipe] = useState(false);
   const total = SECTIONS.length;
 
-  const handleSwipe = (dir: 1 | -1) => {
-    setExitDirection(dir);
+  const handleSwipeIntent = (dir: 1 | -1) => {
+    if (dir === -1 && index === 0) return false;
+    if (dir === 1 && index === total - 1) setClosingAfterSwipe(true);
+    return true;
+  };
+
+  const handleSwipeComplete = (dir: 1 | -1) => {
     setIndex((i) => {
-      const next = i + dir;
-      if (next < 0) return i;
-      if (next >= total) {
-        setClosingAfterSwipe(true);
+      if (dir === 1 && i >= total - 1) {
+        onOpenChange(false);
         window.setTimeout(() => {
-          onOpenChange(false);
           setIndex(0);
           setClosingAfterSwipe(false);
-        }, 620);
-        return total;
+        }, 180);
+        return i;
       }
-      return next;
+      return Math.max(0, Math.min(total - 1, i + dir));
     });
   };
 
+  const handleOpenChange = (o: boolean) => {
+    onOpenChange(o);
+    if (!o) {
+      window.setTimeout(() => {
+        setIndex(0);
+        setClosingAfterSwipe(false);
+      }, 180);
+    }
+  };
+
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(o) => {
-        onOpenChange(o);
-        if (!o) setTimeout(() => setIndex(0), 250);
-      }}
-    >
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-[440px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
         <DialogTitle className="sr-only">Daily brief</DialogTitle>
         <div className="relative h-[620px] w-full select-none">
-          <AnimatePresence initial={false}>
-            {SECTIONS.map((section, i) => {
-              if (i < index || i > index + 2) return null;
+          {SECTIONS.map((section, i) => {
+              if (i > index + 2) return null;
               return (
                 <SwipeCard
                   key={i}
                   section={section}
-                  offset={i - index}
+                  offset={Math.max(0, i - index)}
+                  hidden={i < index}
                   isTop={i === index}
-                  onSwipe={handleSwipe}
+                  onSwipeIntent={handleSwipeIntent}
+                  onSwipeComplete={handleSwipeComplete}
                   total={total}
-                  exitDirection={exitDirection}
                 />
               );
             })}
-          </AnimatePresence>
         </div>
 
         {!closingAfterSwipe && (
@@ -263,7 +267,10 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
             <button
               key={i}
               type="button"
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setClosingAfterSwipe(false);
+                setIndex(i);
+              }}
               className={cn(
                 "h-1.5 rounded-full transition-all",
                 i === index ? "w-7 bg-white" : "w-1.5 bg-white/35 hover:bg-white/55"
