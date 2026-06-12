@@ -146,6 +146,7 @@ function SwipeCard({
   hidden,
   isPrevious,
   isTop,
+  stackDragX,
   onDragMotion,
   onSwipeIntent,
   onSwipeComplete,
@@ -169,6 +170,16 @@ function SwipeCard({
   const previousOpacity = useTransform(stackDragX, [0, 48, 170], [0, 0.7, 1]);
   const previousScale = useTransform(stackDragX, [0, 170], [0.955, 1]);
   const previousY = useTransform(stackDragX, [0, 170], [16, 0]);
+  const nextScale = useTransform(stackDragX, [-170, 0], [1, 0.955]);
+  const nextY = useTransform(stackDragX, [-170, 0], [0, 15]);
+
+  const stackStyle = isTop
+    ? { x, rotate, opacity, zIndex: total + 3 }
+    : isPrevious
+      ? { opacity: previousOpacity, scale: previousScale, y: previousY, zIndex: total + 2 }
+      : offset === 1 && !hidden
+        ? { scale: nextScale, y: nextY, zIndex: total - offset }
+        : { zIndex: total - offset };
 
   useEffect(() => {
     if (isTop && !isThrowing.current) x.set(0);
@@ -201,12 +212,12 @@ function SwipeCard({
   return (
     <motion.div
       className="absolute inset-0"
-      style={isTop ? { x, rotate, opacity, zIndex: total + 3 } : { zIndex: total - offset }}
+      style={stackStyle}
       initial={false}
       animate={{
-        scale: hidden ? 0.94 : 1 - offset * 0.045,
-        y: hidden ? 24 : offset * 15,
-        opacity: hidden || offset > 2 ? 0 : 1,
+        scale: isTop || isPrevious || offset === 1 ? undefined : hidden ? 0.94 : 1 - offset * 0.045,
+        y: isTop || isPrevious || offset === 1 ? undefined : hidden ? 24 : offset * 15,
+        opacity: isTop || isPrevious ? undefined : hidden || offset > 2 ? 0 : 1,
       }}
       transition={{ type: "spring", stiffness: 360, damping: 34, mass: 0.72 }}
       drag={isTop ? "x" : false}
