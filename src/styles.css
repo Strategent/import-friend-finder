@@ -415,6 +415,11 @@
   font-size: clamp(12px, min(4.2cqh, 1.25cqw), 14px);
   line-height: 1.55;
 }
+[data-density="compact"] > section > div:nth-child(1) > button {
+  margin-top: clamp(14px, 4.5cqh, 22px);
+  padding: clamp(8px, 2.8cqh, 11px) clamp(20px, 3cqw, 28px);
+  font-size: clamp(12px, 3.8cqh, 14px);
+}
 
 /* White brief document — top-aligned, floats inside card with margin */
 .daily-brief-document {
