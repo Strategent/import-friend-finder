@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { DailyBriefStack } from "./daily-brief-stack";
 
 export interface BriefPriority {
   status: "urgent" | "this-week" | "closed";
@@ -74,7 +76,13 @@ export function DailyBriefHero({
   brief?: DailyBriefData;
   onReadBrief?: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(true);
+    onReadBrief?.();
+  };
   return (
+    <>
     <section className="daily-brief-hero-bg relative min-h-[380px] w-full overflow-hidden rounded-[32px] lg:min-h-[420px]">
       {/* Left zone — eyebrow, headline, summary (no button) */}
       <div className="relative z-10 flex h-full flex-col justify-center px-7 py-8 lg:max-w-[52%] lg:px-12 lg:py-12">
@@ -95,7 +103,7 @@ export function DailyBriefHero({
 
         <button
           type="button"
-          onClick={onReadBrief}
+          onClick={handleClick}
           className="mt-24 w-fit rounded-full bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90"
         >
           Read daily brief
@@ -152,5 +160,7 @@ export function DailyBriefHero({
 
       <div aria-hidden className="daily-brief-grain pointer-events-none absolute inset-0" />
     </section>
+    <DailyBriefStack open={open} onOpenChange={setOpen} />
+    </>
   );
 }
