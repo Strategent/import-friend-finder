@@ -105,7 +105,7 @@ export function DailyBriefHero({
 
       {/* Right zone — white brief document, top-aligned with margin */}
       <div className="daily-brief-document absolute z-10 hidden overflow-hidden rounded-[6px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] lg:block">
-        <p className="font-sans text-[6px] uppercase tracking-[0.12em] text-neutral-500">
+        <p className="font-sans text-[5px] uppercase tracking-[0.1em] text-neutral-500 whitespace-nowrap">
           {brief.date} · {brief.workspace}
         </p>
         <h2 className="font-serif-display mt-3 text-[18px] font-normal leading-tight text-neutral-900">

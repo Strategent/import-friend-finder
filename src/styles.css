@@ -451,8 +451,9 @@
 }
 
 [data-density="compact"] .daily-brief-document > p:first-child {
-  font-size: 7px;
-  letter-spacing: 0.14em;
+  font-size: 5px;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
 }
 [data-density="compact"] .daily-brief-document > h2 {
   margin-top: 10px;
