@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "motion/react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 type Section = { label: string; render: () => React.ReactNode };
@@ -139,16 +139,18 @@ function SwipeCard({
   isTop,
   onSwipe,
   total,
+  exitDirection,
 }: {
   section: Section;
   offset: number;
   isTop: boolean;
   onSwipe: (dir: 1 | -1) => void;
   total: number;
+  exitDirection: 1 | -1;
 }) {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-300, 0, 300], [-18, 0, 18]);
-  const opacity = useTransform(x, [-300, -150, 0, 150, 300], [0, 1, 1, 1, 0]);
+  const rotate = useTransform(x, [-320, 0, 320], [-14, 0, 14]);
+  const opacity = useTransform(x, [-360, -170, 0, 170, 360], [0.18, 1, 1, 1, 0.18]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const swipe = Math.abs(info.offset.x) * info.velocity.x;
@@ -162,13 +164,20 @@ function SwipeCard({
       style={isTop ? { x, rotate, opacity, zIndex: total - offset } : { zIndex: total - offset }}
       initial={false}
       animate={{
-        scale: 1 - offset * 0.045,
-        y: offset * 14,
+        scale: 1 - offset * 0.04,
+        y: offset * 16,
         opacity: offset > 2 ? 0 : 1,
       }}
-      transition={{ type: "spring", stiffness: 260, damping: 26 }}
+      exit={{
+        x: exitDirection === 1 ? -620 : 620,
+        rotate: exitDirection === 1 ? -18 : 18,
+        opacity: 0,
+        scale: 0.96,
+        transition: { duration: 0.58, ease: [0.19, 1, 0.22, 1] },
+      }}
+      transition={{ type: "spring", stiffness: 150, damping: 32, mass: 1.05 }}
       drag={isTop ? "x" : false}
-      dragElastic={0.7}
+      dragElastic={0.34}
       dragSnapToOrigin
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
@@ -181,12 +190,24 @@ function SwipeCard({
 
 export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const [index, setIndex] = useState(0);
+  const [exitDirection, setExitDirection] = useState<1 | -1>(1);
+  const [closingAfterSwipe, setClosingAfterSwipe] = useState(false);
   const total = SECTIONS.length;
 
   const handleSwipe = (dir: 1 | -1) => {
+    setExitDirection(dir);
     setIndex((i) => {
       const next = i + dir;
-      if (next < 0 || next >= total) return i;
+      if (next < 0) return i;
+      if (next >= total) {
+        setClosingAfterSwipe(true);
+        window.setTimeout(() => {
+          onOpenChange(false);
+          setIndex(0);
+          setClosingAfterSwipe(false);
+        }, 620);
+        return total;
+      }
       return next;
     });
   };
@@ -200,6 +221,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
       }}
     >
       <DialogContent className="max-w-[440px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
+        <DialogTitle className="sr-only">Daily brief</DialogTitle>
         <div className="relative h-[620px] w-full select-none">
           <AnimatePresence initial={false}>
             {SECTIONS.map((section, i) => {
@@ -212,12 +234,14 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
                   isTop={i === index}
                   onSwipe={handleSwipe}
                   total={total}
+                  exitDirection={exitDirection}
                 />
               );
             })}
           </AnimatePresence>
         </div>
 
+        {!closingAfterSwipe && (
         <div className="flex justify-center gap-1.5 mt-5">
           {SECTIONS.map((_, i) => (
             <button
@@ -232,6 +256,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
             />
           ))}
         </div>
+        )}
       </DialogContent>
     </Dialog>
   );
