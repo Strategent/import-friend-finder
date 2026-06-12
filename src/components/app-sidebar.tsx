@@ -36,9 +36,10 @@ const SyraIcon = ({ className }: { className?: string; strokeWidth?: number }) =
     <img
       src={syraSIcon.url}
       alt=""
-      className="absolute h-full w-full object-contain scale-[3.4] dark:invert"
-      style={{ filter: "brightness(0)" }}
+      className="absolute h-full w-full object-contain scale-[3.4]"
+      style={{ filter: "brightness(0) invert(1)" }}
     />
+
   </span>
 );
 
