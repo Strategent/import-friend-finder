@@ -440,9 +440,6 @@
   [data-density="compact"] > section > div:nth-child(1) > p {
     max-width: 100%;
   }
-  [data-density="compact"] .daily-brief-document {
-    display: none !important;
-  }
 }
 @container daily-brief-card (max-height: 300px) {
   [data-density="compact"] > section > div:nth-child(1) > div:first-child > span {
