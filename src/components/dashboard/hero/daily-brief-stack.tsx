@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useTransform,
+  type MotionValue,
+  type PanInfo,
+} from "motion/react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -136,49 +143,91 @@ function News({ src, hed, body }: { src: string; hed: string; body: string }) {
 function SwipeCard({
   section,
   offset,
+  hidden,
+  isPrevious,
   isTop,
-  onSwipe,
+  stackDragX,
+  onDragMotion,
+  onSwipeIntent,
+  onSwipeComplete,
   total,
-  exitDirection,
 }: {
   section: Section;
   offset: number;
+  hidden: boolean;
+  isPrevious: boolean;
   isTop: boolean;
-  onSwipe: (dir: 1 | -1) => void;
+  stackDragX: MotionValue<number>;
+  onDragMotion: (x: number) => void;
+  onSwipeIntent: (dir: 1 | -1) => boolean;
+  onSwipeComplete: (dir: 1 | -1) => void;
   total: number;
-  exitDirection: 1 | -1;
 }) {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-320, 0, 320], [-14, 0, 14]);
-  const opacity = useTransform(x, [-360, -170, 0, 170, 360], [0.18, 1, 1, 1, 0.18]);
+  const isThrowing = useRef(false);
+  const rotate = useTransform(x, [-360, 0, 360], [-15, 0, 15]);
+  const opacity = useTransform(x, [-620, -260, 0, 260, 620], [0, 1, 1, 1, 0]);
+  const previousOpacity = useTransform(stackDragX, [0, 48, 170], [0, 0.7, 1]);
+  const previousScale = useTransform(stackDragX, [0, 170], [0.955, 1]);
+  const previousY = useTransform(stackDragX, [0, 170], [16, 0]);
+  const nextScale = useTransform(stackDragX, [-170, 0], [1, 0.955]);
+  const nextY = useTransform(stackDragX, [-170, 0], [0, 15]);
+
+  const stackStyle = isTop
+    ? { x, rotate, opacity, zIndex: total + 3 }
+    : isPrevious
+      ? { opacity: previousOpacity, scale: previousScale, y: previousY, zIndex: total + 2 }
+      : offset === 1 && !hidden
+        ? { scale: nextScale, y: nextY, zIndex: total - offset }
+        : { zIndex: total - offset };
+
+  useEffect(() => {
+    if (isTop && !isThrowing.current) x.set(0);
+  }, [isTop, x]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
-    const swipe = Math.abs(info.offset.x) * info.velocity.x;
-    if (swipe < -10000 || info.offset.x < -140) onSwipe(1);
-    else if (swipe > 10000 || info.offset.x > 140) onSwipe(-1);
+    if (isThrowing.current) return;
+
+    const dir: 1 | -1 = info.offset.x < 0 ? 1 : -1;
+    const shouldThrow = Math.abs(info.offset.x) > 104 || Math.abs(info.velocity.x) > 520;
+
+    if (!shouldThrow || !onSwipeIntent(dir)) {
+      onDragMotion(0);
+      animate(x, 0, { type: "spring", stiffness: 520, damping: 38, mass: 0.55 });
+      return;
+    }
+
+    isThrowing.current = true;
+    animate(stackDragX, dir === 1 ? -170 : 170, {
+      duration: 0.34,
+      ease: [0.2, 0.82, 0.24, 1],
+    });
+    animate(x, dir === 1 ? -680 : 680, {
+      duration: 0.34,
+      ease: [0.2, 0.82, 0.24, 1],
+    }).then(() => {
+      onSwipeComplete(dir);
+      stackDragX.set(0);
+      x.set(0);
+      isThrowing.current = false;
+    });
   };
 
   return (
     <motion.div
       className="absolute inset-0"
-      style={isTop ? { x, rotate, opacity, zIndex: total - offset } : { zIndex: total - offset }}
+      style={stackStyle}
       initial={false}
       animate={{
-        scale: 1 - offset * 0.04,
-        y: offset * 16,
-        opacity: offset > 2 ? 0 : 1,
+        scale: isTop || isPrevious || offset === 1 ? undefined : hidden ? 0.94 : 1 - offset * 0.045,
+        y: isTop || isPrevious || offset === 1 ? undefined : hidden ? 24 : offset * 15,
+        opacity: isTop || isPrevious ? undefined : hidden || offset > 2 ? 0 : 1,
       }}
-      exit={{
-        x: exitDirection === 1 ? -620 : 620,
-        rotate: exitDirection === 1 ? -18 : 18,
-        opacity: 0,
-        scale: 0.96,
-        transition: { duration: 0.58, ease: [0.19, 1, 0.22, 1] },
-      }}
-      transition={{ type: "spring", stiffness: 150, damping: 32, mass: 1.05 }}
+      transition={{ type: "spring", stiffness: 360, damping: 34, mass: 0.72 }}
       drag={isTop ? "x" : false}
-      dragElastic={0.34}
-      dragSnapToOrigin
+      dragElastic={0.18}
+      dragMomentum={false}
+      onDrag={isTop ? (_, info) => onDragMotion(info.offset.x) : undefined}
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
       <div className="h-full w-full bg-white rounded-[24px] border border-[#ececec] shadow-[0_24px_70px_rgba(0,0,0,0.28)] px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
@@ -190,55 +239,65 @@ function SwipeCard({
 
 export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const [index, setIndex] = useState(0);
-  const [exitDirection, setExitDirection] = useState<1 | -1>(1);
   const [closingAfterSwipe, setClosingAfterSwipe] = useState(false);
+  const stackDragX = useMotionValue(0);
   const total = SECTIONS.length;
 
-  const handleSwipe = (dir: 1 | -1) => {
-    setExitDirection(dir);
+  const handleSwipeIntent = (dir: 1 | -1) => {
+    if (dir === -1 && index === 0) return false;
+    if (dir === 1 && index === total - 1) setClosingAfterSwipe(true);
+    return true;
+  };
+
+  const handleSwipeComplete = (dir: 1 | -1) => {
     setIndex((i) => {
-      const next = i + dir;
-      if (next < 0) return i;
-      if (next >= total) {
-        setClosingAfterSwipe(true);
+      if (dir === 1 && i >= total - 1) {
+        onOpenChange(false);
+        stackDragX.set(0);
         window.setTimeout(() => {
-          onOpenChange(false);
           setIndex(0);
           setClosingAfterSwipe(false);
-        }, 620);
-        return total;
+        }, 180);
+        return i;
       }
-      return next;
+      return Math.max(0, Math.min(total - 1, i + dir));
     });
   };
 
+  const handleOpenChange = (o: boolean) => {
+    onOpenChange(o);
+    if (!o) {
+      window.setTimeout(() => {
+        setIndex(0);
+        setClosingAfterSwipe(false);
+        stackDragX.set(0);
+      }, 180);
+    }
+  };
+
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(o) => {
-        onOpenChange(o);
-        if (!o) setTimeout(() => setIndex(0), 250);
-      }}
-    >
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-[440px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
         <DialogTitle className="sr-only">Daily brief</DialogTitle>
         <div className="relative h-[620px] w-full select-none">
-          <AnimatePresence initial={false}>
-            {SECTIONS.map((section, i) => {
-              if (i < index || i > index + 2) return null;
+          {SECTIONS.map((section, i) => {
+              if (i > index + 2) return null;
               return (
                 <SwipeCard
                   key={i}
                   section={section}
-                  offset={i - index}
+                  offset={Math.max(0, i - index)}
+                  hidden={i < index}
+                  isPrevious={i === index - 1}
                   isTop={i === index}
-                  onSwipe={handleSwipe}
+                  stackDragX={stackDragX}
+                  onDragMotion={(value) => stackDragX.set(value)}
+                  onSwipeIntent={handleSwipeIntent}
+                  onSwipeComplete={handleSwipeComplete}
                   total={total}
-                  exitDirection={exitDirection}
                 />
               );
             })}
-          </AnimatePresence>
         </div>
 
         {!closingAfterSwipe && (
@@ -247,7 +306,10 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
             <button
               key={i}
               type="button"
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setClosingAfterSwipe(false);
+                setIndex(i);
+              }}
               className={cn(
                 "h-1.5 rounded-full transition-all",
                 i === index ? "w-7 bg-white" : "w-1.5 bg-white/35 hover:bg-white/55"
