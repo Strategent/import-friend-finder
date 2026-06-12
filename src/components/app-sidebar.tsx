@@ -123,7 +123,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar
-      collapsible="icon"
+      collapsible="offcanvas"
       className="border-r border-border/60 bg-sidebar/80 backdrop-blur-xl"
     >
       <SidebarHeader className="p-4">
