@@ -156,14 +156,14 @@ export function AppSidebar() {
             <span className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground/55">
               Powered by
             </span>
-            <span className="text-[23px] font-light leading-none text-primary">strategent</span>
+            <span className="font-serif-display text-[23px] font-light leading-none text-neutral-400/80">strategent</span>
           </div>
         ) : (
           <div className="flex w-full flex-col items-start gap-0.5 pl-[7px]">
             <span className="text-[3px] uppercase leading-none tracking-[0.06em] text-muted-foreground/55">
               Powered by
             </span>
-            <span className="text-[7px] font-light leading-none text-primary">strategent</span>
+            <span className="font-serif-display text-[7px] font-light leading-none text-neutral-400/80">strategent</span>
           </div>
         )}
       </SidebarFooter>
