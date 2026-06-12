@@ -60,7 +60,7 @@ const collaboration = [
 const operations = [
   { title: "Syra", url: "/syra", icon: SyraIcon as never, accent: true },
   { title: "Billing", url: "/billing", icon: CreditCard },
-  { title: "Strategent Support", url: "/support", icon: LifeBuoy },
+  { title: "Support", url: "/support", icon: LifeBuoy },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
