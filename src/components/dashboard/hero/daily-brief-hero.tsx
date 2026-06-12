@@ -96,7 +96,7 @@ export function DailyBriefHero({
         <button
           type="button"
           onClick={onReadBrief}
-          className="mt-10 w-fit rounded-full bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90"
+          className="mt-14 w-fit rounded-full bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90"
         >
           Read daily brief
         </button>
