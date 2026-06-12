@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useMotionValue, useTransform, type PanInfo } from "motion/react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -136,49 +136,65 @@ function News({ src, hed, body }: { src: string; hed: string; body: string }) {
 function SwipeCard({
   section,
   offset,
+  hidden,
   isTop,
-  onSwipe,
+  onSwipeIntent,
+  onSwipeComplete,
   total,
-  exitDirection,
 }: {
   section: Section;
   offset: number;
+  hidden: boolean;
   isTop: boolean;
-  onSwipe: (dir: 1 | -1) => void;
+  onSwipeIntent: (dir: 1 | -1) => boolean;
+  onSwipeComplete: (dir: 1 | -1) => void;
   total: number;
-  exitDirection: 1 | -1;
 }) {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-320, 0, 320], [-14, 0, 14]);
-  const opacity = useTransform(x, [-360, -170, 0, 170, 360], [0.18, 1, 1, 1, 0.18]);
+  const isThrowing = useRef(false);
+  const rotate = useTransform(x, [-360, 0, 360], [-15, 0, 15]);
+  const opacity = useTransform(x, [-620, -260, 0, 260, 620], [0, 1, 1, 1, 0]);
+
+  useEffect(() => {
+    if (isTop && !isThrowing.current) x.set(0);
+  }, [isTop, x]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
-    const swipe = Math.abs(info.offset.x) * info.velocity.x;
-    if (swipe < -10000 || info.offset.x < -140) onSwipe(1);
-    else if (swipe > 10000 || info.offset.x > 140) onSwipe(-1);
+    if (isThrowing.current) return;
+
+    const dir: 1 | -1 = info.offset.x < 0 ? 1 : -1;
+    const shouldThrow = Math.abs(info.offset.x) > 104 || Math.abs(info.velocity.x) > 520;
+
+    if (!shouldThrow || !onSwipeIntent(dir)) {
+      animate(x, 0, { type: "spring", stiffness: 520, damping: 38, mass: 0.55 });
+      return;
+    }
+
+    isThrowing.current = true;
+    animate(x, dir === 1 ? -680 : 680, {
+      duration: 0.34,
+      ease: [0.2, 0.82, 0.24, 1],
+    }).then(() => {
+      onSwipeComplete(dir);
+      x.set(0);
+      isThrowing.current = false;
+    });
   };
 
   return (
     <motion.div
       className="absolute inset-0"
-      style={isTop ? { x, rotate, opacity, zIndex: total - offset } : { zIndex: total - offset }}
+      style={isTop ? { x, rotate, opacity, zIndex: total + 3 } : { zIndex: total - offset }}
       initial={false}
       animate={{
-        scale: 1 - offset * 0.04,
-        y: offset * 16,
-        opacity: offset > 2 ? 0 : 1,
+        scale: hidden ? 0.94 : 1 - offset * 0.045,
+        y: hidden ? 24 : offset * 15,
+        opacity: hidden || offset > 2 ? 0 : 1,
       }}
-      exit={{
-        x: exitDirection === 1 ? -620 : 620,
-        rotate: exitDirection === 1 ? -18 : 18,
-        opacity: 0,
-        scale: 0.96,
-        transition: { duration: 0.58, ease: [0.19, 1, 0.22, 1] },
-      }}
-      transition={{ type: "spring", stiffness: 150, damping: 32, mass: 1.05 }}
+      transition={{ type: "spring", stiffness: 360, damping: 34, mass: 0.72 }}
       drag={isTop ? "x" : false}
-      dragElastic={0.34}
-      dragSnapToOrigin
+      dragElastic={0.18}
+      dragMomentum={false}
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
       <div className="h-full w-full bg-white rounded-[24px] border border-[#ececec] shadow-[0_24px_70px_rgba(0,0,0,0.28)] px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
