@@ -139,16 +139,18 @@ function SwipeCard({
   isTop,
   onSwipe,
   total,
+  exitDirection,
 }: {
   section: Section;
   offset: number;
   isTop: boolean;
   onSwipe: (dir: 1 | -1) => void;
   total: number;
+  exitDirection: 1 | -1;
 }) {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-300, 0, 300], [-18, 0, 18]);
-  const opacity = useTransform(x, [-300, -150, 0, 150, 300], [0, 1, 1, 1, 0]);
+  const rotate = useTransform(x, [-320, 0, 320], [-14, 0, 14]);
+  const opacity = useTransform(x, [-360, -170, 0, 170, 360], [0.18, 1, 1, 1, 0.18]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const swipe = Math.abs(info.offset.x) * info.velocity.x;
@@ -162,13 +164,20 @@ function SwipeCard({
       style={isTop ? { x, rotate, opacity, zIndex: total - offset } : { zIndex: total - offset }}
       initial={false}
       animate={{
-        scale: 1 - offset * 0.045,
-        y: offset * 14,
+        scale: 1 - offset * 0.04,
+        y: offset * 16,
         opacity: offset > 2 ? 0 : 1,
       }}
-      transition={{ type: "spring", stiffness: 260, damping: 26 }}
+      exit={{
+        x: exitDirection === 1 ? -560 : 560,
+        rotate: exitDirection === 1 ? -16 : 16,
+        opacity: 0,
+        scale: 0.97,
+        transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+      }}
+      transition={{ type: "spring", stiffness: 190, damping: 30, mass: 0.9 }}
       drag={isTop ? "x" : false}
-      dragElastic={0.7}
+      dragElastic={0.42}
       dragSnapToOrigin
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
