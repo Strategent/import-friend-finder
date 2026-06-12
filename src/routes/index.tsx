@@ -16,7 +16,6 @@ import {
   PlannerCard,
   TeamCard,
   ChannelsCard,
-  DocumentsCard,
 } from "@/components/dashboard/widgets";
 
 export const Route = createFileRoute("/")({
@@ -94,7 +93,6 @@ function Home() {
       { id: "planner", x: 0, y: 10, w: 1, h: 5, minH: 3, node: <PlannerCard /> },
       { id: "team", x: 0, y: 15, w: 1, h: 4, minH: 3, node: <TeamCard /> },
       { id: "channels", x: 0, y: 19, w: 1, h: 4, minH: 3, node: <ChannelsCard /> },
-      { id: "documents", x: 0, y: 23, w: 1, h: 5, minH: 3, node: <DocumentsCard /> },
     ],
     [],
   );
