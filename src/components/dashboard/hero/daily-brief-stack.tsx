@@ -1,74 +1,51 @@
 import { useState } from "react";
-import { motion, AnimatePresence, type PanInfo } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "motion/react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-type Section = {
-  label: string;
-  render: () => React.ReactNode;
-};
+type Section = { label: string; render: () => React.ReactNode };
 
 const SECTIONS: Section[] = [
   {
-    label: "Overview",
+    label: "Today",
     render: () => (
       <div className="flex h-full flex-col">
         <div className="db-eyebrow">
-          Syra <span>→</span> Daily Brief <span>·</span> Updated just now
+          Syra <span>→</span> Daily Brief <span>·</span> Just now
         </div>
         <div className="db-greeting">Good morning, John.</div>
         <p className="db-lede">
           Markets opened steady. Hartley Trust review is your priority, followed by the
-          Marlow rebalance at 11:30. Three items need your attention before noon.
+          Marlow rebalance at 11:30.
         </p>
-      </div>
-    ),
-  },
-  {
-    label: "Priorities",
-    render: () => (
-      <div className="flex h-full flex-col">
         <SectionRule label="Priorities" />
-        <div className="db-list">
-          <PRow tone="hi" name="Hartley Family Trust — IPS sign-off" detail="Olivia's draft ready. Q4 statements attached by Eleanor. Review before meeting." time="Today · 9:00 – 10:00 AM · Confirmed" />
-          <PRow tone="hi" name="Denis Marlow — portfolio rebalance" detail="Allocation memo attached. Marcus Sterling confirmed proceed." time="Today · 11:30 AM" />
-          <PRow tone="mid" name="Office B123 onboarding prep" detail="No owner assigned. Needs attention before Friday." time="Due Friday" />
-          <PRow tone="ok" name="Rebecca Caldwell — engagement letter" detail="Countersigned and vaulted. No action needed." />
+        <div className="flex-1">
+          <PRow tone="hi" name="Hartley Family Trust — IPS sign-off" detail="Olivia's draft ready. Review before 9am." time="9:00 – 10:00 AM" />
+          <PRow tone="hi" name="Denis Marlow — portfolio rebalance" detail="Allocation memo attached. Cleared to proceed." time="11:30 AM" />
+          <PRow tone="mid" name="Office B123 onboarding prep" detail="No owner assigned." time="Due Friday" />
         </div>
       </div>
     ),
   },
   {
-    label: "Reminders",
+    label: "Reminders & Markets",
     render: () => (
       <div className="flex h-full flex-col">
+        <div className="db-eyebrow">Action items · Market open</div>
+        <div className="db-greeting db-greeting--sm">Three things before noon.</div>
         <SectionRule label="Reminders" />
-        <div className="db-list">
-          <Rem text="Review Hartley Q4 statements before 9am" when="Due now" />
-          <Rem text="Reply to Olivia — confirm IPS call Thursday 2pm" when="Draft queued by Syra" />
-          <Rem text="Assign owner for B123 onboarding" when="EOD today" />
-          <Rem text="Review Marlow allocation memo before 11:30" when="IPS_v3.pdf attached" />
+        <div className="mb-6">
+          <Rem text="Review Hartley Q4 statements" when="Due now" />
+          <Rem text="Reply to Olivia — confirm IPS call Thursday 2pm" when="Draft queued" />
+          <Rem text="Review Marlow allocation memo" when="Before 11:30" />
         </div>
-      </div>
-    ),
-  },
-  {
-    label: "Markets",
-    render: () => (
-      <div className="flex h-full flex-col">
         <SectionRule label="Markets" />
-        <div className="grid grid-cols-2 gap-x-3 gap-y-5 mb-7">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4">
           <Mkt ticker="10-yr Treasury" val="4.31%" delta="▼ 6bps" tone="dn" />
           <Mkt ticker="S&P 500" val="Flat" delta="+0.02%" tone="flat" />
           <Mkt ticker="Breadth" val={<span className="text-[#3B6D11]">Improved</span>} />
           <Mkt ticker="Fed speakers" val={<span className="text-[14px] text-neutral-400 font-light">None today</span>} />
         </div>
-        <blockquote className="border-l-2 border-[#7F77DD] py-2.5 px-3.5">
-          <p className="font-serif-display text-[14px] italic text-neutral-400 leading-[1.7]">
-            "First session in three weeks where advancers outpaced decliners across all
-            sectors. Treasuries firmed on softer CPI revisions."
-          </p>
-        </blockquote>
       </div>
     ),
   },
@@ -76,13 +53,20 @@ const SECTIONS: Section[] = [
     label: "News digest",
     render: () => (
       <div className="flex h-full flex-col">
+        <div className="db-eyebrow">Context · Curated by Syra</div>
+        <div className="db-greeting db-greeting--sm">What's moving today.</div>
+        <blockquote className="border-l-2 border-[#7F77DD] py-2 px-3.5 mb-5">
+          <p className="font-serif-display text-[13px] italic text-neutral-500 leading-[1.6]">
+            "Advancers outpaced decliners across all sectors. Treasuries firmed on softer CPI revisions."
+          </p>
+        </blockquote>
         <SectionRule label="News digest" />
-        <div className="db-list">
-          <News src="Financial Times" hed="Treasury yields slip as CPI revision points to cooler inflation" body="Revised figures came in 10bps below consensus. Bond-heavy portfolios may benefit — relevant for Hartley and Marlow accounts." />
-          <News src="WSJ" hed="Wealth managers face tighter fiduciary disclosure rules in Q3" body="SEC updated guidance takes effect July 1. IPS documentation across all trust accounts should be reviewed before deadline." />
-          <News src="Bloomberg" hed="Private credit spreads tighten as institutional demand surges" body="Direct lending inflows not seen since 2021. Context for clients with alternatives exposure in Marlow and Hartley portfolios." />
+        <div className="flex-1">
+          <News src="Financial Times" hed="Treasury yields slip as CPI revision points to cooler inflation" body="Bond-heavy portfolios may benefit — relevant for Hartley and Marlow." />
+          <News src="WSJ" hed="Wealth managers face tighter fiduciary disclosure rules in Q3" body="SEC guidance takes effect July 1. Review IPS docs before deadline." />
+          <News src="Bloomberg" hed="Private credit spreads tighten as institutional demand surges" body="Inflows not seen since 2021. Context for alternatives exposure." />
         </div>
-        <div className="mt-auto pt-4 border-t border-[#f0f0f0] text-[11px] text-neutral-300">
+        <div className="mt-4 pt-3 border-t border-[#f0f0f0] text-[10px] text-neutral-300 tracking-wide">
           Generated by Syra · Harwick &amp; Sterne · Confidential · Jun 9, 2026
         </div>
       </div>
@@ -92,11 +76,11 @@ const SECTIONS: Section[] = [
 
 function SectionRule({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2 mb-3.5 mt-1">
-      <span className="text-[9px] tracking-[0.18em] uppercase text-neutral-300 whitespace-nowrap">
+    <div className="flex items-center gap-2 mb-2.5 mt-1">
+      <span className="text-[9px] tracking-[0.2em] uppercase text-neutral-400 whitespace-nowrap font-medium">
         {label}
       </span>
-      <div className="flex-1 h-px bg-[#ebebeb]" />
+      <div className="flex-1 h-px bg-[#ececec]" />
     </div>
   );
 }
@@ -104,12 +88,12 @@ function SectionRule({ label }: { label: string }) {
 function PRow({ tone, name, detail, time }: { tone: "hi" | "mid" | "ok"; name: string; detail: string; time?: string }) {
   const dot = tone === "hi" ? "bg-[#7F77DD]" : tone === "mid" ? "bg-[#ccc]" : "bg-[#e2e2e2]";
   return (
-    <div className="flex gap-3 py-3.5 border-b border-[#f2f2f2] last:border-b-0">
+    <div className="flex gap-3 py-3 border-b border-[#f4f4f4] last:border-b-0">
       <div className={cn("w-[7px] h-[7px] rounded-full mt-1.5 shrink-0", dot)} />
-      <div>
-        <div className="text-[15px] font-medium text-neutral-900 mb-1 leading-snug">{name}</div>
-        <div className="text-[13px] font-light text-neutral-500 leading-[1.5]">{detail}</div>
-        {time && <div className="text-[12px] text-neutral-300 mt-1.5">{time}</div>}
+      <div className="min-w-0 flex-1">
+        <div className="text-[14px] font-medium text-neutral-900 leading-snug">{name}</div>
+        <div className="text-[12.5px] font-light text-neutral-500 leading-[1.5] mt-0.5">{detail}</div>
+        {time && <div className="text-[11px] text-neutral-400 mt-1">{time}</div>}
       </div>
     </div>
   );
@@ -117,11 +101,11 @@ function PRow({ tone, name, detail, time }: { tone: "hi" | "mid" | "ok"; name: s
 
 function Rem({ text, when }: { text: string; when: string }) {
   return (
-    <div className="flex items-start gap-3 py-3 border-b border-[#f2f2f2] last:border-b-0">
-      <div className="w-[18px] h-[18px] rounded border border-[#ddd] shrink-0 mt-px" />
-      <div>
-        <div className="text-[15px] text-neutral-700 leading-[1.45]">{text}</div>
-        <div className="text-[12px] text-neutral-300 mt-1">{when}</div>
+    <div className="flex items-start gap-3 py-2.5 border-b border-[#f4f4f4] last:border-b-0">
+      <div className="w-[16px] h-[16px] rounded border border-[#ddd] shrink-0 mt-px" />
+      <div className="min-w-0 flex-1">
+        <div className="text-[13.5px] text-neutral-700 leading-snug">{text}</div>
+        <div className="text-[11px] text-neutral-400 mt-0.5">{when}</div>
       </div>
     </div>
   );
@@ -131,9 +115,9 @@ function Mkt({ ticker, val, delta, tone }: { ticker: string; val: React.ReactNod
   const tc = tone === "up" ? "text-[#3B6D11]" : tone === "dn" ? "text-[#A32D2D]" : "text-neutral-400";
   return (
     <div>
-      <div className="text-[10px] tracking-[0.08em] uppercase text-neutral-400 mb-1">{ticker}</div>
-      <div className="text-[16px] font-medium text-neutral-900">
-        {val} {delta && <span className={cn("text-[12px] ml-1", tc)}>{delta}</span>}
+      <div className="text-[9px] tracking-[0.1em] uppercase text-neutral-400 mb-1">{ticker}</div>
+      <div className="text-[15px] font-medium text-neutral-900">
+        {val} {delta && <span className={cn("text-[11px] ml-1 font-normal", tc)}>{delta}</span>}
       </div>
     </div>
   );
@@ -141,11 +125,56 @@ function Mkt({ ticker, val, delta, tone }: { ticker: string; val: React.ReactNod
 
 function News({ src, hed, body }: { src: string; hed: string; body: string }) {
   return (
-    <div className="py-4 border-b border-[#f2f2f2] last:border-b-0">
-      <div className="text-[10px] tracking-[0.1em] uppercase text-neutral-400 mb-1.5">{src}</div>
-      <div className="text-[15px] font-medium text-neutral-900 leading-snug mb-1">{hed}</div>
-      <div className="text-[13px] font-light text-neutral-500 leading-[1.55]">{body}</div>
+    <div className="py-3 border-b border-[#f4f4f4] last:border-b-0">
+      <div className="text-[9px] tracking-[0.12em] uppercase text-neutral-400 mb-1">{src}</div>
+      <div className="text-[13.5px] font-medium text-neutral-900 leading-snug mb-0.5">{hed}</div>
+      <div className="text-[12px] font-light text-neutral-500 leading-[1.5]">{body}</div>
     </div>
+  );
+}
+
+function SwipeCard({
+  section,
+  offset,
+  isTop,
+  onSwipe,
+  total,
+}: {
+  section: Section;
+  offset: number;
+  isTop: boolean;
+  onSwipe: (dir: 1 | -1) => void;
+  total: number;
+}) {
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-300, 0, 300], [-18, 0, 18]);
+  const opacity = useTransform(x, [-300, -150, 0, 150, 300], [0, 1, 1, 1, 0]);
+
+  const handleDragEnd = (_: unknown, info: PanInfo) => {
+    const swipe = Math.abs(info.offset.x) * info.velocity.x;
+    if (swipe < -10000 || info.offset.x < -140) onSwipe(1);
+    else if (swipe > 10000 || info.offset.x > 140) onSwipe(-1);
+  };
+
+  return (
+    <motion.div
+      className="absolute inset-0"
+      style={isTop ? { x, rotate, opacity, zIndex: total - offset } : { zIndex: total - offset }}
+      initial={false}
+      animate={{
+        scale: 1 - offset * 0.045,
+        y: offset * 14,
+        opacity: offset > 2 ? 0 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 260, damping: 26 }}
+      drag={isTop ? "x" : false}
+      dragElastic={0.7}
+      onDragEnd={isTop ? handleDragEnd : undefined}
+    >
+      <div className="h-full w-full bg-white rounded-[24px] border border-[#ececec] shadow-[0_24px_70px_rgba(0,0,0,0.28)] px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
+        {section.render()}
+      </div>
+    </motion.div>
   );
 }
 
@@ -153,15 +182,12 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
   const [index, setIndex] = useState(0);
   const total = SECTIONS.length;
 
-  const reset = () => setIndex(0);
-
-  const handleDragEnd = (_: unknown, info: PanInfo) => {
-    const threshold = 100;
-    if (info.offset.x < -threshold && index < total - 1) {
-      setIndex((i) => i + 1);
-    } else if (info.offset.x > threshold && index > 0) {
-      setIndex((i) => i - 1);
-    }
+  const handleSwipe = (dir: 1 | -1) => {
+    setIndex((i) => {
+      const next = i + dir;
+      if (next < 0 || next >= total) return i;
+      return next;
+    });
   };
 
   return (
@@ -169,47 +195,28 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
       open={open}
       onOpenChange={(o) => {
         onOpenChange(o);
-        if (!o) setTimeout(reset, 200);
+        if (!o) setTimeout(() => setIndex(0), 250);
       }}
     >
-      <DialogContent className="max-w-[460px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
-        <div className="relative h-[640px] w-full select-none">
-          {/* Stack — render current + next behind */}
+      <DialogContent className="max-w-[440px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
+        <div className="relative h-[620px] w-full select-none">
           <AnimatePresence initial={false}>
             {SECTIONS.map((section, i) => {
               if (i < index || i > index + 2) return null;
-              const offset = i - index;
-              const isTop = offset === 0;
               return (
-                <motion.div
+                <SwipeCard
                   key={i}
-                  className="absolute inset-0"
-                  style={{ zIndex: total - offset }}
-                  initial={isTop ? { x: 0, opacity: 1, scale: 1 } : { scale: 1 - offset * 0.04, y: offset * 12, opacity: 1 }}
-                  animate={{
-                    x: 0,
-                    y: offset * 12,
-                    scale: 1 - offset * 0.04,
-                    opacity: offset > 2 ? 0 : 1,
-                  }}
-                  exit={{ x: -400, opacity: 0, rotate: -8, transition: { duration: 0.3 } }}
-                  drag={isTop ? "x" : false}
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.5}
-                  onDragEnd={isTop ? handleDragEnd : undefined}
-                  whileDrag={{ rotate: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                >
-                  <div className="h-full w-full bg-white rounded-[20px] border border-[#e8e8e8] shadow-[0_20px_60px_rgba(0,0,0,0.25)] p-7 overflow-y-auto cursor-grab active:cursor-grabbing">
-                    {section.render()}
-                  </div>
-                </motion.div>
+                  section={section}
+                  offset={i - index}
+                  isTop={i === index}
+                  onSwipe={handleSwipe}
+                  total={total}
+                />
               );
             })}
           </AnimatePresence>
         </div>
 
-        {/* Progress dots */}
         <div className="flex justify-center gap-1.5 mt-5">
           {SECTIONS.map((_, i) => (
             <button
@@ -218,27 +225,26 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
               onClick={() => setIndex(i)}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                i === index ? "w-6 bg-white" : "w-1.5 bg-white/40"
+                i === index ? "w-7 bg-white" : "w-1.5 bg-white/35 hover:bg-white/55"
               )}
               aria-label={`Go to ${SECTIONS[i].label}`}
             />
           ))}
         </div>
-        <p className="text-center text-[11px] text-white/60 mt-3">
-          Swipe left to continue · {index + 1} / {total}
+        <p className="text-center text-[11px] text-white/55 mt-3 tracking-wide">
+          {index < total - 1 ? "Swipe left to continue" : "End of brief · swipe right to revisit"} · {index + 1} / {total}
         </p>
       </DialogContent>
     </Dialog>
   );
 }
 
-/* Local styles helpers */
 const _styles = `
-.db-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #aaa; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.db-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #aaa; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .db-eyebrow span { color: #ddd; }
-.db-greeting { font-family: var(--font-serif-display, 'Playfair Display', serif); font-size: 32px; font-weight: 400; line-height: 1.15; color: #111; margin-bottom: 10px; }
-.db-lede { font-size: 15px; font-weight: 300; color: #666; line-height: 1.6; }
-.db-list { margin-bottom: 0; }
+.db-greeting { font-family: var(--font-serif-display, 'Playfair Display', serif); font-size: 30px; font-weight: 400; line-height: 1.1; color: #111; margin-bottom: 10px; letter-spacing: -0.01em; }
+.db-greeting--sm { font-size: 24px; }
+.db-lede { font-size: 14px; font-weight: 300; color: #666; line-height: 1.6; margin-bottom: 22px; }
 `;
 if (typeof document !== "undefined" && !document.getElementById("db-stack-styles")) {
   const el = document.createElement("style");
