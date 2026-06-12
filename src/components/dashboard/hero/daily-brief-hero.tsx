@@ -160,5 +160,7 @@ export function DailyBriefHero({
 
       <div aria-hidden className="daily-brief-grain pointer-events-none absolute inset-0" />
     </section>
+    <DailyBriefStack open={open} onOpenChange={setOpen} />
+    </>
   );
 }
