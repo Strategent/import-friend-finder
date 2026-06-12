@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { animate, motion, useMotionValue, useTransform, type PanInfo } from "motion/react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useTransform,
+  type MotionValue,
+  type PanInfo,
+} from "motion/react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -137,6 +144,7 @@ function SwipeCard({
   section,
   offset,
   hidden,
+  isPrevious,
   isTop,
   onDragMotion,
   onSwipeIntent,
@@ -146,7 +154,9 @@ function SwipeCard({
   section: Section;
   offset: number;
   hidden: boolean;
+  isPrevious: boolean;
   isTop: boolean;
+  stackDragX: MotionValue<number>;
   onDragMotion: (x: number) => void;
   onSwipeIntent: (dir: 1 | -1) => boolean;
   onSwipeComplete: (dir: 1 | -1) => void;
@@ -156,6 +166,9 @@ function SwipeCard({
   const isThrowing = useRef(false);
   const rotate = useTransform(x, [-360, 0, 360], [-15, 0, 15]);
   const opacity = useTransform(x, [-620, -260, 0, 260, 620], [0, 1, 1, 1, 0]);
+  const previousOpacity = useTransform(stackDragX, [0, 48, 170], [0, 0.7, 1]);
+  const previousScale = useTransform(stackDragX, [0, 170], [0.955, 1]);
+  const previousY = useTransform(stackDragX, [0, 170], [16, 0]);
 
   useEffect(() => {
     if (isTop && !isThrowing.current) x.set(0);
