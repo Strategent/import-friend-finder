@@ -236,6 +236,7 @@ function SwipeCard({
 export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const [index, setIndex] = useState(0);
   const [closingAfterSwipe, setClosingAfterSwipe] = useState(false);
+  const stackDragX = useMotionValue(0);
   const total = SECTIONS.length;
 
   const handleSwipeIntent = (dir: 1 | -1) => {
@@ -248,6 +249,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
     setIndex((i) => {
       if (dir === 1 && i >= total - 1) {
         onOpenChange(false);
+        stackDragX.set(0);
         window.setTimeout(() => {
           setIndex(0);
           setClosingAfterSwipe(false);
@@ -264,6 +266,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
       window.setTimeout(() => {
         setIndex(0);
         setClosingAfterSwipe(false);
+        stackDragX.set(0);
       }, 180);
     }
   };
@@ -281,7 +284,10 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
                   section={section}
                   offset={Math.max(0, i - index)}
                   hidden={i < index}
+                  isPrevious={i === index - 1}
                   isTop={i === index}
+                  stackDragX={stackDragX}
+                  onDragMotion={(value) => stackDragX.set(value)}
                   onSwipeIntent={handleSwipeIntent}
                   onSwipeComplete={handleSwipeComplete}
                   total={total}
