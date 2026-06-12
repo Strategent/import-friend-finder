@@ -387,7 +387,7 @@
    every element stays in the DOM. Deliberately unlayered: these must outrank
    the card's Tailwind utility classes (utilities layer beats components). */
 [data-density="compact"] > section {
-  container-type: size;
+  container: daily-brief-card / size;
   height: 100%;
   min-height: 0;
 }
@@ -407,13 +407,17 @@
 [data-density="compact"] > section > div:nth-child(1) > h1 {
   margin-top: clamp(12px, 5cqh, 18px);
   /* the card sets its font-size inline (clamp) — !important is the only override */
-  font-size: clamp(30px, 12cqh, 40px) !important;
+  font-size: clamp(28px, min(15cqh, 4cqw), 42px) !important;
   line-height: 1.04;
 }
 [data-density="compact"] > section > div:nth-child(1) > p {
   margin-top: clamp(10px, 4cqh, 14px);
-  max-width: min(32rem, 50cqw);
-  font-size: clamp(12px, 4.6cqh, 14px);
+  display: -webkit-box;
+  max-width: min(32rem, 54cqw);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-size: clamp(12px, min(4.8cqh, 1.35cqw), 14px);
   line-height: 1.52;
 }
 [data-density="compact"] > section > div:nth-child(1) > button {
@@ -427,6 +431,37 @@
   height: 82%;
   width: 30%;
   padding: 22px 24px;
+}
+@container daily-brief-card (max-width: 900px) {
+  [data-density="compact"] > section > div:nth-child(1) {
+    max-width: none !important;
+    padding: clamp(18px, 6cqh, 26px) clamp(24px, 8cqw, 36px);
+  }
+  [data-density="compact"] > section > div:nth-child(1) > p {
+    max-width: 100%;
+  }
+  [data-density="compact"] .daily-brief-document {
+    display: none !important;
+  }
+}
+@container daily-brief-card (max-height: 300px) {
+  [data-density="compact"] > section > div:nth-child(1) > div:first-child > span {
+    font-size: 10px !important;
+  }
+  [data-density="compact"] > section > div:nth-child(1) > h1 {
+    margin-top: 10px;
+    font-size: clamp(26px, min(13cqh, 4cqw), 36px) !important;
+  }
+  [data-density="compact"] > section > div:nth-child(1) > p {
+    margin-top: 9px;
+    -webkit-line-clamp: 2;
+    font-size: 12px;
+  }
+  [data-density="compact"] > section > div:nth-child(1) > button {
+    margin-top: 12px;
+    padding: 8px 22px;
+    font-size: 12px;
+  }
 }
 [data-density="compact"] .daily-brief-document > p:first-child {
   font-size: 6px;
