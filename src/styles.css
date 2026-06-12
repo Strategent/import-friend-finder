@@ -421,13 +421,15 @@
   font-size: clamp(12px, 3.8cqh, 14px);
 }
 
-/* White brief document — top-aligned, floats inside card with margin */
+/* White brief document — anchored to bottom edge, rises from below */
 .daily-brief-document {
-  top: clamp(28px, 10cqh, 56px);
+  bottom: 0;
   right: clamp(120px, 14cqw, 200px);
   width: clamp(280px, 30cqw, 420px);
-  height: clamp(220px, 78cqh, 320px);
+  height: clamp(240px, 82cqh, 340px);
   padding: clamp(16px, 4cqh, 24px) clamp(18px, 3cqw, 28px);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 /* Dark pill CTA — vertically centered against the doc, far right */
