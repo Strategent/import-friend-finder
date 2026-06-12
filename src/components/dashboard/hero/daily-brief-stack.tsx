@@ -169,15 +169,15 @@ function SwipeCard({
         opacity: offset > 2 ? 0 : 1,
       }}
       exit={{
-        x: exitDirection === 1 ? -560 : 560,
-        rotate: exitDirection === 1 ? -16 : 16,
+        x: exitDirection === 1 ? -620 : 620,
+        rotate: exitDirection === 1 ? -18 : 18,
         opacity: 0,
-        scale: 0.97,
-        transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+        scale: 0.96,
+        transition: { duration: 0.58, ease: [0.19, 1, 0.22, 1] },
       }}
-      transition={{ type: "spring", stiffness: 190, damping: 30, mass: 0.9 }}
+      transition={{ type: "spring", stiffness: 150, damping: 32, mass: 1.05 }}
       drag={isTop ? "x" : false}
-      dragElastic={0.42}
+      dragElastic={0.34}
       dragSnapToOrigin
       onDragEnd={isTop ? handleDragEnd : undefined}
     >
@@ -205,7 +205,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
           onOpenChange(false);
           setIndex(0);
           setClosingAfterSwipe(false);
-        }, 380);
+        }, 620);
         return total;
       }
       return next;
