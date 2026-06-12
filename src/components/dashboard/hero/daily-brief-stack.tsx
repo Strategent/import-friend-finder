@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "motion/react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 type Section = { label: string; render: () => React.ReactNode };
@@ -221,6 +221,7 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
       }}
     >
       <DialogContent className="max-w-[440px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
+        <DialogTitle className="sr-only">Daily brief</DialogTitle>
         <div className="relative h-[620px] w-full select-none">
           <AnimatePresence initial={false}>
             {SECTIONS.map((section, i) => {
