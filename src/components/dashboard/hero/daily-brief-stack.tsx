@@ -198,12 +198,16 @@ function SwipeCard({
     }
 
     isThrowing.current = true;
+    animate(stackDragX, dir === 1 ? -170 : 170, {
+      duration: 0.34,
+      ease: [0.2, 0.82, 0.24, 1],
+    });
     animate(x, dir === 1 ? -680 : 680, {
       duration: 0.34,
       ease: [0.2, 0.82, 0.24, 1],
     }).then(() => {
       onSwipeComplete(dir);
-      onDragMotion(0);
+      stackDragX.set(0);
       x.set(0);
       isThrowing.current = false;
     });
