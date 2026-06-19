@@ -90,7 +90,7 @@ export function InboxCard() {
               tab === t ? "text-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            {t}
+            {t === "other" ? "\n" : t}
             {tab === t && (
               <span className="absolute -bottom-[8px] left-2.5 right-2.5 h-[2px] rounded-full bg-primary" />
             )}
