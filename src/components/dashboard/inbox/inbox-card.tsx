@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Reply, ReplyAll, Forward, Star, Paperclip, Archive } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
 import { emails } from "@/components/dashboard/data";
@@ -13,7 +13,30 @@ import { emails } from "@/components/dashboard/data";
 export function InboxCard() {
   const [selected, setSelected] = useState(0);
   const [tab, setTab] = useState<"focused" | "other">("focused");
+  const [sentIds, setSentIds] = useState<Set<number>>(new Set());
+  const [sending, setSending] = useState(false);
+  const [justSent, setJustSent] = useState(false);
   const e = emails[selected];
+  const isSent = sentIds.has(selected);
+
+  useEffect(() => {
+    setJustSent(false);
+    setSending(false);
+  }, [selected]);
+
+  const handleSend = () => {
+    if (sending || isSent) return;
+    setSending(true);
+    window.setTimeout(() => {
+      setSentIds((prev) => {
+        const next = new Set(prev);
+        next.add(selected);
+        return next;
+      });
+      setSending(false);
+      setJustSent(true);
+    }, 650);
+  };
   const initials = (n: string) =>
     n
       .split(" ")
