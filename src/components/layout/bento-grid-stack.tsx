@@ -115,7 +115,36 @@ function BentoGridStackImpl({
           /* storage may be unavailable */
         }
       };
-      grid.on("change", persist);
+      // Compact after every change so reordering/resizing never leaves
+      // empty rows above an item — cards always shift up to maintain
+      // alignment (Apple-like reflow). Skip while a drag/resize is in
+      // flight to avoid fighting the user's gesture.
+      let interacting = false;
+      const compactAndPersist = () => {
+        if (interacting) {
+          persist();
+          return;
+        }
+        try {
+          grid.compact("compact", false);
+        } catch {
+          /* older gridstack signatures — fall through */
+        }
+        persist();
+      };
+      grid.on("change added removed", compactAndPersist);
+      grid.on("dragstart resizestart", () => {
+        interacting = true;
+      });
+      grid.on("dragstop resizestop", () => {
+        interacting = false;
+        try {
+          grid.compact("compact", false);
+        } catch {
+          /* ignore */
+        }
+        persist();
+      });
 
       // Reveal once gridstack has positioned the items — prevents the
       // pre-init "stacked pile" flash on initial load/reload.
