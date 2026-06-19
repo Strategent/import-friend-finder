@@ -16,8 +16,16 @@ export function InboxCard() {
   const [sentIds, setSentIds] = useState<Set<number>>(new Set());
   const [sending, setSending] = useState(false);
   const [justSent, setJustSent] = useState(false);
-  const e = emails[selected];
-  const isSent = sentIds.has(selected);
+
+  const visibleEmails = useMemo(
+    () => emails.map((m, i) => ({ ...m, originalIndex: i })).filter((m) => !sentIds.has(m.originalIndex)),
+    [sentIds]
+  );
+
+  const selectedIdx = Math.min(selected, Math.max(visibleEmails.length - 1, 0));
+  const e = visibleEmails[selectedIdx] ?? visibleEmails[0] ?? emails[0];
+  const isSent = sentIds.has(e.originalIndex);
+
   const defaultDraft = useMemo(
     () =>
       `Hi ${e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached for sign-off; happy to take 15 min Thursday 2:00 PM ET.`,
@@ -26,10 +34,14 @@ export function InboxCard() {
   const [draft, setDraft] = useState(defaultDraft);
 
   useEffect(() => {
+    setSelected(selectedIdx);
+  }, [visibleEmails.length, selectedIdx]);
+
+  useEffect(() => {
     setJustSent(false);
     setSending(false);
     setDraft(defaultDraft);
-  }, [selected, defaultDraft]);
+  }, [e.originalIndex, defaultDraft]);
 
   const handleSend = () => {
     if (sending || isSent || draft.trim().length === 0) return;
@@ -37,7 +49,7 @@ export function InboxCard() {
     window.setTimeout(() => {
       setSentIds((prev) => {
         const next = new Set(prev);
-        next.add(selected);
+        next.add(e.originalIndex);
         return next;
       });
       setSending(false);
@@ -88,12 +100,12 @@ export function InboxCard() {
       <div className="grid min-h-0 flex-1 grid-cols-12">
         {/* Thread list */}
         <div className="col-span-12 flex min-h-0 flex-col overflow-hidden py-1 md:col-span-4 md:border-r md:border-border/50">
-          {emails.slice(0, 4).map((m, i) => {
+          {visibleEmails.map((m, i) => {
             const unread = m.chips.includes("Draft ready");
-            const active = i === selected;
+            const active = i === selectedIdx;
             return (
               <button
-                key={i}
+                key={m.originalIndex}
                 onClick={() => setSelected(i)}
                 className={`relative flex items-start gap-2.5 px-3 py-1.5 text-left transition-colors ${
                   active ? "bg-primary/[0.08]" : "hover:bg-foreground/[0.035]"
