@@ -130,7 +130,7 @@ export function CalendarCard() {
                 href={m.zoom}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-foreground/[0.06] px-3 text-[11px] font-semibold text-foreground/90 transition-colors hover:bg-foreground/[0.12]"
+                className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md border border-border bg-foreground/[0.06] px-3 text-[11px] font-semibold text-foreground/90 transition-colors hover:bg-foreground/[0.12]"
               >
                 <Video className="h-3 w-3" /> Join
               </a>

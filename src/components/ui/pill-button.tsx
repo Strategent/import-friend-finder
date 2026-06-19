@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
  *  - brand:     Strategent gradient fill (kept for in-card actions like "Send")
  */
 const pillVariants = cva(
-  "inline-flex items-center justify-center gap-1.5 rounded-full font-medium tracking-tight whitespace-nowrap transition-all hover:scale-[1.02] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-1.5 rounded-md font-medium tracking-tight whitespace-nowrap transition-all hover:scale-[1.02] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
