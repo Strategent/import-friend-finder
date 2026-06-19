@@ -178,28 +178,47 @@ export function InboxCard() {
           </div>
 
           {/* Reply composer */}
-          <div className="m-3 mt-2 shrink-0 rounded-lg border border-border/60 bg-foreground/[0.02]">
-            <div className="flex items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10.5px] text-muted-foreground">
-              <span>
-                Reply to <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
+          {isSent ? (
+            <div className="m-3 mt-2 flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.06] px-3 py-2.5">
+              <span className="grid h-5 w-5 place-items-center rounded-full bg-emerald-500/20 text-emerald-400">
+                <Check className="h-3 w-3" strokeWidth={2.5} />
               </span>
-              <button className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground">
-                <Paperclip className="h-3 w-3" /> IPS_v3.pdf
-              </button>
+              <span className="text-[11.5px] text-foreground/85">
+                Sent to <span className="font-medium text-foreground">{e.sender.split(" ")[0]}</span>
+                {justSent && (
+                  <span className="ml-1 text-muted-foreground">· just now</span>
+                )}
+              </span>
             </div>
-            <p className="px-3 py-2 text-[11.5px] leading-snug text-foreground/80">
-              Hi {e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached
-              for sign-off; happy to take 15 min Thursday 2:00 PM ET.
-            </p>
-            <div className="flex items-center gap-1.5 px-3 pb-2.5">
-              <PillButton variant="brand" size="xs">
-                Send
-              </PillButton>
-              <PillButton variant="secondary" size="xs">
-                Edit
-              </PillButton>
+          ) : (
+            <div className="m-3 mt-2 shrink-0 rounded-lg border border-border/60 bg-foreground/[0.02]">
+              <div className="flex items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10.5px] text-muted-foreground">
+                <span>
+                  Reply to <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
+                </span>
+                <button className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground">
+                  <Paperclip className="h-3 w-3" /> IPS_v3.pdf
+                </button>
+              </div>
+              <p className="px-3 py-2 text-[11.5px] leading-snug text-foreground/80">
+                Hi {e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached
+                for sign-off; happy to take 15 min Thursday 2:00 PM ET.
+              </p>
+              <div className="flex items-center gap-1.5 px-3 pb-2.5">
+                <PillButton
+                  variant="brand"
+                  size="xs"
+                  onClick={handleSend}
+                  disabled={sending}
+                >
+                  {sending ? "Sending…" : "Send"}
+                </PillButton>
+                <PillButton variant="secondary" size="xs">
+                  Edit
+                </PillButton>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </Panel>
