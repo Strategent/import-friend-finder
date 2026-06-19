@@ -1,11 +1,13 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Bell, Search, Sun, X } from "lucide-react";
+import { Bell, Search, Sun, Moon, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
+import { useTheme } from "@/components/theme-provider";
 
 export function Topbar() {
+  const { theme, toggleTheme } = useTheme();
   const [now, setNow] = useState<Date | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -69,6 +71,19 @@ export function Topbar() {
         <Button
           variant="ghost"
           size="icon"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          {theme === "dark" ? (
+            <Moon className="h-4 w-4" />
+          ) : (
+            <Sun className="h-4 w-4" />
+          )}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
           className="text-muted-foreground hover:text-foreground"
         >
           <Bell className="h-4 w-4" />
@@ -115,7 +130,7 @@ export function PageHeader({
 export function PageShell({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="min-h-screen bg-zinc-950 px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5">
+      <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5">
         {children}
       </div>
       <SyraChatWidget />
