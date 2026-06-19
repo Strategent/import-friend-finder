@@ -38,7 +38,7 @@ function BentoGridStackImpl({
   cellHeight = 76,
   storageKey,
   float = false,
-  resizeHandles = "e, se, s",
+  resizeHandles = "e, se, s, sw, w",
   className,
 }: {
   items: BentoItem[];
@@ -170,7 +170,7 @@ function BentoGridStackImpl({
       window.addEventListener("bento:reset", onReset);
 
       cleanupGrid = () => {
-        grid.off("change");
+        grid.off("change added removed dragstart resizestart dragstop resizestop");
         mq.removeEventListener("change", applyStatic);
         window.removeEventListener("bento:reset", onReset);
         // Keep the DOM so React can unmount its own nodes cleanly.
