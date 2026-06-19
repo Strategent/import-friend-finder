@@ -65,7 +65,7 @@ export const callQueue = [
 
 export const emails = [
   {
-    sender: "Olivia Park",
+    sender: "Elena Smith",
     title: "Associate, Harwick & Sterne",
     subject: "IPS draft ready for review",
     time: "11:02",
@@ -75,7 +75,7 @@ export const emails = [
       "John — quick check on the revised allocation. Could we firm up the IPS this week and lock a 15-minute call before Friday's committee?",
   },
   {
-    sender: "Eleanor Hartley",
+    sender: "Emma Reeves",
     title: "Trustee, Hartley Family Trust",
     subject: "Q4 statements attached",
     time: "10:14",
@@ -85,7 +85,7 @@ export const emails = [
       "Attaching the Q4 statements for the trust accounts. Would appreciate your view on the muni ladder before our review next week.",
   },
   {
-    sender: "Marcus Sterling",
+    sender: "Adrian Engman",
     title: "CFO, Sterling Holdings LLC",
     subject: "Rebalance confirmation",
     time: "09:48",
@@ -95,7 +95,7 @@ export const emails = [
       "Confirming we're good to proceed with the proposed rebalance. Please send the final trade ticket for signature today.",
   },
   {
-    sender: "Rebecca Caldwell",
+    sender: "Claire Bennett",
     title: "Principal, Caldwell Estate",
     subject: "Signed engagement letter",
     time: "Yest",
@@ -105,7 +105,7 @@ export const emails = [
       "Engagement letter is countersigned and uploaded to the vault. Let me know the next steps for KYC and onboarding.",
   },
   {
-    sender: "Denis Marlow",
+    sender: "Daniel Brooks",
     title: "Managing Partner, Marlow Capital",
     subject: "Portfolio rebalance — agenda",
     time: "Yest",
@@ -115,7 +115,7 @@ export const emails = [
       "Sharing the agenda for tomorrow's rebalance call. Want to spend most of the time on the alts sleeve and 2026 tax positioning.",
   },
   {
-    sender: "Sophia Beaumont",
+    sender: "Lena Foster",
     title: "Family Office Director, Beaumont Group",
     subject: "Proposal — private credit allocation",
     time: "Mon",
@@ -125,7 +125,7 @@ export const emails = [
       "Following up on our proposal for the private credit sleeve. Happy to revise terms once you've had a chance to review with the committee.",
   },
   {
-    sender: "Rafael Castellanos",
+    sender: "Maya Lopez",
     title: "GC, Castellanos Holdings",
     subject: "Estate planning — SLAT structure",
     time: "Mon",
