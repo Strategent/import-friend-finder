@@ -100,12 +100,12 @@ export function InboxCard() {
       <div className="grid min-h-0 flex-1 grid-cols-12">
         {/* Thread list */}
         <div className="col-span-12 flex min-h-0 flex-col overflow-hidden py-1 md:col-span-4 md:border-r md:border-border/50">
-          {emails.slice(0, 4).map((m, i) => {
+          {visibleEmails.map((m, i) => {
             const unread = m.chips.includes("Draft ready");
-            const active = i === selected;
+            const active = i === selectedIdx;
             return (
               <button
-                key={i}
+                key={m.originalIndex}
                 onClick={() => setSelected(i)}
                 className={`relative flex items-start gap-2.5 px-3 py-1.5 text-left transition-colors ${
                   active ? "bg-primary/[0.08]" : "hover:bg-foreground/[0.035]"
