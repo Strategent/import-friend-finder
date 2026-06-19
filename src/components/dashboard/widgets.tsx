@@ -1,7 +1,6 @@
 import { Plus, Paperclip } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Panel } from "@/components/ui/panel";
-import { PillButton } from "@/components/ui/pill-button";
 import { planner, team, channels, docTemplates } from "@/components/dashboard/data";
 
 /** PlannerCard — open task list with checkboxes. */
@@ -97,11 +96,6 @@ export function RecapCard() {
         Treasuries firmed and breadth improved. Syra flagged 3 items across your book that may move
         client conversations today.
       </p>
-      <div className="mt-3">
-        <PillButton variant="secondary" size="xs">
-          Read recap
-        </PillButton>
-      </div>
     </Panel>
   );
 }
