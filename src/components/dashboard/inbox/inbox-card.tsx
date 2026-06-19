@@ -16,8 +16,16 @@ export function InboxCard() {
   const [sentIds, setSentIds] = useState<Set<number>>(new Set());
   const [sending, setSending] = useState(false);
   const [justSent, setJustSent] = useState(false);
-  const e = emails[selected];
-  const isSent = sentIds.has(selected);
+
+  const visibleEmails = useMemo(
+    () => emails.map((m, i) => ({ ...m, originalIndex: i })).filter((m) => !sentIds.has(m.originalIndex)),
+    [sentIds]
+  );
+
+  const selectedIdx = Math.min(selected, Math.max(visibleEmails.length - 1, 0));
+  const e = visibleEmails[selectedIdx] ?? visibleEmails[0] ?? emails[0];
+  const isSent = sentIds.has(e.originalIndex);
+
   const defaultDraft = useMemo(
     () =>
       `Hi ${e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached for sign-off; happy to take 15 min Thursday 2:00 PM ET.`,
@@ -26,10 +34,14 @@ export function InboxCard() {
   const [draft, setDraft] = useState(defaultDraft);
 
   useEffect(() => {
+    setSelected(selectedIdx);
+  }, [visibleEmails.length, selectedIdx]);
+
+  useEffect(() => {
     setJustSent(false);
     setSending(false);
     setDraft(defaultDraft);
-  }, [selected, defaultDraft]);
+  }, [e.originalIndex, defaultDraft]);
 
   const handleSend = () => {
     if (sending || isSent || draft.trim().length === 0) return;
