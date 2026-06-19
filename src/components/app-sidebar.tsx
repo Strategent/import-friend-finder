@@ -36,8 +36,7 @@ const SyraIcon = ({ className }: { className?: string; strokeWidth?: number }) =
     <img
       src={syraSIcon.url}
       alt=""
-      className="absolute h-full w-full object-contain scale-[3.4]"
-      style={{ filter: "brightness(0) invert(1)" }}
+      className="absolute h-full w-full object-contain scale-[3.4] [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]"
     />
 
   </span>
@@ -79,7 +78,7 @@ export function AppSidebar() {
   ) => (
     <SidebarGroup>
       {!collapsed && (
-        <SidebarGroupLabel className="font-label text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 px-3">
+        <SidebarGroupLabel className="font-serif-display text-[11px] uppercase tracking-[0.22em] text-muted-foreground/70 px-3">
           {label}
         </SidebarGroupLabel>
       )}
