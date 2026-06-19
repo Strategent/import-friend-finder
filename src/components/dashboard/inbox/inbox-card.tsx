@@ -49,7 +49,7 @@ export function InboxCard() {
     window.setTimeout(() => {
       setSentIds((prev) => {
         const next = new Set(prev);
-        next.add(selected);
+        next.add(e.originalIndex);
         return next;
       });
       setSending(false);
