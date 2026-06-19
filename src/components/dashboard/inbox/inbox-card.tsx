@@ -1,14 +1,14 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Reply, ReplyAll, Forward, Star, Paperclip, Archive } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
-import { SyraMark } from "@/components/syra-mark";
 import { emails } from "@/components/dashboard/data";
 
 /**
- * InboxCard — focused/other inbox with reading pane and the "Drafted by Syra"
- * suggestion block. Wrapped in the Origin <Panel> (INBOX ›) with the Outlook-style
- * action ribbon kept as the panel header action.
+ * InboxCard — Gmail-style mini inbox: focused/other tabs, thread list, and a
+ * reading pane with subject row, From/To meta, body, and an inline reply
+ * composer. The composer keeps the brand-purple Send button (Syra-drafted is
+ * implied by that CTA, so the explicit Syra label/icon is removed).
  */
 export function InboxCard() {
   const [selected, setSelected] = useState(0);
@@ -79,9 +79,7 @@ export function InboxCard() {
                   <div className="flex items-center justify-between gap-2">
                     <div
                       className={`truncate text-[12.5px] ${
-                        unread
-                          ? "font-semibold text-foreground"
-                          : "font-semibold text-foreground/90"
+                        unread ? "font-semibold text-foreground" : "font-semibold text-foreground/90"
                       }`}
                     >
                       {m.sender}
@@ -110,62 +108,73 @@ export function InboxCard() {
           })}
         </div>
 
-        {/* Reading pane */}
-        <div className="col-span-12 flex min-w-0 flex-col gap-2.5 overflow-hidden p-3.5 md:col-span-8">
-          <div className="flex items-start justify-between gap-3 border-b border-border/40 pb-2">
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[14px] font-semibold tracking-tight">{e.subject}</div>
-              <div className="mt-1 flex items-center gap-2">
-                <div className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[9.5px] font-semibold text-foreground/85">
-                  {initials(e.sender)}
-                </div>
-                <div className="min-w-0 leading-tight">
-                  <div className="truncate text-[11.5px] text-foreground/90">
-                    <span className="font-semibold">{e.sender}</span>
-                    <span className="font-normal text-muted-foreground">
-                      {" "}
-                      &lt;{e.sender.toLowerCase().split(" ").join(".")}@harwicksterne.com&gt;
-                    </span>
-                  </div>
-                  <div className="mt-px text-[10px] text-muted-foreground">
-                    To: John Harwick · {e.time}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {e.chips.length > 0 && (
-              <span className="inline-flex h-5 shrink-0 items-center rounded-full bg-primary/15 px-2 text-[10px] font-medium text-primary">
-                {e.chips[0]}
-              </span>
-            )}
+        {/* Reading pane — Gmail-style */}
+        <div className="col-span-12 flex min-w-0 flex-col overflow-hidden md:col-span-8">
+          {/* Subject row */}
+          <div className="flex items-center justify-between gap-3 border-b border-border/40 px-4 py-2.5">
+            <h2 className="truncate text-[15px] font-semibold tracking-tight text-foreground">
+              {e.subject}
+            </h2>
+            <button
+              aria-label="Flag"
+              className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+            >
+              <Star className="h-3.5 w-3.5" strokeWidth={1.75} />
+            </button>
           </div>
 
-          <p className="line-clamp-2 flex-1 overflow-hidden text-[12px] leading-snug text-foreground/85">
-            {e.preview}
-          </p>
-
-          {/* Drafted reply — elevated suggestion card */}
-          <div className="origin-raised flex shrink-0 flex-col px-3 py-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-primary/90">
-                <SyraMark size={12} flat /> Drafted by Syra
-              </div>
-              <div className="text-[9.5px] text-muted-foreground">to {e.sender}</div>
+          {/* From / To meta */}
+          <div className="flex items-start gap-2.5 px-4 pt-3">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[10.5px] font-semibold text-foreground/85">
+              {initials(e.sender)}
             </div>
-            <p className="mt-1.5 line-clamp-2 text-[11.5px] leading-snug text-foreground/85">
-              Hi {e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached
-              for sign-off; happy to take 15 min Thursday 2:00pm ET.
+            <div className="min-w-0 flex-1 leading-tight">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 truncate text-[12.5px] text-foreground/95">
+                  <span className="font-semibold">{e.sender}</span>
+                  <span className="font-normal text-muted-foreground">
+                    {" "}
+                    &lt;{e.sender.toLowerCase().split(" ").join(".")}@harwicksterne.com&gt;
+                  </span>
+                </div>
+                <div className="shrink-0 text-[10.5px] tabular-nums text-muted-foreground">
+                  {e.time}
+                </div>
+              </div>
+              <div className="mt-0.5 text-[10.5px] text-muted-foreground">
+                to <span className="text-foreground/80">me</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="min-h-0 flex-1 overflow-hidden px-4 pt-3">
+            <p className="line-clamp-3 text-[12.5px] leading-relaxed text-foreground/85">
+              {e.preview}
             </p>
-            <div className="mt-2 flex items-center gap-1.5">
+          </div>
+
+          {/* Reply composer */}
+          <div className="m-3 mt-2 shrink-0 rounded-lg border border-border/60 bg-foreground/[0.02]">
+            <div className="flex items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10.5px] text-muted-foreground">
+              <span>
+                Reply to <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
+              </span>
+              <button className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground">
+                <Paperclip className="h-3 w-3" /> IPS_v3.pdf
+              </button>
+            </div>
+            <p className="px-3 py-2 text-[11.5px] leading-snug text-foreground/80">
+              Hi {e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached
+              for sign-off; happy to take 15 min Thursday 2:00 PM ET.
+            </p>
+            <div className="flex items-center gap-1.5 px-3 pb-2.5">
               <PillButton variant="brand" size="xs">
-                Send draft
+                Send
               </PillButton>
               <PillButton variant="secondary" size="xs">
                 Edit
               </PillButton>
-              <button className="ml-auto inline-flex items-center gap-1 text-[10.5px] text-muted-foreground transition-colors hover:text-foreground">
-                <Paperclip className="h-3 w-3" /> IPS_v3.pdf
-              </button>
             </div>
           </div>
         </div>
