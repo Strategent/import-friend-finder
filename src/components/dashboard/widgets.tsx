@@ -97,11 +97,6 @@ export function RecapCard() {
         Treasuries firmed and breadth improved. Syra flagged 3 items across your book that may move
         client conversations today.
       </p>
-      <div className="mt-3">
-        <PillButton variant="secondary" size="xs">
-          Read recap
-        </PillButton>
-      </div>
     </Panel>
   );
 }
