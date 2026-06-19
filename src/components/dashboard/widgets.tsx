@@ -2,7 +2,6 @@ import { Plus, Paperclip } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
-import { ScoreBar } from "@/components/ui/score-bar";
 import { planner, team, channels, docTemplates } from "@/components/dashboard/data";
 
 /** PlannerCard — open task list with checkboxes. */
@@ -24,11 +23,13 @@ export function PlannerCard() {
         {planner.slice(0, 5).map((t, i) => (
           <div
             key={i}
-            className="origin-raised group flex items-center gap-3 px-3 py-2 transition-colors hover:bg-foreground/[0.05]"
+            className={`group flex items-center gap-3 px-1 py-2 transition-colors hover:bg-foreground/[0.03] ${
+              i === 0 ? "" : "border-t border-border/40"
+            }`}
           >
             <Checkbox
               checked={t.done}
-              className="h-4 w-4 data-[state=checked]:border-primary data-[state=checked]:bg-primary"
+              className="h-4 w-4 rounded-full border-border data-[state=checked]:border-foreground/60 data-[state=checked]:bg-foreground/80 data-[state=checked]:text-background"
             />
             <div
               className={`min-w-0 flex-1 truncate text-[13px] leading-snug ${
@@ -47,21 +48,36 @@ export function PlannerCard() {
 
 /** WorkloadCard — capacity as a graded ScoreBar (Origin credit-score pattern). */
 export function WorkloadCard() {
+  const value = 56;
+  const labels = ["Light", "Healthy", "Busy", "Heavy", "Maxed"];
   return (
     <Panel label="Workload">
       <div className="flex items-end gap-3">
         <div className="text-[34px] font-semibold leading-none tracking-tight tabular-nums">
-          56<span className="ml-0.5 text-base font-normal text-muted-foreground">%</span>
+          {value}<span className="ml-0.5 text-base font-normal text-muted-foreground">%</span>
         </div>
-        <span className="mb-1 inline-flex h-5 items-center rounded-full border border-primary/25 bg-primary/15 px-2 text-[10px] font-medium text-primary">
+        <span className="mb-1 inline-flex h-5 items-center rounded-full border border-border bg-foreground/[0.05] px-2 text-[10px] font-medium text-foreground/80">
           Healthy
         </span>
       </div>
-      <ScoreBar
-        value={56}
-        labels={["Light", "Healthy", "Busy", "Heavy", "Maxed"]}
-        className="mt-4"
-      />
+      <div className="mt-4">
+        <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-foreground/[0.08]">
+          <div
+            className="h-full rounded-full bg-foreground/70"
+            style={{ width: `${value}%` }}
+          />
+        </div>
+        <div className="mt-1.5 flex items-center justify-between">
+          {labels.map((l) => (
+            <span
+              key={l}
+              className="text-[9.5px] uppercase tracking-[0.08em] text-muted-foreground/60"
+            >
+              {l}
+            </span>
+          ))}
+        </div>
+      </div>
       <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
         <span>Capacity used</span>
         <span className="tabular-nums">52 / 93 hrs</span>

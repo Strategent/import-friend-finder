@@ -32,10 +32,12 @@ export function GradientFeatureCard({
     <section
       className={cn("relative overflow-hidden p-5", className)}
       style={{
-        background: "var(--spotlight-feature)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background:
+          "linear-gradient(150deg, #1a1d33 0%, #1f2340 55%, #262a4a 100%)",
+        border: "1px solid rgba(255,255,255,0.06)",
         borderRadius: "var(--radius)",
-        boxShadow: "0 1px 0 0 rgba(255,255,255,0.08) inset, 0 24px 60px -36px rgba(30,40,140,0.6)",
+        boxShadow:
+          "0 1px 0 0 rgba(255,255,255,0.06) inset, 0 20px 50px -36px rgba(15,18,40,0.7)",
       }}
     >
       {/* Soft directional wash for depth without banding */}
@@ -44,7 +46,7 @@ export function GradientFeatureCard({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(90% 80% at 100% 100%, rgba(120,140,255,0.16), transparent 60%)",
+            "radial-gradient(90% 80% at 100% 100%, rgba(140,150,200,0.08), transparent 60%)",
         }}
       />
       <div className="relative">
