@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, Mic, Pause, PhoneForwarded, PhoneOff, Headphones } from "lucide-react";
+import { ChevronDown, Mic, Pause, PhoneForwarded, Headphones, UserPlus } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
 import { callQueue } from "@/components/dashboard/data";
 
 /**
- * CallsCard — live-call handling with recording state and the waiting queue.
- * Wrapped in the Origin <Panel> (CALL HANDLING ›).
+ * CallsCard — single live AI-handled call. Syra captures caller contact
+ * details and logs them to the CRM as a new lead. Apple-native dev style:
+ * one circle avatar, sleek status pill, no destructive controls.
  */
 function parseDur(d: string): number {
   const [m, s] = d.split(":").map((n) => parseInt(n, 10) || 0);
@@ -18,11 +19,19 @@ function fmtDur(total: number): string {
 }
 
 const transcript: { who: "client" | "agent"; text: string }[] = [
-  { who: "client", text: "Hi, calling about the form I filled out on your site this morning." },
-  { who: "agent", text: "Of course — happy to help. Are you looking at a rollover or a new account?" },
-  { who: "client", text: "Rollover. Two old 401(k)s, around $480K combined." },
-  { who: "agent", text: "Got it. I can get you scheduled with John this week to walk through the IPS." },
-  { who: "client", text: "Thursday afternoon would work best for me." },
+  { who: "agent", text: "Thanks for calling Harwick & Sterne — may I grab your name and best email?" },
+  { who: "client", text: "Marcus Vahlen. marcus.vahlen@vahlencap.com — best number is this one." },
+  { who: "agent", text: "Got it. What's prompting the call today?" },
+  { who: "client", text: "Rollover — two old 401(k)s, around $480K combined." },
+  { who: "agent", text: "Perfect. I'll log you as a new lead and have an advisor reach out this week." },
+];
+
+const capturedFields = [
+  { label: "Name", value: "Marcus Vahlen", done: true },
+  { label: "Email", value: "marcus.vahlen@vahlencap.com", done: true },
+  { label: "Phone", value: "+1 (415) 555‑0148", done: true },
+  { label: "Intent", value: "401(k) rollover · ~$480K", done: true },
+  { label: "CRM", value: "Logging as new lead…", done: false },
 ];
 
 export function CallsCard() {
@@ -34,43 +43,38 @@ export function CallsCard() {
     return () => clearInterval(id);
   }, []);
   const duration = useMemo(() => fmtDur(seconds), [seconds]);
+
   return (
     <Panel
       label="Call handling"
       bodyClassName="gap-4"
       action={
-        <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> On call
+        <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-border/60 bg-foreground/[0.04] px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <span className="relative grid h-1.5 w-1.5 place-items-center">
+            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
+            <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          </span>
+          On call
         </span>
       }
     >
-      <div className="shrink-0 text-[20px] font-semibold leading-none tracking-tight">
-        1 <span className="text-[13px] font-normal text-muted-foreground">live · 2 queued</span>
-      </div>
-
-      {/* Live call — single circle, no inner card */}
+      {/* Live call header — single avatar, no inner card */}
       <div className="flex shrink-0 flex-col gap-3">
         <div className="flex items-center gap-3">
-          <div className="relative shrink-0">
-            <div className="grid h-14 w-14 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[15px] font-semibold tracking-tight text-foreground/90">
-              MV
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full bg-background">
-              <span className="relative grid h-2.5 w-2.5 place-items-center">
-                <span className="absolute inset-0 animate-ping rounded-full bg-rose-500/50" />
-                <span className="relative h-2.5 w-2.5 rounded-full bg-rose-500" />
-              </span>
-            </span>
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[15px] font-semibold tracking-tight text-foreground/90">
+            MV
           </div>
           <div className="min-w-0 flex-1">
             <div className="truncate text-[15px] font-semibold tracking-tight text-foreground">
               {live.name}
             </div>
-            <div className="truncate text-[11.5px] text-muted-foreground">{live.org}</div>
+            <div className="truncate text-[11.5px] text-muted-foreground">
+              Handled by Syra · AI agent
+            </div>
           </div>
           <div className="text-right leading-tight">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-rose-400">
-              Recording
+            <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/70">
+              Duration
             </div>
             <div
               className="mt-1 text-[15px] font-semibold tabular-nums text-foreground"
@@ -80,28 +84,23 @@ export function CallsCard() {
             </div>
           </div>
         </div>
-        {/* Controls — Apple-native row of circles */}
+
+        {/* Controls — Apple-native row, no destructive end-call */}
         <div className="flex items-center justify-between px-1">
           <CallAction icon={Mic} label="Mute" />
           <CallAction icon={Pause} label="Hold" />
           <CallAction icon={PhoneForwarded} label="Transfer" />
-          <CallAction icon={Headphones} label="Join" />
-          <button
-            aria-label="End call"
-            className="grid h-11 w-11 place-items-center rounded-full bg-rose-500 text-white shadow-[0_8px_18px_-6px_rgba(244,63,94,0.6)] transition-colors hover:bg-rose-600"
-          >
-            <PhoneOff className="h-4 w-4" />
-          </button>
+          <CallAction icon={Headphones} label="Listen in" />
         </div>
       </div>
 
-      {/* Transcript toggle */}
+      {/* Section toggle */}
       <button
         onClick={() => setShowTranscript((v) => !v)}
         className="flex shrink-0 items-center justify-between border-t border-border/50 pt-3 text-left"
       >
         <span className="font-label text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/80">
-          {showTranscript ? "Live transcript" : "Show transcript"}
+          {showTranscript ? "Live transcript" : "Captured for CRM"}
         </span>
         <ChevronDown
           className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${showTranscript ? "rotate-180" : ""}`}
@@ -126,31 +125,48 @@ export function CallsCard() {
                 </div>
               </div>
             ))
-          : callQueue.slice(1, 3).map((c, i) => (
+          : capturedFields.map((f, i) => (
               <div
-                key={i}
+                key={f.label}
                 className={`flex items-center gap-3 py-1.5 ${
                   i === 0 ? "" : "border-t border-border/40"
                 }`}
               >
-                <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.05] text-[10.5px] font-semibold text-foreground/85">
-                  {c.name
-                    .split(" ")
-                    .map((p) => p[0])
-                    .slice(0, 2)
-                    .join("")}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-[12.5px] font-semibold leading-tight text-foreground/95">
-                    {c.name}
-                  </div>
-                  <div className="truncate text-[10.5px] leading-tight text-muted-foreground">
-                    {c.intent}
-                  </div>
-                </div>
-                <span className="shrink-0 text-[10.5px] font-medium tabular-nums text-amber-400">
-                  {c.dur}
+                <span
+                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-full ${
+                    f.done
+                      ? "bg-foreground/[0.08] text-foreground/80"
+                      : "bg-emerald-500/10 text-emerald-400"
+                  }`}
+                >
+                  {f.done ? (
+                    <svg
+                      viewBox="0 0 12 12"
+                      className="h-3 w-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        d="M2.5 6.5l2.5 2.5 4.5-5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ) : (
+                    <UserPlus className="h-3 w-3" />
+                  )}
                 </span>
+                <div className="w-[64px] shrink-0 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">
+                  {f.label}
+                </div>
+                <div
+                  className={`min-w-0 flex-1 truncate text-[12px] ${
+                    f.done ? "text-foreground/90" : "text-emerald-400"
+                  }`}
+                >
+                  {f.value}
+                </div>
               </div>
             ))}
       </div>
