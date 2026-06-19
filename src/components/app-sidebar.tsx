@@ -108,9 +108,6 @@ export function AppSidebar() {
                     {!collapsed && (
                       <span className="text-[13px] font-medium tracking-tight">{item.title}</span>
                     )}
-                    {!collapsed && active && (
-                      <span className="ml-auto h-1.5 w-1.5 rounded-full bg-foreground/70" />
-                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
