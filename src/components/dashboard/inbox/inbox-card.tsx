@@ -3,6 +3,7 @@ import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucid
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
 import { emails } from "@/components/dashboard/data";
+import { avatarUrl } from "@/lib/avatar";
 
 /**
  * InboxCard — Gmail-style mini inbox: focused/other tabs, thread list, and a
@@ -114,9 +115,12 @@ export function InboxCard() {
                 {active && (
                   <span className="absolute bottom-1.5 left-0 top-1.5 w-[2.5px] rounded-r-full bg-primary" />
                 )}
-                <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[10px] font-semibold text-foreground/85">
-                  {initials(m.sender)}
-                </div>
+                <img
+                  src={avatarUrl(m.sender, 64)}
+                  alt={m.sender}
+                  loading="lazy"
+                  className="h-7 w-7 shrink-0 rounded-full border border-border object-cover"
+                />
                 <div className="min-w-0 flex-1 leading-tight">
                   <div className="flex items-center justify-between gap-2">
                     <div
@@ -167,9 +171,12 @@ export function InboxCard() {
 
           {/* From / To meta */}
           <div className="flex items-start gap-2.5 px-4 pt-3">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[10.5px] font-semibold text-foreground/85">
-              {initials(e.sender)}
-            </div>
+            <img
+              src={avatarUrl(e.sender, 96)}
+              alt={e.sender}
+              loading="lazy"
+              className="h-8 w-8 shrink-0 rounded-full border border-border object-cover"
+            />
             <div className="min-w-0 flex-1 leading-tight">
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0 truncate text-[12.5px] text-foreground/95">

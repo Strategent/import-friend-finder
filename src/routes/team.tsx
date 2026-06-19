@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageShell, PageHeader } from "@/components/page-shell";
 import { UserPlus } from "lucide-react";
+import { avatarUrl } from "@/lib/avatar";
 
 export const Route = createFileRoute("/team")({
   component: TeamPage,
@@ -35,9 +36,12 @@ function TeamPage() {
         {team.map((m) => (
           <Card key={m.name} className="bento p-5">
             <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-full grid place-items-center text-sm font-semibold" style={{ background: "var(--gradient-primary)" }}>
-                {m.name.split(" ").map((p) => p[0]).join("")}
-              </div>
+              <img
+                src={avatarUrl(m.name, 128)}
+                alt={m.name}
+                loading="lazy"
+                className="h-11 w-11 rounded-full object-cover border border-border/60"
+              />
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-semibold truncate">{m.name}</div>
                 <div className="text-xs text-muted-foreground truncate">{m.role}</div>
