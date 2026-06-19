@@ -105,11 +105,11 @@
 }
 
 .dark {
-  /* Origin-calibrated: near-black page, a hair-lighter card, hairline borders. */
+  /* Midday-leaning: true-black page, matte lift card, hairline borders, calm depth. */
   --radius: 0.875rem;
-  --background: oklch(0.135 0.004 268);
+  --background: oklch(0.115 0.003 268);
   --foreground: oklch(0.97 0 0);
-  --card: oklch(0.172 0.004 268);
+  --card: oklch(0.155 0.003 268);
   --card-foreground: oklch(0.97 0 0);
   --popover: oklch(0.185 0.004 268);
   --popover-foreground: oklch(0.97 0 0);
@@ -196,13 +196,14 @@
     content: none;
   }
   .dark .bento {
-    /* Origin: flat near-black surface, hairline border, calm soft shadow. */
+    /* Midday: matte lift, hairline border, top sheen + soft depth. */
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow:
-      0 1px 2px oklch(0 0 0 / 30%),
-      0 8px 24px -16px oklch(0 0 0 / 55%);
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 1px 2px oklch(0 0 0 / 35%),
+      0 4px 24px -10px oklch(0 0 0 / 55%);
   }
   .dark .bento-raised {
     background: var(--surface-raised);
@@ -261,8 +262,9 @@
        must scroll themselves (see .scroll-slim). */
     overflow: hidden;
     box-shadow:
-      0 1px 2px oklch(0 0 0 / 30%),
-      0 8px 24px -16px oklch(0 0 0 / 55%);
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 1px 2px oklch(0 0 0 / 35%),
+      0 4px 24px -10px oklch(0 0 0 / 55%);
   }
   /* Raised sub-surface inside a card (draft blocks, stat tiles, queue rows). */
   .origin-raised {
