@@ -3,7 +3,7 @@ import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucid
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
 import { emails } from "@/components/dashboard/data";
-import { avatarUrl } from "@/lib/avatar";
+import { avatarUrl, senderEmailAddress } from "@/lib/avatar";
 
 /**
  * InboxCard — Gmail-style mini inbox: focused/other tabs, thread list, and a
@@ -181,10 +181,7 @@ export function InboxCard() {
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0 truncate text-[12.5px] text-foreground/95">
                   <span className="font-semibold">{e.sender}</span>
-                  <span className="font-normal text-muted-foreground">
-                    {" "}
-                    &lt;{e.sender.toLowerCase().split(" ").join(".")}@harwicksterne.com&gt;
-                  </span>
+                  <span className="font-normal text-muted-foreground"> &lt;{senderEmailAddress(e.sender)}&gt;</span>
                 </div>
                 <div className="shrink-0 text-[10.5px] tabular-nums text-muted-foreground">
                   {e.time}
