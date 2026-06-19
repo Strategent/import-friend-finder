@@ -130,11 +130,7 @@ export function InboxCard() {
                     >
                       {m.sender}
                     </div>
-                    <div
-                      className={`shrink-0 text-[10.5px] tabular-nums ${
-                        unread ? "font-medium text-foreground/90" : "text-muted-foreground"
-                      }`}
-                    >
+                    <div className="shrink-0 text-[10.5px] tabular-nums text-muted-foreground">
                       {m.time}
                     </div>
                   </div>
