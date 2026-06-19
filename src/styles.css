@@ -327,6 +327,32 @@
 
   /* ---- gridstack — Origin theme overrides ---- */
 
+  /* Apple-like spring easing for reflow. Gridstack toggles inline
+     `transition` styles during animate; we override with !important so
+     reorder/resize/compact all share the same cubic-bezier curve and
+     duration regardless of which property gridstack is animating. */
+  .grid-stack-item {
+    transition:
+      left 360ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      top 360ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      width 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      height 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    will-change: transform, left, top, width, height;
+  }
+  /* While the user is actively dragging/resizing this item, drop the
+     transition so the card tracks the pointer 1:1. */
+  .grid-stack-item.ui-draggable-dragging,
+  .grid-stack-item.ui-resizable-resizing {
+    transition: none !important;
+  }
+  /* Inner content fills the cell and resizes with it — no clipped or
+     stretched frames mid-animation. */
+  .grid-stack-item > .grid-stack-item-content {
+    inset: 0;
+    transition: none;
+  }
+
   /* Cards own their own surface/border/radius; gridstack content is a
      transparent positioning box that the card fills completely. */
   .grid-stack-item-content {

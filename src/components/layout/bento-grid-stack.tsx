@@ -38,7 +38,7 @@ function BentoGridStackImpl({
   cellHeight = 76,
   storageKey,
   float = false,
-  resizeHandles = "e, se, s",
+  resizeHandles = "e, se, s, sw, w",
   className,
 }: {
   items: BentoItem[];
@@ -115,7 +115,36 @@ function BentoGridStackImpl({
           /* storage may be unavailable */
         }
       };
-      grid.on("change", persist);
+      // Compact after every change so reordering/resizing never leaves
+      // empty rows above an item — cards always shift up to maintain
+      // alignment (Apple-like reflow). Skip while a drag/resize is in
+      // flight to avoid fighting the user's gesture.
+      let interacting = false;
+      const compactAndPersist = () => {
+        if (interacting) {
+          persist();
+          return;
+        }
+        try {
+          grid.compact("compact", false);
+        } catch {
+          /* older gridstack signatures — fall through */
+        }
+        persist();
+      };
+      grid.on("change added removed", compactAndPersist);
+      grid.on("dragstart resizestart", () => {
+        interacting = true;
+      });
+      grid.on("dragstop resizestop", () => {
+        interacting = false;
+        try {
+          grid.compact("compact", false);
+        } catch {
+          /* ignore */
+        }
+        persist();
+      });
 
       // Reveal once gridstack has positioned the items — prevents the
       // pre-init "stacked pile" flash on initial load/reload.
@@ -141,7 +170,7 @@ function BentoGridStackImpl({
       window.addEventListener("bento:reset", onReset);
 
       cleanupGrid = () => {
-        grid.off("change");
+        grid.off("change added removed dragstart resizestart dragstop resizestop");
         mq.removeEventListener("change", applyStatic);
         window.removeEventListener("bento:reset", onReset);
         // Keep the DOM so React can unmount its own nodes cleanly.
