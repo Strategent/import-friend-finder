@@ -57,42 +57,35 @@ export function CalendarCard() {
         <div className="mb-3 text-[14px] font-semibold leading-none tracking-tight">
           {weekRangeLabel}
         </div>
-        <div className="grid grid-cols-7 gap-1.5">
+        {/* Apple-native week strip — bare cells, single circle on today */}
+        <div className="grid grid-cols-7 gap-1">
           {week.map((d, i) => {
-            const isToday = d.toDateString() === todayKey;
             const weekend = i === 0 || i === 6;
             return (
-              <button
-                key={i}
-                className={`group flex flex-col items-center gap-1 rounded-2xl border py-2.5 transition-all ${
-                  isToday
-                    ? "border-transparent text-white shadow-md"
-                    : "border-border/60 bg-foreground/[0.02] hover:bg-foreground/[0.04]"
-                }`}
-                style={
-                  isToday
-                    ? {
-                        background: "var(--gradient-primary)",
-                        boxShadow:
-                          "0 1px 0 0 rgba(255,255,255,0.2) inset, 0 8px 20px -8px color-mix(in oklab, var(--primary) 55%, transparent)",
-                      }
-                    : undefined
-                }
-              >
+              <div key={i} className="flex flex-col items-center gap-1.5 py-1">
                 <span
-                  className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${
-                    isToday
-                      ? "text-white/80"
-                      : weekend
-                        ? "text-muted-foreground/60"
-                        : "text-muted-foreground"
+                  className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                    weekend ? "text-muted-foreground/50" : "text-muted-foreground/80"
                   }`}
                 >
                   {dayLetter[d.getDay()]}
                 </span>
+              </div>
+            );
+          })}
+          {week.map((d, i) => {
+            const isToday = d.toDateString() === todayKey;
+            return (
+              <button
+                key={i}
+                className="group flex items-center justify-center py-1"
+                aria-label={d.toDateString()}
+              >
                 <span
-                  className={`text-[17px] font-semibold leading-none tracking-tight tabular-nums ${
-                    isToday ? "text-white" : "text-foreground/90"
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-[14px] leading-none tabular-nums transition-colors ${
+                    isToday
+                      ? "bg-white text-black font-semibold"
+                      : "text-foreground/85 font-normal hover:bg-foreground/[0.06]"
                   }`}
                 >
                   {d.getDate()}
@@ -113,27 +106,31 @@ export function CalendarCard() {
             {todaysMeetings.length} scheduled
           </span>
         </div>
-        <div className="flex min-h-0 flex-col gap-1.5 overflow-hidden">
+        {/* Hairline-divided rows — no card-in-card */}
+        <div className="flex min-h-0 flex-col overflow-hidden">
           {todaysMeetings.slice(0, 3).map((m, i) => (
-            <div key={i} className="origin-raised flex items-center gap-3 px-3 py-2">
-              <div
-                className="h-9 w-1 rounded-full"
-                style={{ background: "var(--gradient-primary)" }}
-              />
+            <div
+              key={i}
+              className={`flex items-center gap-3 py-2.5 ${
+                i === 0 ? "" : "border-t border-border/50"
+              }`}
+            >
+              <div className="w-12 shrink-0 text-right text-[11px] font-medium tabular-nums text-muted-foreground/70">
+                {m.time.split(" ")[0]}
+              </div>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[12.5px] font-semibold leading-tight text-foreground/95">
+                <div className="truncate text-[13px] font-semibold leading-tight text-foreground/95">
                   {m.client}
                 </div>
                 <div className="mt-0.5 text-[10.5px] leading-tight text-muted-foreground">
-                  {m.time} · {m.status}
+                  {m.status}
                 </div>
               </div>
               <a
                 href={m.zoom}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-7 shrink-0 items-center gap-1 rounded-full px-3 text-[11px] font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "var(--gradient-primary)" }}
+                className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-foreground/[0.06] px-3 text-[11px] font-semibold text-foreground/90 transition-colors hover:bg-foreground/[0.12]"
               >
                 <Video className="h-3 w-3" /> Join
               </a>
