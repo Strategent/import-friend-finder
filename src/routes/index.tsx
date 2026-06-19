@@ -56,9 +56,9 @@ function Home() {
   // these DOM nodes, so the lists must not change identity on re-render.
   // (Per-card timers live inside the cards themselves, e.g. CalendarCard.)
   // Row heights: visible card height ≈ h·76(cellHeight) − 2·10(margin).
-  // hero h=4 → ~284px (target ~280) · inbox/bulletin h=6 → ~436px (target
+  // hero h=3 → ~208px (target ~210) · inbox/bulletin h=6 → ~436px (target
   // ~420) · calls/calendar h=5 → ~360px (closest integer rows to ~390).
-  const heroH = setupDone ? 6 : 4;
+  const heroH = setupDone ? 4 : 3;
   const rowShift = heroH - 4;
   const mainItems = useMemo<BentoItem[]>(
     () => [
@@ -69,7 +69,7 @@ function Home() {
         w: 12,
         h: heroH,
         minW: 6,
-        minH: 3,
+        minH: 2,
         node: (
           // data-density scales the hero to banner height via wrapper-scoped
           // CSS (styles.css) — the card component itself stays untouched.
@@ -140,10 +140,10 @@ function Home() {
         }
       >
         <BentoGridStack
-          key={setupDone ? "main-v5-done" : "main-v5-setup"}
+          key={setupDone ? "main-v6-done" : "main-v6-setup"}
           items={mainItems}
           column={12}
-          storageKey={setupDone ? "hs-main-layout-v5-done" : "hs-main-layout-v5"}
+          storageKey={setupDone ? "hs-main-layout-v6-done" : "hs-main-layout-v6"}
           className="-mx-2.5"
         />
       </DashboardShell>
