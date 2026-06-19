@@ -135,7 +135,7 @@ function Home() {
             column={1}
             storageKey={setupDone ? "hs-rail-layout-v3-done" : "hs-rail-layout-v3"}
             resizeHandles="s"
-            className="-mt-2.5"
+            className="-mx-2.5"
           />
         }
       >
