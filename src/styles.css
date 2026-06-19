@@ -107,7 +107,7 @@
 .dark {
   /* Midday-leaning: true-black page, matte lift card, hairline borders, calm depth. */
   --radius: 0.875rem;
-  --background: oklch(0.115 0.003 268);
+  --background: oklch(0.105 0.003 268);
   --foreground: oklch(0.97 0 0);
   --card: oklch(0.155 0.003 268);
   --card-foreground: oklch(0.97 0 0);
