@@ -108,6 +108,15 @@ function BentoGridStackImpl({
         /* ignore malformed/absent layout */
       }
 
+      // Apple-like default: always start cleanly stacked — no incongruent
+      // gaps inherited from a previous layout or an out-of-date seed.
+      try {
+        grid.float(false);
+        grid.compact("compact", false);
+      } catch {
+        /* ignore */
+      }
+
       const persist = () => {
         try {
           localStorage.setItem(storageKey, JSON.stringify(grid.save(false)));
@@ -135,6 +144,15 @@ function BentoGridStackImpl({
       grid.on("change added removed", compactAndPersist);
       grid.on("dragstart resizestart", () => {
         interacting = true;
+      });
+      // Live reflow during resize so neighboring cards immediately shift
+      // up to fill any gap the resize would otherwise open.
+      grid.on("resize", () => {
+        try {
+          grid.compact("compact", false);
+        } catch {
+          /* ignore */
+        }
       });
       grid.on("dragstop resizestop", () => {
         interacting = false;
@@ -170,7 +188,7 @@ function BentoGridStackImpl({
       window.addEventListener("bento:reset", onReset);
 
       cleanupGrid = () => {
-        grid.off("change added removed dragstart resizestart dragstop resizestop");
+        grid.off("change added removed dragstart resizestart resize dragstop resizestop");
         mq.removeEventListener("change", applyStatic);
         window.removeEventListener("bento:reset", onReset);
         // Keep the DOM so React can unmount its own nodes cleanly.
