@@ -83,7 +83,10 @@ export function DailyBriefHero({
   };
   return (
     <>
-    <section className="daily-brief-hero-bg relative h-full w-full overflow-hidden rounded-[32px]">
+    <section
+      className="daily-brief-hero-bg relative h-full w-full"
+      style={{ borderRadius: "var(--radius)" }}
+    >
       {/* Left zone — eyebrow, headline, summary (no button) */}
       <div className="relative z-10 flex h-full flex-col justify-center px-7 py-8 lg:max-w-[52%] lg:px-12 lg:py-12">
         <span className="font-serif-display text-[12px] uppercase tracking-[0.18em] text-white/85 lg:text-[13px]">
