@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import type { GridStack, GridStackOptions } from "gridstack";
 // gridstack base CSS is imported in styles.css (before our Origin overrides).
@@ -51,6 +51,7 @@ function BentoGridStackImpl({
 }) {
   const elRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<GridStack | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (!elRef.current) return;
@@ -116,6 +117,12 @@ function BentoGridStackImpl({
       };
       grid.on("change", persist);
 
+      // Reveal once gridstack has positioned the items — prevents the
+      // pre-init "stacked pile" flash on initial load/reload.
+      requestAnimationFrame(() => {
+        if (!disposed) setReady(true);
+      });
+
     // Disable drag/resize on small screens; re-enable above the breakpoint.
       const mq = window.matchMedia(STATIC_QUERY);
       const applyStatic = () => grid.setStatic(mq.matches);
@@ -152,7 +159,14 @@ function BentoGridStackImpl({
   }, []);
 
   return (
-    <div ref={elRef} className={cn("grid-stack", className)}>
+    <div
+      ref={elRef}
+      className={cn(
+        "grid-stack transition-opacity duration-150",
+        ready ? "opacity-100" : "opacity-0",
+        className,
+      )}
+    >
       {items.map((it) => (
         <div key={it.id} className="grid-stack-item" data-gs-id={it.id}>
           <div className="grid-stack-item-content">
