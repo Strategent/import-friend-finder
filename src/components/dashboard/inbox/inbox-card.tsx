@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
@@ -18,14 +18,21 @@ export function InboxCard() {
   const [justSent, setJustSent] = useState(false);
   const e = emails[selected];
   const isSent = sentIds.has(selected);
+  const defaultDraft = useMemo(
+    () =>
+      `Hi ${e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached for sign-off; happy to take 15 min Thursday 2:00 PM ET.`,
+    [e.sender],
+  );
+  const [draft, setDraft] = useState(defaultDraft);
 
   useEffect(() => {
     setJustSent(false);
     setSending(false);
-  }, [selected]);
+    setDraft(defaultDraft);
+  }, [selected, defaultDraft]);
 
   const handleSend = () => {
-    if (sending || isSent) return;
+    if (sending || isSent || draft.trim().length === 0) return;
     setSending(true);
     window.setTimeout(() => {
       setSentIds((prev) => {
@@ -200,10 +207,13 @@ export function InboxCard() {
                   <Paperclip className="h-3 w-3" /> IPS_v3.pdf
                 </button>
               </div>
-              <p className="px-3 py-2 text-[11.5px] leading-snug text-foreground/80">
-                Hi {e.sender.split(" ")[0]} — confirming the revised allocation. Updated IPS attached
-                for sign-off; happy to take 15 min Thursday 2:00 PM ET.
-              </p>
+              <textarea
+                value={draft}
+                onChange={(ev) => setDraft(ev.target.value)}
+                rows={3}
+                placeholder="Write a reply…"
+                className="block w-full resize-none bg-transparent px-3 py-2 text-[11.5px] leading-snug text-foreground/90 placeholder:text-muted-foreground/60 outline-none focus:outline-none"
+              />
               <div className="flex items-center gap-1.5 px-3 pb-2.5">
                 <PillButton
                   variant="brand"
