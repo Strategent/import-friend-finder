@@ -68,19 +68,18 @@ export function Topbar() {
             <span className="hidden md:inline">Sunny · Brentwood</span>
           </div>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
+          type="button"
           onClick={toggleTheme}
           aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          className="text-muted-foreground hover:text-foreground"
+          className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
         >
           {theme === "dark" ? (
-            <Moon className="h-4 w-4" />
+            <Moon className="h-4 w-4" fill="currentColor" />
           ) : (
-            <Sun className="h-4 w-4" />
+            <Sun className="h-4 w-4" fill="currentColor" />
           )}
-        </Button>
+        </button>
         <Button
           variant="ghost"
           size="icon"
