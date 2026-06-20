@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { PageShell } from "@/components/page-shell";
+import { SyraChatWidget } from "@/components/syra-chat-widget";
 import {
   Hash,
   Lock,
@@ -108,12 +108,12 @@ function ChannelsPage() {
       };
 
   return (
-    <PageShell>
+    <>
       <div
-        className="overflow-hidden rounded-2xl border"
-        style={{ borderColor: palette.chatBorder, background: palette.chatBg }}
+        className="fixed inset-0 overflow-hidden"
+        style={{ background: palette.chatBg }}
       >
-        <div className="grid grid-cols-12 h-[78vh] min-h-[600px]">
+        <div className="grid grid-cols-12 h-screen w-screen">
           {/* Workspace sidebar */}
           <aside
             className="col-span-12 md:col-span-3 lg:col-span-3 flex flex-col"
@@ -124,12 +124,13 @@ function ChannelsPage() {
               className="flex items-center justify-between px-4 py-3 border-b"
               style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
-              <button className="flex items-center gap-1.5 text-white font-bold text-[15px]">
-                Harwick & Sterne <ChevronDown className="h-3.5 w-3.5" />
+              <button className="flex items-center gap-1 text-white font-semibold text-[12.5px] whitespace-nowrap truncate min-w-0">
+                <span className="truncate">Harwick &amp; Sterne</span>
+                <ChevronDown className="h-3 w-3 shrink-0" />
               </button>
               <button
                 onClick={() => setTheme(dark ? "light" : "dark")}
-                className="grid h-7 w-7 place-items-center rounded-md text-white/70 hover:bg-white/10"
+                className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-white/70 hover:bg-white/10"
                 aria-label="Toggle theme"
               >
                 {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
@@ -430,6 +431,7 @@ function ChannelsPage() {
           </main>
         </div>
       </div>
-    </PageShell>
+      <SyraChatWidget />
+    </>
   );
 }
