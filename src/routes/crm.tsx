@@ -63,7 +63,6 @@ function fmtAum(v: number) {
 function CrmPage() {
   const [query, setQuery] = useState("");
   const [stage, setStage] = useState<(typeof STAGES)[number]>("All");
-  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
