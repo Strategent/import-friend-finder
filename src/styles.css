@@ -526,3 +526,13 @@
   mix-blend-mode: soft-light;
 }
 
+
+/* ---- Sparkline shine sweep (Markets card) ---------------------- */
+@keyframes spark-shine-sweep {
+  0% { stroke-dashoffset: 320; }
+  100% { stroke-dashoffset: -40; }
+}
+.spark-shine {
+  animation: spark-shine-sweep 2.6s linear infinite;
+  opacity: 0.85;
+}
