@@ -64,7 +64,7 @@ function SyraPage() {
       {/* Content */}
       <div className="relative h-full flex flex-col items-center justify-center px-6">
           <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-white/50 mb-6">
-            <Sparkles className="h-3.5 w-3.5" /> AI Operations Agent
+            <Sparkles className="h-3.5 w-3.5" /> YOUOPERATIONS AGENT
           </div>
           <h1 className="font-radley text-5xl md:text-6xl font-normal tracking-tight text-white text-center">
             Syra
