@@ -12,11 +12,12 @@ export const Route = createFileRoute("/team")({
 });
 
 const team = [
-  { name: "Avery Cole", role: "Operations Lead", status: "Online", tasks: 12, score: 96 },
-  { name: "Marcus Reed", role: "Account Manager", status: "Online", tasks: 9, score: 91 },
-  { name: "Jenna Park", role: "CX Specialist", status: "Away", tasks: 7, score: 88 },
-  { name: "Diego Alvarez", role: "Solutions Engineer", status: "Online", tasks: 5, score: 94 },
-  { name: "Priya Shah", role: "AI Trainer", status: "Offline", tasks: 3, score: 90 },
+  { name: "Elena Smith", role: "Associate, Harwick & Sterne", status: "Online", tasks: 12, score: 96 },
+  { name: "Emma Reeves", role: "Trustee, Hartley Family Trust", status: "Online", tasks: 9, score: 91 },
+  { name: "Adrian Engman", role: "CFO, Sterling Holdings LLC", status: "Away", tasks: 7, score: 88 },
+  { name: "Claire Bennett", role: "Principal, Caldwell Estate", status: "Online", tasks: 5, score: 94 },
+  { name: "Daniel Brooks", role: "Managing Partner, Marlow Capital", status: "Offline", tasks: 3, score: 90 },
+  { name: "Lena Foster", role: "Family Office Director, Beaumont Group", status: "Online", tasks: 4, score: 92 },
 ];
 
 function TeamPage() {
