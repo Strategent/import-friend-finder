@@ -86,7 +86,7 @@ function ConnectorsPage() {
             <div key={c.name} className="col-span-12 sm:col-span-6 lg:col-span-4">
               <div className="p-5 h-full flex flex-col gap-4 bg-card border border-border">
                 <div className="flex items-start justify-between">
-                  <ConnectorIcon icon={c.icon} name={c.name} />
+                  <ConnectorIcon slug={c.slug} name={c.name} />
                   {c.connected ? (
                     <Badge className="bg-white/[0.06] text-foreground/80 border border-white/10 hover:bg-white/[0.06] gap-1">
                       <Check className="h-3 w-3" /> Connected
