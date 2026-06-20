@@ -47,7 +47,7 @@ function SyraPage() {
   const c4 = isDark ? "70, 65, 95"    : "210, 208, 218";
   const c5 = isDark ? "105, 95, 135"  : "220, 218, 228";
   const blending = isDark ? "soft-light" : "normal";
-  const blobOpacity = isDark ? undefined : "0.55";
+
 
 
   return (
