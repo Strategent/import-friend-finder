@@ -101,7 +101,7 @@ function CrmPage() {
 
   return (
     <>
-    <div className="w-full bg-background flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
+    <div className="w-full bg-background dark:bg-slate-900 flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
       {/* Header */}
       <div className="px-8 pt-8 pb-6 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
         <div>
