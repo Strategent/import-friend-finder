@@ -12,13 +12,11 @@ export const Route = createFileRoute("/team")({
 });
 
 const team = [
-  { name: "Elena Smith", role: "Operations Lead", status: "Online", tasks: 12, score: 96 },
-  { name: "Emma Reeves", role: "Account Manager", status: "Online", tasks: 9, score: 91 },
-  { name: "Adrian Engman", role: "CX Specialist", status: "Away", tasks: 7, score: 88 },
-  { name: "Claire Bennett", role: "Solutions Engineer", status: "Online", tasks: 5, score: 94 },
-  { name: "Daniel Brooks", role: "AI Trainer", status: "Offline", tasks: 3, score: 90 },
-  { name: "Lena Foster", role: "Compliance Analyst", status: "Online", tasks: 6, score: 93 },
-  { name: "Maya Lopez", role: "Portfolio Associate", status: "Away", tasks: 4, score: 89 },
+  { name: "Avery Cole", role: "Operations Lead", status: "Online", tasks: 12, score: 96 },
+  { name: "Marcus Reed", role: "Account Manager", status: "Online", tasks: 9, score: 91 },
+  { name: "Jenna Park", role: "CX Specialist", status: "Away", tasks: 7, score: 88 },
+  { name: "Diego Alvarez", role: "Solutions Engineer", status: "Online", tasks: 5, score: 94 },
+  { name: "Priya Shah", role: "AI Trainer", status: "Offline", tasks: 3, score: 90 },
 ];
 
 function TeamPage() {

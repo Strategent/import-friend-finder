@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Panel } from "@/components/ui/panel";
 
 /**
- * MarketsCard — Apple Stocks–style list. Symbol + name on the left,
- * mini sparkline in the middle, price + green/red pill on the right.
+ * MarketsCard — sleek monochrome market widget: one S&P 500 sparkline up top,
+ * three commodity tickers (Crude, Gold, Silver) underneath. Direction color is
+ * tasteful and minimal so the card stays light. Exported as BulletinCard to
+ * preserve the existing import path.
  */
 
 type Ticker = {
@@ -12,14 +14,13 @@ type Ticker = {
   price: number;
   change: number;
   decimals?: number;
+  unit?: string;
 };
 
 const SEED_TICKERS: Ticker[] = [
-  { symbol: "^GSPC", name: "S&P 500", price: 5482.13, change: 18.42 },
-  { symbol: "^DJI", name: "Dow Jones", price: 39150.33, change: -42.77 },
-  { symbol: "^IXIC", name: "NASDAQ", price: 17689.36, change: 87.5 },
-  { symbol: "AAPL", name: "Apple Inc.", price: 214.29, change: 1.42 },
-  { symbol: "BTC-USD", name: "Bitcoin USD", price: 64812.4, change: -512.8 },
+  { symbol: "CL", name: "Crude Oil", price: 78.42, change: 0.31, decimals: 2, unit: "/bbl" },
+  { symbol: "GC", name: "Gold", price: 2418.6, change: -4.2, decimals: 1, unit: "/oz" },
+  { symbol: "SI", name: "Silver", price: 30.84, change: 0.12, decimals: 2, unit: "/oz" },
 ];
 
 function fmt(n: number, decimals = 2) {
@@ -29,58 +30,72 @@ function fmt(n: number, decimals = 2) {
   });
 }
 
-function buildSeries(base: number, points = 36, seed = 7) {
+/** Deterministic seeded series so SSR and client match. */
+function buildSeries(base: number, points = 48, seed = 7) {
   const out: number[] = [];
   let v = base * 0.992;
   let s = seed;
   for (let i = 0; i < points; i++) {
     s = (s * 9301 + 49297) % 233280;
     const rnd = s / 233280 - 0.5;
-    v += rnd * base * 0.002 + (base - v) * 0.02;
+    v += rnd * base * 0.0018 + (base - v) * 0.02;
     out.push(v);
   }
   out[out.length - 1] = base;
   return out;
 }
 
-function MiniSparkline({ data, up }: { data: number[]; up: boolean }) {
-  const { path, w, h } = useMemo(() => {
-    const w = 100;
-    const h = 32;
+function Sparkline({ data, up }: { data: number[]; up: boolean }) {
+  const { path, area, w, h } = useMemo(() => {
+    const w = 280;
+    const h = 64;
     const min = Math.min(...data);
     const max = Math.max(...data);
     const range = max - min || 1;
-    const step = w / Math.max(data.length - 1, 1);
-    const path = data
-      .map((d, i) => {
-        const x = i * step;
-        const y = h - ((d - min) / range) * (h - 4) - 2;
-        return `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`;
-      })
+    const step = w / (data.length - 1);
+    const pts = data.map((d, i) => {
+      const x = i * step;
+      const y = h - ((d - min) / range) * (h - 6) - 3;
+      return [x, y] as const;
+    });
+    const path = pts
+      .map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`)
       .join(" ");
-    return { path, w, h };
+    const area = `${path} L${w},${h} L0,${h} Z`;
+    return { path, area, w, h };
   }, [data]);
-  const stroke = up ? "rgb(48,209,88)" : "rgb(255,69,58)";
+  const stroke = up ? "rgba(134,239,172,0.95)" : "rgba(252,165,165,0.95)";
+  const fillTop = up ? "rgba(134,239,172,0.18)" : "rgba(252,165,165,0.18)";
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-full w-full">
-      <path d={path} fill="none" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <defs>
+        <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor={fillTop} />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </linearGradient>
+      </defs>
+      <path d={area} fill="url(#spark-fill)" />
+      <path
+        d={path}
+        fill="none"
+        stroke={stroke}
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 export function BulletinCard() {
-  const [tickers, setTickers] = useState<Ticker[]>(SEED_TICKERS);
-  const initialSeries = useMemo(() => {
-    const m: Record<string, number[]> = {};
-    SEED_TICKERS.forEach((t, i) => {
-      m[t.symbol] = buildSeries(t.price, 36, 7 + i * 13);
-    });
-    return m;
-  }, []);
-  const [series, setSeries] = useState<Record<string, number[]>>(initialSeries);
-  const seedRef = useRef(91);
+  const spxBase = 5482.13;
+  const spxChange = 18.42;
+  const spxPct = (spxChange / (spxBase - spxChange)) * 100;
+  const spxUp = spxChange >= 0;
+  const series = useMemo(() => buildSeries(spxBase), [spxBase]);
 
-  const [clock, setClock] = useState("");
+  const [tickers, setTickers] = useState<Ticker[]>(SEED_TICKERS);
+  const [clock, setClock] = useState<string>("");
   useEffect(() => {
     const tick = () =>
       setClock(
@@ -94,42 +109,25 @@ export function BulletinCard() {
     const id = setInterval(tick, 30_000);
     return () => clearInterval(id);
   }, []);
-
   useEffect(() => {
     const id = setInterval(() => {
       setTickers((prev) =>
         prev.map((t) => {
           const decimals = t.decimals ?? 2;
-          seedRef.current = (seedRef.current * 9301 + 49297) % 233280;
-          const rnd = seedRef.current / 233280 - 0.5;
-          const drift = rnd * 0.0015 * t.price;
-          return {
-            ...t,
-            price: +(t.price + drift).toFixed(decimals),
-            change: +(t.change + drift).toFixed(decimals),
-          };
+          const drift = (Math.random() - 0.5) * 0.0006 * t.price;
+          const price = +(t.price + drift).toFixed(decimals);
+          const change = +(t.change + drift).toFixed(decimals);
+          return { ...t, price, change };
         }),
       );
-      setSeries((prev) => {
-        const next: Record<string, number[]> = {};
-        for (const k of Object.keys(prev)) {
-          const arr = prev[k];
-          const last = arr[arr.length - 1];
-          seedRef.current = (seedRef.current * 9301 + 49297) % 233280;
-          const rnd = seedRef.current / 233280 - 0.5;
-          const nv = +(last + rnd * last * 0.002).toFixed(2);
-          next[k] = [...arr.slice(1), nv];
-        }
-        return next;
-      });
-    }, 1500);
+    }, 6000);
     return () => clearInterval(id);
   }, []);
 
   return (
     <Panel
       label="Markets"
-      bodyClassName="gap-0"
+      bodyClassName="gap-4"
       action={
         <span className="inline-flex items-center gap-1.5 text-[10.5px] tabular-nums text-muted-foreground/80">
           <span className="relative grid h-1.5 w-1.5 place-items-center">
@@ -140,34 +138,67 @@ export function BulletinCard() {
         </span>
       }
     >
+      {/* S&P 500 — headline + sparkline */}
+      <div className="shrink-0">
+        <div className="flex items-baseline justify-between gap-3">
+          <div className="min-w-0">
+            <div className="truncate text-[9.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/70">
+              S&amp;P 500
+            </div>
+            <div className="mt-1 text-[22px] font-semibold leading-none tracking-tight tabular-nums text-foreground">
+              {fmt(spxBase)}
+            </div>
+          </div>
+          <div
+            className={`text-right text-[11px] font-medium leading-tight tabular-nums ${
+              spxUp ? "text-emerald-300/90" : "text-rose-300/90"
+            }`}
+          >
+            <div>
+              {spxUp ? "+" : ""}
+              {fmt(spxChange)}
+            </div>
+            <div className="text-muted-foreground/80">
+              {spxUp ? "+" : ""}
+              {fmt(spxPct, 2)}%
+            </div>
+          </div>
+        </div>
+        <div className="mt-2 h-14 w-full">
+          <Sparkline data={series} up={spxUp} />
+        </div>
+      </div>
+
+      <div className="h-px shrink-0 bg-border/50" />
+
+      {/* Commodities — three rows, hairline dividers */}
       <div className="flex min-h-0 flex-1 flex-col">
-        {tickers.map((t) => {
+        {tickers.map((t, i) => {
           const up = t.change >= 0;
           const pct = (t.change / Math.max(t.price - t.change, 0.0001)) * 100;
-          const data = series[t.symbol] ?? [];
           return (
             <div
               key={t.symbol}
-              className="flex items-center gap-3 border-b border-border/30 py-2.5 last:border-b-0"
+              className={`flex items-center gap-3 py-2.5 ${
+                i === 0 ? "" : "border-t border-border/40"
+              }`}
             >
               <div className="min-w-0 flex-1 leading-tight">
-                <div className="truncate text-[14px] font-semibold tracking-tight text-foreground">
-                  {t.symbol.replace("^", "").replace("-USD", "")}
-                </div>
-                <div className="truncate text-[10.5px] text-muted-foreground/70">
+                <div className="truncate text-[12.5px] font-semibold tracking-tight text-foreground/95">
                   {t.name}
                 </div>
+                <div className="truncate text-[10px] text-muted-foreground/70">
+                  {t.symbol}
+                  {t.unit ? ` · USD${t.unit}` : ""}
+                </div>
               </div>
-              <div className="h-7 w-[88px] shrink-0">
-                <MiniSparkline data={data} up={up} />
-              </div>
-              <div className="flex w-[72px] flex-col items-end gap-1 leading-none">
-                <div className="text-[13px] font-semibold tabular-nums text-foreground">
+              <div className="text-right leading-tight">
+                <div className="text-[12.5px] font-semibold tabular-nums text-foreground/95">
                   {fmt(t.price, t.decimals ?? 2)}
                 </div>
                 <div
-                  className={`rounded-md px-1.5 py-0.5 text-[10.5px] font-semibold tabular-nums text-white ${
-                    up ? "bg-[rgb(48,209,88)]" : "bg-[rgb(255,69,58)]"
+                  className={`text-[10.5px] font-medium tabular-nums ${
+                    up ? "text-emerald-300/85" : "text-rose-300/85"
                   }`}
                 >
                   {up ? "+" : ""}
