@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Panel } from "@/components/ui/panel";
 
 /**
@@ -46,7 +46,7 @@ function buildSeries(base: number, points = 48, seed = 7) {
 }
 
 function Sparkline({ data, up }: { data: number[]; up: boolean }) {
-  const { path, area, w, h } = useMemo(() => {
+  const { path, area, w, h, lastX, lastY } = useMemo(() => {
     const w = 280;
     const h = 64;
     const min = Math.min(...data);
@@ -62,16 +62,23 @@ function Sparkline({ data, up }: { data: number[]; up: boolean }) {
       .map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`)
       .join(" ");
     const area = `${path} L${w},${h} L0,${h} Z`;
-    return { path, area, w, h };
+    const [lastX, lastY] = pts[pts.length - 1];
+    return { path, area, w, h, lastX, lastY };
   }, [data]);
   const stroke = up ? "rgba(134,239,172,0.95)" : "rgba(252,165,165,0.95)";
   const fillTop = up ? "rgba(134,239,172,0.18)" : "rgba(252,165,165,0.18)";
+  const glow = up ? "rgba(134,239,172,0.9)" : "rgba(252,165,165,0.9)";
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-full w-full">
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-full w-full overflow-visible">
       <defs>
         <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor={fillTop} />
           <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </linearGradient>
+        <linearGradient id="spark-shine" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stopColor={stroke} stopOpacity="0" />
+          <stop offset="50%" stopColor="rgba(255,255,255,0.95)" stopOpacity="0.9" />
+          <stop offset="100%" stopColor={stroke} stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d={area} fill="url(#spark-fill)" />
@@ -83,16 +90,61 @@ function Sparkline({ data, up }: { data: number[]; up: boolean }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      {/* moving shine overlay */}
+      <path
+        d={path}
+        fill="none"
+        stroke="url(#spark-shine)"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray="40 260"
+        className="spark-shine"
+      />
+      {/* leading dot with pulse */}
+      <circle cx={lastX} cy={lastY} r="6" fill={glow} opacity="0.18">
+        <animate attributeName="r" values="3;8;3" dur="1.8s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.35;0;0.35" dur="1.8s" repeatCount="indefinite" />
+      </circle>
+      <circle cx={lastX} cy={lastY} r="2.2" fill={stroke} />
     </svg>
   );
 }
 
 export function BulletinCard() {
-  const spxBase = 5482.13;
-  const spxChange = 18.42;
-  const spxPct = (spxChange / (spxBase - spxChange)) * 100;
+  const spxBaseSeed = 5482.13;
+  const baseChange = 18.42;
+  const initialSeries = useMemo(() => buildSeries(spxBaseSeed), []);
+  const [series, setSeries] = useState<number[]>(initialSeries);
+  const seedRef = useRef(91);
+  const [flash, setFlash] = useState<"up" | "down" | null>(null);
+
+  const spxBase = series[series.length - 1] ?? spxBaseSeed;
+  const spxChange = baseChange + (spxBase - spxBaseSeed);
+  const spxPct = (spxChange / Math.max(spxBase - spxChange, 0.0001)) * 100;
   const spxUp = spxChange >= 0;
-  const series = useMemo(() => buildSeries(spxBase), [spxBase]);
+
+  // Live ticking series — shifts left, appends a new sample
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSeries((prev) => {
+        const last = prev[prev.length - 1];
+        seedRef.current = (seedRef.current * 9301 + 49297) % 233280;
+        const rnd = seedRef.current / 233280 - 0.5;
+        const next = +(last + rnd * spxBaseSeed * 0.0009 + (spxBaseSeed - last) * 0.015).toFixed(2);
+        setFlash(next >= last ? "up" : "down");
+        return [...prev.slice(1), next];
+      });
+    }, 1200);
+    return () => clearInterval(id);
+  }, []);
+
+  // Clear flash highlight shortly after each tick
+  useEffect(() => {
+    if (!flash) return;
+    const id = setTimeout(() => setFlash(null), 600);
+    return () => clearTimeout(id);
+  }, [flash]);
 
   const [tickers, setTickers] = useState<Ticker[]>(SEED_TICKERS);
   const [clock, setClock] = useState<string>("");
@@ -145,7 +197,16 @@ export function BulletinCard() {
             <div className="truncate text-[9.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/70">
               S&amp;P 500
             </div>
-            <div className="mt-1 text-[22px] font-semibold leading-none tracking-tight tabular-nums text-foreground">
+            <div
+              key={spxBase}
+              className={`mt-1 text-[22px] font-semibold leading-none tracking-tight tabular-nums transition-colors duration-300 animate-fade-in ${
+                flash === "up"
+                  ? "text-emerald-200"
+                  : flash === "down"
+                    ? "text-rose-200"
+                    : "text-foreground"
+              }`}
+            >
               {fmt(spxBase)}
             </div>
           </div>
