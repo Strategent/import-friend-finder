@@ -15,21 +15,31 @@ export const Route = createFileRoute("/connectors")({
 });
 
 const connectors = [
-  { name: "DocuSign", desc: "E-signature & agreements", icon: "https://cdn.simpleicons.org/docusign", connected: true },
-  { name: "Stripe", desc: "Payments & invoicing", icon: "https://cdn.simpleicons.org/stripe/635BFF", connected: true },
-  { name: "Gmail", desc: "Email sync & drafts", icon: "https://cdn.simpleicons.org/gmail/EA4335", connected: true },
-  { name: "Google Drive", desc: "Document storage", icon: "https://cdn.simpleicons.org/googledrive", connected: false },
-  { name: "Slack", desc: "Team messaging", icon: "https://cdn.simpleicons.org/slack/4A154B", connected: true },
-  { name: "Google Calendar", desc: "Meetings & scheduling", icon: "https://cdn.simpleicons.org/googlecalendar/4285F4", connected: false },
-  { name: "HubSpot", desc: "CRM & pipeline", icon: "https://cdn.simpleicons.org/hubspot/FF7A59", connected: false },
-  { name: "Notion", desc: "Notes & wikis", icon: "https://cdn.simpleicons.org/notion/000000", connected: false },
-  { name: "QuickBooks", desc: "Accounting & books", icon: "https://cdn.simpleicons.org/quickbooks/2CA01C", connected: false },
+  { name: "DocuSign", desc: "E-signature & agreements", slug: "docusign", connected: true },
+  { name: "Stripe", desc: "Payments & invoicing", slug: "stripe", connected: true },
+  { name: "Gmail", desc: "Email sync & drafts", slug: "gmail", connected: true },
+  { name: "Google Drive", desc: "Document storage", slug: "googledrive", connected: false },
+  { name: "Slack", desc: "Team messaging", slug: "slack", connected: true },
+  { name: "Google Calendar", desc: "Meetings & scheduling", slug: "googlecalendar", connected: false },
+  { name: "HubSpot", desc: "CRM & pipeline", slug: "hubspot", connected: false },
+  { name: "Notion", desc: "Notes & wikis", slug: "notion", connected: false },
+  { name: "QuickBooks", desc: "Accounting & books", slug: "quickbooks", connected: false },
 ];
 
-function ConnectorIcon({ icon, name }: { icon: string; name: string }) {
+function ConnectorIcon({ slug, name }: { slug: string; name: string }) {
+  // Force solid black silhouette, then invert to white in dark mode for a
+  // sleek monotone look that matches the dashboard aesthetic.
   return (
     <div className="h-10 w-10 grid place-items-center bg-transparent">
-      <img src={icon} alt={name} className="w-8 h-8 object-contain" />
+      <img
+        src={`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg`}
+        alt={name}
+        className="w-7 h-7 object-contain opacity-90 dark:invert"
+        style={{ filter: "brightness(0)" }}
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = `https://cdn.simpleicons.org/${slug}/000000`;
+        }}
+      />
     </div>
   );
 }
