@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
-import { Plus, Filter, Search, ArrowUpDown, MoreHorizontal, Star, Phone, Mail } from "lucide-react";
+import { Plus, Filter, Search, ArrowUpDown, MoreHorizontal, Star, Phone, Mail, Check, ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/crm")({
