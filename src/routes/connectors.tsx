@@ -6,18 +6,8 @@ import { PageShell, PageHeader } from "@/components/page-shell";
 import {
   Plug,
   Plus,
-  Cloud,
-  Calendar,
   Check,
 } from "lucide-react";
-
-import stripeAsset from "@/assets/stripe.png.asset.json";
-import gmailAsset from "@/assets/gmail.png.asset.json";
-import notionAsset from "@/assets/notion.png.asset.json";
-import quickbooksAsset from "@/assets/quickbooks.png.asset.json";
-import docusignAsset from "@/assets/docusign.png.asset.json";
-import slackAsset from "@/assets/slack.png.asset.json";
-import hubspotAsset from "@/assets/hubspot.png.asset.json";
 
 export const Route = createFileRoute("/connectors")({
   component: ConnectorsPage,
@@ -25,33 +15,23 @@ export const Route = createFileRoute("/connectors")({
 });
 
 const connectors = [
-  { name: "DocuSign", desc: "E-signature & agreements", icon: docusignAsset.url, connected: true },
-  { name: "Stripe", desc: "Payments & invoicing", icon: stripeAsset.url, connected: true },
-  { name: "Gmail", desc: "Email sync & drafts", icon: gmailAsset.url, connected: true },
-  { name: "Google Drive", desc: "Document storage", icon: null, lucideIcon: Cloud, connected: false },
-  { name: "Slack", desc: "Team messaging", icon: slackAsset.url, connected: true },
-  { name: "Google Calendar", desc: "Meetings & scheduling", icon: null, lucideIcon: Calendar, connected: false },
-  { name: "HubSpot", desc: "CRM & pipeline", icon: hubspotAsset.url, connected: false },
-  { name: "Notion", desc: "Notes & wikis", icon: notionAsset.url, connected: false },
-  { name: "QuickBooks", desc: "Accounting & books", icon: quickbooksAsset.url, connected: false },
+  { name: "DocuSign", desc: "E-signature & agreements", icon: "https://cdn.simpleicons.org/docusign", connected: true },
+  { name: "Stripe", desc: "Payments & invoicing", icon: "https://cdn.simpleicons.org/stripe/635BFF", connected: true },
+  { name: "Gmail", desc: "Email sync & drafts", icon: "https://cdn.simpleicons.org/gmail/EA4335", connected: true },
+  { name: "Google Drive", desc: "Document storage", icon: "https://cdn.simpleicons.org/googledrive", connected: false },
+  { name: "Slack", desc: "Team messaging", icon: "https://cdn.simpleicons.org/slack/4A154B", connected: true },
+  { name: "Google Calendar", desc: "Meetings & scheduling", icon: "https://cdn.simpleicons.org/googlecalendar/4285F4", connected: false },
+  { name: "HubSpot", desc: "CRM & pipeline", icon: "https://cdn.simpleicons.org/hubspot/FF7A59", connected: false },
+  { name: "Notion", desc: "Notes & wikis", icon: "https://cdn.simpleicons.org/notion/000000", connected: false },
+  { name: "QuickBooks", desc: "Accounting & books", icon: "https://cdn.simpleicons.org/quickbooks/2CA01C", connected: false },
 ];
 
-function ConnectorIcon({ icon, lucideIcon: LucideIcon }: { icon: string | null; lucideIcon?: React.ComponentType<{ className?: string; strokeWidth?: number }> }) {
-  if (icon) {
-    return (
-      <div className="h-10 w-10 rounded-lg overflow-hidden grid place-items-center bg-transparent">
-        <img src={icon} alt="" className="w-full h-full object-contain" />
-      </div>
-    );
-  }
-  if (LucideIcon) {
-    return (
-      <div className="h-10 w-10 rounded-lg grid place-items-center bg-white/[0.05] border border-white/10">
-        <LucideIcon className="h-[18px] w-[18px] text-foreground/85" strokeWidth={1.5} />
-      </div>
-    );
-  }
-  return null;
+function ConnectorIcon({ icon, name }: { icon: string; name: string }) {
+  return (
+    <div className="h-10 w-10 grid place-items-center bg-transparent">
+      <img src={icon} alt={name} className="w-8 h-8 object-contain" />
+    </div>
+  );
 }
 
 function ConnectorsPage() {
@@ -96,7 +76,7 @@ function ConnectorsPage() {
             <div key={c.name} className="col-span-12 sm:col-span-6 lg:col-span-4">
               <div className="p-5 h-full flex flex-col gap-4 bg-card border border-border">
                 <div className="flex items-start justify-between">
-                  <ConnectorIcon icon={c.icon} lucideIcon={c.lucideIcon} />
+                  <ConnectorIcon icon={c.icon} name={c.name} />
                   {c.connected ? (
                     <Badge className="bg-white/[0.06] text-foreground/80 border border-white/10 hover:bg-white/[0.06] gap-1">
                       <Check className="h-3 w-3" /> Connected
