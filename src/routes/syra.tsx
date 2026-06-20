@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { PageShell } from "@/components/page-shell";
 import {
   Paperclip,
   ArrowUp,
@@ -8,7 +7,8 @@ import {
   FileText,
   Inbox,
   Calendar,
-  Workflow,
+  ChevronDown,
+  Check,
 } from "lucide-react";
 
 export const Route = createFileRoute("/syra")({
@@ -20,23 +20,32 @@ const quickActions = [
   { icon: FileText, label: "Draft Email" },
   { icon: Inbox, label: "Triage Inbox" },
   { icon: Calendar, label: "Schedule Meeting" },
-  { icon: Workflow, label: "Run Workflow" },
+];
+
+const models = [
+  { id: "claude-sonnet-4.5", name: "Claude Sonnet 4.5", provider: "Anthropic" },
+  { id: "claude-opus-4", name: "Claude Opus 4", provider: "Anthropic" },
+  { id: "gpt-5", name: "GPT-5", provider: "OpenAI" },
+  { id: "gpt-5-mini", name: "GPT-5 Mini", provider: "OpenAI" },
 ];
 
 function SyraPage() {
   const [input, setInput] = useState("");
+  const [modelId, setModelId] = useState(models[0].id);
+  const [open, setOpen] = useState(false);
+  const activeModel = models.find((m) => m.id === modelId) ?? models[0];
   return (
-    <PageShell>
+    <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
       <style>{`
         @keyframes syra-drift-1 { 0%,100% { transform: translate(-8%, 4%) scale(1); } 50% { transform: translate(6%, -4%) scale(1.15); } }
         @keyframes syra-drift-2 { 0%,100% { transform: translate(10%, -6%) scale(1.1); } 50% { transform: translate(-6%, 8%) scale(0.95); } }
         @keyframes syra-drift-3 { 0%,100% { transform: translate(0%, 8%) scale(1.05); } 50% { transform: translate(4%, -2%) scale(1.2); } }
         .syra-blob { position: absolute; border-radius: 9999px; filter: blur(80px); mix-blend-mode: screen; opacity: 0.55; }
+        .font-radley { font-family: 'Radley', Georgia, serif; }
       `}</style>
 
-      <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-[#0a0a0c] min-h-[78vh] flex flex-col">
-        {/* Animated monochrome fluid background */}
-        <div className="absolute inset-0 pointer-events-none">
+      {/* Animated monochrome fluid background */}
+      <div className="absolute inset-0 bg-[#0a0a0c] pointer-events-none">
           <div
             className="syra-blob"
             style={{
@@ -61,18 +70,17 @@ function SyraPage() {
               animation: "syra-drift-3 20s ease-in-out infinite",
             }}
           />
-          {/* Subtle grain / vignette */}
           <div className="absolute inset-0" style={{
             background: "radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 55%)",
           }} />
-        </div>
+      </div>
 
-        {/* Content */}
-        <div className="relative flex-1 flex flex-col items-center justify-center px-6 py-16">
+      {/* Content */}
+      <div className="relative h-full flex flex-col items-center justify-center px-6">
           <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-white/50 mb-6">
             <Sparkles className="h-3.5 w-3.5" /> AI Operations Agent
           </div>
-          <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-white text-center">
+          <h1 className="font-radley text-5xl md:text-6xl font-normal tracking-tight text-white text-center">
             Ask Syra
           </h1>
           <p className="mt-4 text-white/55 text-center max-w-xl text-[15px]">
@@ -87,14 +95,47 @@ function SyraPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask Syra anything…"
-                className="w-full bg-transparent px-5 pt-5 pb-14 text-[15px] text-white placeholder:text-white/40 focus:outline-none"
+                className="w-full bg-transparent px-5 pt-5 pb-16 text-[15px] text-white placeholder:text-white/40 focus:outline-none"
               />
-              <button
-                aria-label="Attach"
-                className="absolute left-3 bottom-3 grid h-9 w-9 place-items-center rounded-lg text-white/55 hover:text-white hover:bg-white/[0.06] transition-colors"
-              >
-                <Paperclip className="h-4 w-4" />
-              </button>
+              <div className="absolute left-3 bottom-3 flex items-center gap-1.5">
+                <button
+                  aria-label="Attach"
+                  className="grid h-9 w-9 place-items-center rounded-lg text-white/55 hover:text-white hover:bg-white/[0.06] transition-colors"
+                >
+                  <Paperclip className="h-4 w-4" />
+                </button>
+                {/* Perplexity-style model switch */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setOpen((v) => !v)}
+                    className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-[12.5px] text-white/75 hover:text-white hover:bg-white/[0.06] transition-colors"
+                  >
+                    {activeModel.name}
+                    <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                  </button>
+                  {open && (
+                    <div
+                      className="absolute left-0 bottom-11 z-30 w-64 rounded-xl border border-white/10 bg-[#141417]/95 backdrop-blur-xl p-1 shadow-2xl"
+                      onMouseLeave={() => setOpen(false)}
+                    >
+                      {models.map((m) => (
+                        <button
+                          key={m.id}
+                          onClick={() => { setModelId(m.id); setOpen(false); }}
+                          className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-left hover:bg-white/[0.06] transition-colors"
+                        >
+                          <div className="min-w-0">
+                            <div className="text-[13px] text-white truncate">{m.name}</div>
+                            <div className="text-[11px] text-white/45">{m.provider}</div>
+                          </div>
+                          {m.id === modelId && <Check className="h-3.5 w-3.5 text-white/80 shrink-0" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
               <button
                 aria-label="Send"
                 className="absolute right-3 bottom-3 grid h-9 w-9 place-items-center rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
@@ -115,8 +156,7 @@ function SyraPage() {
               ))}
             </div>
           </div>
-        </div>
       </div>
-    </PageShell>
+    </div>
   );
 }
