@@ -83,26 +83,6 @@ function CrmPage() {
     return { aum, open, count: filtered.length };
   }, [filtered]);
 
-  const toggle = (id: number) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
-  const allChecked = filtered.length > 0 && filtered.every((c) => selected.has(c.id));
-  const toggleAll = () => {
-    setSelected((prev) => {
-      if (allChecked) {
-        const next = new Set(prev);
-        filtered.forEach((c) => next.delete(c.id));
-        return next;
-      }
-      const next = new Set(prev);
-      filtered.forEach((c) => next.add(c.id));
-      return next;
-    });
-  };
 
   return (
     <>
@@ -169,11 +149,6 @@ function CrmPage() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        {selected.size > 0 && (
-          <div className="text-[11px] text-muted-foreground">
-            {selected.size} selected
-          </div>
-        )}
       </div>
 
       {/* Table — full width, no card */}
@@ -181,14 +156,6 @@ function CrmPage() {
         <table className="w-full text-left">
           <thead className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground border-b border-border/60 bg-muted/20">
               <tr>
-                <th className="py-3 pl-4 pr-2 w-8">
-                  <input
-                    type="checkbox"
-                    checked={allChecked}
-                    onChange={toggleAll}
-                    className="h-3.5 w-3.5 accent-foreground cursor-pointer"
-                  />
-                </th>
                 <th className="py-3 px-2 w-6"></th>
                 <th className="py-3 px-2">
                   <span className="inline-flex items-center gap-1">Client <ArrowUpDown className="h-3 w-3 opacity-50" /></span>
@@ -205,21 +172,12 @@ function CrmPage() {
             </thead>
             <tbody className="text-[13px]">
               {filtered.map((c) => {
-                const checked = selected.has(c.id);
                 const sty = stageStyle[c.stage];
                 return (
                   <tr
                     key={c.id}
-                    className={`border-b border-border/40 hover:bg-foreground/[0.025] transition-colors ${checked ? "bg-foreground/[0.04]" : ""}`}
+                    className="border-b border-border/40 hover:bg-foreground/[0.025] transition-colors"
                   >
-                    <td className="py-3 pl-4 pr-2">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggle(c.id)}
-                        className="h-3.5 w-3.5 accent-foreground cursor-pointer"
-                      />
-                    </td>
                     <td className="py-3 px-2">
                       <Star
                         className={`h-3.5 w-3.5 ${c.starred ? "text-amber-400 fill-amber-400" : "text-muted-foreground/40"}`}
