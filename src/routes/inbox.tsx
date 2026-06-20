@@ -16,6 +16,20 @@ import {
   MoreHorizontal,
   Printer,
   CornerUpLeft,
+  Bold,
+  Italic,
+  Underline,
+  Link2,
+  List,
+  ListOrdered,
+  AlignLeft,
+  Image as ImageIcon,
+  Paperclip,
+  Smile,
+  Type,
+  ChevronDown,
+  Minus,
+  X,
 } from "lucide-react";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
 
