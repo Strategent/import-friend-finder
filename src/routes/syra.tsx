@@ -87,8 +87,7 @@ function SyraPage() {
           Syra
         </h1>
         <p className="mt-4 text-muted-foreground text-center max-w-xl text-[15px]">
-          Draft, analyze, automate. Syra moves work forward across your inbox,
-          calendar, CRM, and channels.
+          Draft, analyze, automate. Syra moves work forward.
         </p>
 
         {/* Input bar */}
