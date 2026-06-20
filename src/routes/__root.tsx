@@ -81,14 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "strategent | demo build" },
+      { title: "Harwick & Sterne — Private Wealth Admin" },
       {
         name: "description",
         content:
           "Private wealth admin console for Harwick & Sterne: portfolios, client meetings, planner, documents and the Syra agent.",
       },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "strategent | demo build" },
+      { property: "og:title", content: "Harwick & Sterne — Private Wealth Admin" },
       {
         property: "og:description",
         content:
@@ -97,12 +97,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "strategent | demo build" },
-      { name: "description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { property: "og:description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { name: "twitter:description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
