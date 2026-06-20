@@ -34,8 +34,7 @@ function ConnectorIcon({ slug, name }: { slug: string; name: string }) {
       <img
         src={`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg`}
         alt={name}
-        className="w-7 h-7 object-contain opacity-90 dark:invert"
-        style={{ filter: "brightness(0)" }}
+        className="w-7 h-7 object-contain opacity-90 brightness-0 dark:brightness-0 dark:invert"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src = `https://cdn.simpleicons.org/${slug}/000000`;
         }}
