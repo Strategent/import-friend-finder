@@ -20,6 +20,19 @@ const team = [
   { name: "Lena Foster", role: "Family Office Director, Beaumont Group", status: "Online", tasks: 4, score: 92 },
 ];
 
+function statusDotColor(status: string) {
+  switch (status) {
+    case "Online":
+      return "#2BAC76";
+    case "Away":
+      return "#EBB02C";
+    case "Offline":
+      return "#CB2431";
+    default:
+      return "#888";
+  }
+}
+
 function TeamPage() {
   return (
     <PageShell>
@@ -28,7 +41,7 @@ function TeamPage() {
         title="Team"
         description="Employees, workload and accountability at a glance."
         actions={
-          <Button className="text-white border-0" style={{ background: "var(--gradient-primary)" }}>
+          <Button variant="outline" className="border-border/60">
             <UserPlus className="h-4 w-4 mr-2" /> Invite
           </Button>
         }
@@ -47,7 +60,14 @@ function TeamPage() {
                 <div className="text-sm font-semibold truncate">{m.name}</div>
                 <div className="text-xs text-muted-foreground truncate">{m.role}</div>
               </div>
-              <Badge className={`border ${m.status === "Online" ? "bg-primary/15 text-primary border-primary/30" : m.status === "Away" ? "bg-accent/15 text-accent border-accent/30" : "bg-white/5 text-muted-foreground border-border/60"}`}>
+              <Badge
+                variant="outline"
+                className="flex items-center gap-1.5 border-border/60 text-muted-foreground"
+              >
+                <span
+                  className="inline-block h-1.5 w-1.5 rounded-full"
+                  style={{ background: statusDotColor(m.status) }}
+                />
                 {m.status}
               </Badge>
             </div>
@@ -58,11 +78,14 @@ function TeamPage() {
               </div>
               <div>
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Accountability</div>
-                <div className="mt-1 text-xl font-semibold text-primary">{m.score}%</div>
+                <div className="mt-1 text-xl font-semibold">{m.score}%</div>
               </div>
             </div>
-            <div className="mt-3 h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${m.score}%`, background: "var(--gradient-primary)" }} />
+            <div className="mt-3 h-1.5 w-full rounded-full bg-border/60 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-foreground"
+                style={{ width: `${m.score}%`, opacity: 0.85 }}
+              />
             </div>
           </Card>
         ))}
