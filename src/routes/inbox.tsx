@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Inbox as InboxIcon,
   Star,
@@ -51,43 +51,80 @@ function initials(name: string) {
 function InboxPage() {
   const [selected, setSelected] = useState(threads[0]);
   const [activeFolder, setActiveFolder] = useState("Inbox");
+  const [foldersOpen, setFoldersOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!foldersOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setFoldersOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setFoldersOpen(false);
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [foldersOpen]);
+
+  const activeIcon = folders.find((f) => f.name === activeFolder)?.icon ?? InboxIcon;
+  const ActiveIcon = activeIcon;
 
   return (
     <>
-      <div className="flex w-full bg-background overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
-        {/* Folders sidebar */}
-        <aside className="hidden md:flex w-[220px] shrink-0 flex-col border-r border-border/60 bg-muted/30">
-          <div className="px-5 pt-5 pb-3">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">Mailbox</div>
-          </div>
-          <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
-            {folders.map((f) => {
-              const Icon = f.icon;
-              const active = f.name === activeFolder;
-              return (
-                <button
-                  key={f.name}
-                  onClick={() => setActiveFolder(f.name)}
-                  className={`w-full flex items-center gap-2.5 px-3 h-8 rounded-md text-[13px] transition-colors ${
-                    active
-                      ? "bg-foreground/[0.06] text-foreground font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
-                  }`}
-                >
-                  <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
-                  <span className="flex-1 text-left">{f.name}</span>
-                  {f.count != null && (
-                    <span className="text-[11px] text-muted-foreground tabular-nums">{f.count}</span>
-                  )}
-                </button>
-              );
-            })}
-          </nav>
-        </aside>
-
+      <div className="flex w-full bg-muted/20 overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
         {/* Thread list */}
-        <section className="w-[360px] shrink-0 flex flex-col border-r border-border/60 min-w-0">
+        <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 min-w-0 bg-background">
           <div className="h-12 px-4 flex items-center gap-2 border-b border-border/60">
+            {/* Mailbox glass pill — opens folder picker */}
+            <div className="relative" ref={popoverRef}>
+              <button
+                onClick={() => setFoldersOpen((v) => !v)}
+                aria-label="Mailboxes"
+                aria-expanded={foldersOpen}
+                className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full border border-border/70 bg-background/70 backdrop-blur-md text-[12px] font-medium text-foreground/90 hover:bg-foreground/[0.05] transition-colors shadow-sm"
+              >
+                <ActiveIcon className="h-3.5 w-3.5" strokeWidth={1.75} />
+                <span>{activeFolder}</span>
+              </button>
+              {foldersOpen && (
+                <div
+                  className="absolute left-0 top-10 z-30 w-56 p-1.5 rounded-2xl border border-border/70 bg-popover/85 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
+                  style={{
+                    boxShadow:
+                      "0 1px 0 0 color-mix(in oklab, white 30%, transparent) inset, 0 20px 50px -20px rgba(15,20,40,0.35), 0 8px 24px -10px rgba(15,20,40,0.25)",
+                  }}
+                >
+                  {folders.map((f) => {
+                    const Icon = f.icon;
+                    const active = f.name === activeFolder;
+                    return (
+                      <button
+                        key={f.name}
+                        onClick={() => {
+                          setActiveFolder(f.name);
+                          setFoldersOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-2.5 px-2.5 h-8 rounded-lg text-[13px] transition-colors ${
+                          active
+                            ? "bg-foreground/[0.08] text-foreground font-medium"
+                            : "text-foreground/80 hover:bg-foreground/[0.05]"
+                        }`}
+                      >
+                        <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
+                        <span className="flex-1 text-left">{f.name}</span>
+                        {f.count != null && (
+                          <span className="text-[11px] text-muted-foreground tabular-nums">{f.count}</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
             <div className="flex-1 flex items-center gap-2 h-8 px-2.5 rounded-md bg-muted/50 border border-border/60">
               <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
@@ -146,7 +183,7 @@ function InboxPage() {
         </section>
 
         {/* Reading pane */}
-        <main className="flex-1 flex flex-col min-w-0">
+        <main className="flex-1 flex flex-col min-w-0 bg-background">
           {/* Toolbar */}
           <div className="h-12 px-4 flex items-center justify-between border-b border-border/60">
             <div className="flex items-center gap-1">
@@ -197,9 +234,15 @@ function InboxPage() {
               {`Hi team,\n\n${selected.preview}\n\nLooking forward to your thoughts. Let me know if a 30-minute sync this week works.\n\nBest,\n${selected.from.split(" ")[0]}`}
             </div>
 
-            {/* Syra suggested reply — monotone */}
-            <div className="mt-8 max-w-2xl border border-border/60 bg-muted/30 rounded-lg overflow-hidden">
-              <div className="px-4 py-2.5 flex items-center justify-between border-b border-border/60 bg-muted/40">
+            {/* Syra suggested reply — monotone, lifted */}
+            <div
+              className="mt-8 max-w-2xl border border-border/70 bg-card rounded-xl overflow-hidden"
+              style={{
+                boxShadow:
+                  "0 1px 0 0 color-mix(in oklab, white 25%, transparent) inset, 0 18px 40px -22px rgba(15,20,40,0.35), 0 6px 18px -10px rgba(15,20,40,0.18)",
+              }}
+            >
+              <div className="px-4 py-2.5 flex items-center justify-between border-b border-border/60 bg-muted/50">
                 <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">
                   <CornerUpLeft className="h-3 w-3" />
                   Syra suggested reply
