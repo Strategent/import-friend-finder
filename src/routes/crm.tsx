@@ -177,7 +177,7 @@ function CrmPage() {
                     type="checkbox"
                     checked={allChecked}
                     onChange={toggleAll}
-                    className="h-3.5 w-3.5 accent-[oklch(0.62_0.22_270)] cursor-pointer"
+                    className="h-3.5 w-3.5 accent-foreground cursor-pointer"
                   />
                 </th>
                 <th className="py-3 px-2 w-6"></th>
