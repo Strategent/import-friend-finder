@@ -13,10 +13,11 @@ import {
   Bookmark,
   Bell,
   Search,
-  Sparkles,
+
   X,
 } from "lucide-react";
 import { avatarUrl } from "@/lib/avatar";
+import { SyraMark } from "@/components/syra-mark";
 
 export const Route = createFileRoute("/channels")({
   component: ChannelsPage,
@@ -203,9 +204,7 @@ function ChannelsPage() {
                 >
                   <span className="relative">
                     {d.status === "ai" ? (
-                      <span className="grid h-4 w-4 place-items-center rounded-sm bg-white/15">
-                        <Sparkles className="h-2.5 w-2.5 text-white" />
-                      </span>
+                      <SyraMark size={14} flat />
                     ) : (
                       <>
                         <span className="h-2 w-2 rounded-full inline-block" style={{
@@ -258,15 +257,7 @@ function ChannelsPage() {
                 background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
               }}
             >
-              <div
-                className="h-9 w-9 rounded-md grid place-items-center shrink-0"
-                style={{
-                  background: dark ? "rgba(255,255,255,0.08)" : "#1D1C1D",
-                  color: "#FFF",
-                }}
-              >
-                <Sparkles className="h-4 w-4" />
-              </div>
+              <SyraMark size={36} className="shrink-0 rounded-md" />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-[13.5px] font-semibold">Talk to Syra in any channel</span>
@@ -309,16 +300,7 @@ function ChannelsPage() {
               return (
                 <div key={i} className="flex gap-3 group">
                   {isAi ? (
-                    <div
-                      className="h-9 w-9 rounded-md grid place-items-center shrink-0"
-                      style={{
-                        background: "#1D1C1D",
-                        color: "#FFF",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                      }}
-                    >
-                      <Sparkles className="h-4 w-4" />
-                    </div>
+                    <SyraMark size={36} className="shrink-0 rounded-md" />
                   ) : (
                     <img
                       src={avatarUrl(m.user, 72)}
