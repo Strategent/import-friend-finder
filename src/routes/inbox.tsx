@@ -248,35 +248,8 @@ function InboxPage() {
               {`Hi team,\n\n${selected.preview}\n\nLooking forward to your thoughts. Let me know if a 30-minute sync this week works.\n\nBest,\n${selected.from.split(" ")[0]}`}
             </div>
 
-            {/* Syra suggested reply — monotone, lifted */}
-            <div
-              className="mt-8 max-w-2xl border border-border/70 bg-card rounded-xl overflow-hidden"
-              style={{
-                boxShadow:
-                  "0 1px 0 0 color-mix(in oklab, white 25%, transparent) inset, 0 18px 40px -22px rgba(15,20,40,0.35), 0 6px 18px -10px rgba(15,20,40,0.18)",
-              }}
-            >
-              <div className="px-4 py-2.5 flex items-center justify-between border-b border-border/60 bg-muted/50">
-                <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">
-                  <CornerUpLeft className="h-3 w-3" />
-                  Syra suggested reply
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <button className="h-7 px-2.5 text-[11.5px] rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]">
-                    Regenerate
-                  </button>
-                  <button className="h-7 px-2.5 text-[11.5px] rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]">
-                    Edit
-                  </button>
-                  <button className="h-7 px-3 text-[11.5px] rounded-md bg-foreground text-background font-medium hover:bg-foreground/90">
-                    Send
-                  </button>
-                </div>
-              </div>
-              <div className="px-4 py-3.5 text-[13.5px] leading-relaxed text-foreground/90">
-                Hi {selected.from.split(" ")[0]}, thanks for the notes — happy to adjust tier 2 pricing as proposed and lock kickoff for the week of June 10th. I'll send an updated SOW shortly and a calendar invite for a 30-min walkthrough.
-              </div>
-            </div>
+            {/* Gmail-style compose window */}
+            <ComposeWindow selectedFrom={selected.from} selectedSubject={selected.subject} />
           </div>
         </main>
       </div>
@@ -294,5 +267,148 @@ function ToolbarBtn({ icon: Icon, label }: { icon: React.ComponentType<{ classNa
     >
       <Icon className="h-4 w-4" strokeWidth={1.75} />
     </button>
+  );
+}
+
+function FmtBtn({
+  icon: Icon,
+  label,
+  withCaret = false,
+}: {
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  label: string;
+  withCaret?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      className="inline-flex items-center gap-0.5 h-7 px-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06] transition-colors"
+    >
+      <Icon className="h-3.5 w-3.5" strokeWidth={1.85} />
+      {withCaret && <ChevronDown className="h-3 w-3 opacity-60" />}
+    </button>
+  );
+}
+
+function FmtDivider() {
+  return <span className="mx-0.5 h-4 w-px bg-border/70" />;
+}
+
+function ComposeWindow({
+  selectedFrom,
+  selectedSubject,
+}: {
+  selectedFrom: string;
+  selectedSubject: string;
+}) {
+  const firstName = selectedFrom.split(" ")[0];
+  return (
+    <div
+      className="mt-8 max-w-2xl bg-card border border-border/70 dark:border-white/[0.08] rounded-xl overflow-hidden"
+      style={{
+        boxShadow:
+          "0 1px 0 0 color-mix(in oklab, white 30%, transparent) inset, 0 24px 56px -28px rgba(10,15,30,0.45), 0 8px 24px -12px rgba(10,15,30,0.22)",
+      }}
+    >
+      {/* Title bar — Gmail style */}
+      <div className="flex items-center justify-between px-3.5 h-9 bg-foreground/[0.04] dark:bg-white/[0.04] border-b border-border/60">
+        <div className="flex items-center gap-2 text-[12px] font-medium text-foreground/85">
+          <CornerUpLeft className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.85} />
+          New message
+        </div>
+        <div className="flex items-center gap-0.5 text-muted-foreground">
+          <button className="grid h-6 w-6 place-items-center rounded hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="Minimize">
+            <Minus className="h-3.5 w-3.5" />
+          </button>
+          <button className="grid h-6 w-6 place-items-center rounded hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="Close">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Recipient + subject fields */}
+      <div className="text-[13px]">
+        <div className="flex items-center gap-3 px-4 h-9 border-b border-border/50">
+          <span className="text-muted-foreground w-12 shrink-0">To</span>
+          <span className="inline-flex items-center gap-1.5 h-6 pl-1 pr-2 rounded-full bg-foreground/[0.06] dark:bg-white/[0.06] text-[12px]">
+            <span className="grid h-4 w-4 place-items-center rounded-full bg-foreground/15 text-[9px] font-semibold">
+              {firstName[0]}
+            </span>
+            {firstName.toLowerCase()}@acme.com
+          </span>
+          <div className="ml-auto flex items-center gap-3 text-[12px] text-muted-foreground">
+            <button className="hover:text-foreground">Cc</button>
+            <button className="hover:text-foreground">Bcc</button>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 px-4 h-9 border-b border-border/50">
+          <span className="text-muted-foreground w-12 shrink-0">Subject</span>
+          <span className="truncate">Re: {selectedSubject}</span>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="px-4 py-4 min-h-[180px] text-[13.5px] leading-relaxed text-foreground/90">
+        <p>Hi {firstName},</p>
+        <p className="mt-3">
+          Thanks for the notes — happy to adjust tier 2 pricing as proposed and lock kickoff
+          for the week of June 10th. I'll send an updated SOW shortly and a calendar invite
+          for a 30-min walkthrough.
+        </p>
+        <p className="mt-3 text-muted-foreground/80">Best,<br />Syra</p>
+      </div>
+
+      {/* Formatting toolbar */}
+      <div className="px-3 py-1.5 border-t border-border/60 bg-foreground/[0.025] dark:bg-white/[0.025] flex items-center gap-0.5 overflow-x-auto">
+        <FmtBtn icon={Type} label="Font" withCaret />
+        <FmtDivider />
+        <FmtBtn icon={Bold} label="Bold" />
+        <FmtBtn icon={Italic} label="Italic" />
+        <FmtBtn icon={Underline} label="Underline" />
+        <FmtDivider />
+        <FmtBtn icon={AlignLeft} label="Align" withCaret />
+        <FmtBtn icon={List} label="Bulleted list" />
+        <FmtBtn icon={ListOrdered} label="Numbered list" />
+        <FmtDivider />
+        <FmtBtn icon={Link2} label="Insert link" />
+        <FmtBtn icon={ImageIcon} label="Insert image" />
+        <FmtBtn icon={Smile} label="Emoji" />
+      </div>
+
+      {/* Action bar */}
+      <div className="px-3 py-2 border-t border-border/60 bg-card flex items-center justify-between">
+        <div className="flex items-center">
+          <button className="inline-flex items-center h-8 pl-3 pr-3 rounded-l-md bg-foreground text-background text-[12.5px] font-medium hover:bg-foreground/90">
+            <Send className="h-3.5 w-3.5 mr-2" strokeWidth={2} />
+            Send
+          </button>
+          <button
+            aria-label="Send options"
+            className="grid place-items-center h-8 w-7 rounded-r-md bg-foreground text-background hover:bg-foreground/90 border-l border-background/20"
+          >
+            <ChevronDown className="h-3.5 w-3.5" />
+          </button>
+          <div className="ml-2 flex items-center gap-0.5 text-muted-foreground">
+            <FmtBtn icon={Paperclip} label="Attach files" />
+            <FmtBtn icon={Link2} label="Insert link" />
+            <FmtBtn icon={Smile} label="Insert emoji" />
+            <FmtBtn icon={ImageIcon} label="Insert photo" />
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button className="h-7 px-2.5 text-[11.5px] rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]">
+            Syra: Regenerate
+          </button>
+          <button className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="More">
+            <MoreHorizontal className="h-4 w-4" />
+          </button>
+          <button className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="Discard">
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
