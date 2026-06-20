@@ -67,7 +67,7 @@ function SyraPage() {
             <Sparkles className="h-3.5 w-3.5" /> AI Operations Agent
           </div>
           <h1 className="font-radley text-5xl md:text-6xl font-normal tracking-tight text-white text-center">
-            Ask Syra
+            Syra
           </h1>
           <p className="mt-4 text-white/55 text-center max-w-xl text-[15px]">
             Draft, analyze, automate. Syra moves work forward across your inbox,
