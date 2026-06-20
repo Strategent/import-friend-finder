@@ -1,13 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
-import { Plus, Filter, Search, ArrowUpDown, MoreHorizontal, Star, Phone, Mail, Check, ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Plus, Filter, Search, ArrowUpDown, MoreHorizontal, Star, Phone, Mail } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/crm")({
@@ -63,6 +57,7 @@ function fmtAum(v: number) {
 function CrmPage() {
   const [query, setQuery] = useState("");
   const [stage, setStage] = useState<(typeof STAGES)[number]>("All");
+  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
@@ -83,10 +78,30 @@ function CrmPage() {
     return { aum, open, count: filtered.length };
   }, [filtered]);
 
+  const toggle = (id: number) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+  const allChecked = filtered.length > 0 && filtered.every((c) => selected.has(c.id));
+  const toggleAll = () => {
+    setSelected((prev) => {
+      if (allChecked) {
+        const next = new Set(prev);
+        filtered.forEach((c) => next.delete(c.id));
+        return next;
+      }
+      const next = new Set(prev);
+      filtered.forEach((c) => next.add(c.id));
+      return next;
+    });
+  };
 
   return (
     <>
-    <div className="w-full bg-slate-50 dark:bg-[#121212] flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
+    <div className="w-full bg-background dark:bg-slate-900 flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
       {/* Header */}
       <div className="px-8 pt-8 pb-6 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
         <div>
@@ -132,23 +147,24 @@ function CrmPage() {
             className="w-full h-9 pl-9 pr-3 rounded-lg bg-muted/50 border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-foreground/30"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="h-9 px-3 rounded-lg border border-border bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05] flex items-center gap-2 text-[13px]">
-              <Filter className="h-3.5 w-3.5" />
-              <span>Filter</span>
-              <ChevronDown className="h-3 w-3 opacity-50" />
+        <div className="flex items-center gap-1 p-0.5 rounded-full bg-muted/50 border border-border">
+          {STAGES.map((s) => (
+            <button
+              key={s}
+              onClick={() => setStage(s)}
+              className={`h-7 px-3 rounded-full text-[11px] font-medium transition-colors ${
+                stage === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {s}
             </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="min-w-[160px]">
-            {STAGES.map((s) => (
-              <DropdownMenuItem key={s} onSelect={() => setStage(s)} className="text-[13px] cursor-pointer">
-                <span className="flex-1">{s}</span>
-                {stage === s && <Check className="h-3.5 w-3.5 opacity-70" />}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          ))}
+        </div>
+        {selected.size > 0 && (
+          <div className="text-[11px] text-muted-foreground">
+            {selected.size} selected
+          </div>
+        )}
       </div>
 
       {/* Table — full width, no card */}
@@ -156,6 +172,14 @@ function CrmPage() {
         <table className="w-full text-left">
           <thead className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground border-b border-border/60 bg-muted/20">
               <tr>
+                <th className="py-3 pl-4 pr-2 w-8">
+                  <input
+                    type="checkbox"
+                    checked={allChecked}
+                    onChange={toggleAll}
+                    className="h-3.5 w-3.5 accent-foreground cursor-pointer"
+                  />
+                </th>
                 <th className="py-3 px-2 w-6"></th>
                 <th className="py-3 px-2">
                   <span className="inline-flex items-center gap-1">Client <ArrowUpDown className="h-3 w-3 opacity-50" /></span>
@@ -172,12 +196,21 @@ function CrmPage() {
             </thead>
             <tbody className="text-[13px]">
               {filtered.map((c) => {
+                const checked = selected.has(c.id);
                 const sty = stageStyle[c.stage];
                 return (
                   <tr
                     key={c.id}
-                    className="border-b border-border/40 hover:bg-foreground/[0.025] transition-colors"
+                    className={`border-b border-border/40 hover:bg-foreground/[0.025] transition-colors ${checked ? "bg-foreground/[0.04]" : ""}`}
                   >
+                    <td className="py-3 pl-4 pr-2">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggle(c.id)}
+                        className="h-3.5 w-3.5 accent-foreground cursor-pointer"
+                      />
+                    </td>
                     <td className="py-3 px-2">
                       <Star
                         className={`h-3.5 w-3.5 ${c.starred ? "text-amber-400 fill-amber-400" : "text-muted-foreground/40"}`}
@@ -205,8 +238,11 @@ function CrmPage() {
                     </td>
                     <td className="py-3 px-2 text-right font-semibold tabular-nums">{fmtAum(c.aum)}</td>
                     <td className="py-3 px-2">
-                      <div className="h-6 w-6 rounded-full grid place-items-center text-[10px] font-semibold bg-muted text-foreground/80 border border-border" title={c.owner.name}>
-                        {c.owner.initials}
+                      <div className="flex items-center gap-2">
+                        <div className="h-6 w-6 rounded-full grid place-items-center text-[10px] font-semibold bg-muted text-foreground/80 border border-border">
+                          {c.owner.initials}
+                        </div>
+                        <div className="text-[12px] text-foreground/80 truncate">{c.owner.name}</div>
                       </div>
                     </td>
                     <td className="py-3 px-2 text-[12px] text-muted-foreground whitespace-nowrap">{c.lastContact}</td>
