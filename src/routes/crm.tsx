@@ -101,7 +101,7 @@ function CrmPage() {
 
   return (
     <>
-    <div className="w-full bg-background dark:bg-slate-900 flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
+    <div className="w-full bg-slate-50 dark:bg-slate-900 flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
       {/* Header */}
       <div className="px-8 pt-8 pb-6 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
         <div>
@@ -238,11 +238,8 @@ function CrmPage() {
                     </td>
                     <td className="py-3 px-2 text-right font-semibold tabular-nums">{fmtAum(c.aum)}</td>
                     <td className="py-3 px-2">
-                      <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 rounded-full grid place-items-center text-[10px] font-semibold bg-muted text-foreground/80 border border-border">
-                          {c.owner.initials}
-                        </div>
-                        <div className="text-[12px] text-foreground/80 truncate">{c.owner.name}</div>
+                      <div className="h-6 w-6 rounded-full grid place-items-center text-[10px] font-semibold bg-muted text-foreground/80 border border-border" title={c.owner.name}>
+                        {c.owner.initials}
                       </div>
                     </td>
                     <td className="py-3 px-2 text-[12px] text-muted-foreground whitespace-nowrap">{c.lastContact}</td>
