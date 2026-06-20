@@ -11,6 +11,7 @@ import {
   Check,
 } from "lucide-react";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+import { useTheme } from "@/components/theme-provider";
 
 export const Route = createFileRoute("/syra")({
   component: SyraPage,
@@ -31,10 +32,21 @@ const models = [
 ];
 
 function SyraPage() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [input, setInput] = useState("");
   const [modelId, setModelId] = useState(models[0].id);
   const [open, setOpen] = useState(false);
   const activeModel = models.find((m) => m.id === modelId) ?? models[0];
+
+  const bgStart = isDark ? "rgb(10, 10, 14)" : "rgb(250, 249, 252)";
+  const bgEnd = isDark ? "rgb(20, 18, 28)" : "rgb(245, 244, 248)";
+  const c1 = isDark ? "120, 110, 150" : "210, 205, 220";
+  const c2 = isDark ? "90, 85, 115" : "200, 195, 215";
+  const c3 = isDark ? "140, 130, 170" : "215, 210, 225";
+  const c4 = isDark ? "70, 65, 95" : "195, 190, 210";
+  const c5 = isDark ? "105, 95, 135" : "205, 200, 218";
+
   return (
     <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
       <style>{`
@@ -45,103 +57,108 @@ function SyraPage() {
       <div className="absolute inset-0 pointer-events-none">
         <BackgroundGradientAnimation
           interactive={false}
-          gradientBackgroundStart="rgb(10, 10, 14)"
-          gradientBackgroundEnd="rgb(20, 18, 28)"
-          firstColor="120, 110, 150"
-          secondColor="90, 85, 115"
-          thirdColor="140, 130, 170"
-          fourthColor="70, 65, 95"
-          fifthColor="105, 95, 135"
+          gradientBackgroundStart={bgStart}
+          gradientBackgroundEnd={bgEnd}
+          firstColor={c1}
+          secondColor={c2}
+          thirdColor={c3}
+          fourthColor={c4}
+          fifthColor={c5}
           blendingValue="soft-light"
           size="70%"
           containerClassName="h-full w-full"
         />
-        <div className="absolute inset-0" style={{
-          background: "radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 55%)",
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: isDark
+              ? "radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 55%)"
+              : "radial-gradient(120% 80% at 50% 100%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 55%)",
+          }}
+        />
       </div>
 
       {/* Content */}
       <div className="relative h-full flex flex-col items-center justify-center px-6">
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-white/50 mb-6">
-            <Sparkles className="h-3.5 w-3.5" /> YOUOPERATIONS AGENT
-          </div>
-          <h1 className="font-radley text-5xl md:text-6xl font-normal tracking-tight text-white text-center">
-            Syra
-          </h1>
-          <p className="mt-4 text-white/55 text-center max-w-xl text-[15px]">
-            Draft, analyze, automate. Syra moves work forward across your inbox,
-            calendar, CRM, and channels.
-          </p>
+        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-6">
+          <Sparkles className="h-3.5 w-3.5" /> YOUOPERATIONS AGENT
+        </div>
+        <h1 className="font-radley text-5xl md:text-6xl font-normal tracking-tight text-foreground text-center">
+          Syra
+        </h1>
+        <p className="mt-4 text-muted-foreground text-center max-w-xl text-[15px]">
+          Draft, analyze, automate. Syra moves work forward across your inbox,
+          calendar, CRM, and channels.
+        </p>
 
-          {/* Input bar */}
-          <div className="mt-10 w-full max-w-3xl">
-            <div className="relative rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask Syra anything…"
-                className="w-full bg-transparent px-5 pt-5 pb-16 text-[15px] text-white placeholder:text-white/40 focus:outline-none"
-              />
-              <div className="absolute left-3 bottom-3 flex items-center gap-1.5">
-                <button
-                  aria-label="Attach"
-                  className="grid h-9 w-9 place-items-center rounded-lg text-white/55 hover:text-white hover:bg-white/[0.06] transition-colors"
-                >
-                  <Paperclip className="h-4 w-4" />
-                </button>
-                {/* Perplexity-style model switch */}
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setOpen((v) => !v)}
-                    className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-[12.5px] text-white/75 hover:text-white hover:bg-white/[0.06] transition-colors"
-                  >
-                    {activeModel.name}
-                    <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                  </button>
-                  {open && (
-                    <div
-                      className="absolute left-0 bottom-11 z-30 w-64 rounded-xl border border-white/10 bg-[#141417]/95 backdrop-blur-xl p-1 shadow-2xl"
-                      onMouseLeave={() => setOpen(false)}
-                    >
-                      {models.map((m) => (
-                        <button
-                          key={m.id}
-                          onClick={() => { setModelId(m.id); setOpen(false); }}
-                          className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-left hover:bg-white/[0.06] transition-colors"
-                        >
-                          <div className="min-w-0">
-                            <div className="text-[13px] text-white truncate">{m.name}</div>
-                            <div className="text-[11px] text-white/45">{m.provider}</div>
-                          </div>
-                          {m.id === modelId && <Check className="h-3.5 w-3.5 text-white/80 shrink-0" />}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
+        {/* Input bar */}
+        <div className="mt-10 w-full max-w-3xl">
+          <div className="relative rounded-2xl border border-border bg-card/60 backdrop-blur-xl shadow-xl">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask Syra anything…"
+              className="w-full bg-transparent px-5 pt-5 pb-16 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+            />
+            <div className="absolute left-3 bottom-3 flex items-center gap-1.5">
               <button
-                aria-label="Send"
-                className="absolute right-3 bottom-3 grid h-9 w-9 place-items-center rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
+                aria-label="Attach"
+                className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
-                <ArrowUp className="h-4 w-4" />
+                <Paperclip className="h-4 w-4" />
               </button>
-            </div>
-
-            {/* Quick actions */}
-            <div className="mt-5 flex flex-wrap justify-center gap-2">
-              {quickActions.map((a) => (
+              {/* Perplexity-style model switch */}
+              <div className="relative">
                 <button
-                  key={a.label}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[12.5px] text-white/75 hover:bg-white/[0.07] hover:text-white transition-colors"
+                  type="button"
+                  onClick={() => setOpen((v) => !v)}
+                  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-[12.5px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 >
-                  <a.icon className="h-3.5 w-3.5" /> {a.label}
+                  {activeModel.name}
+                  <ChevronDown className="h-3.5 w-3.5 opacity-70" />
                 </button>
-              ))}
+                {open && (
+                  <div
+                    className="absolute left-0 bottom-11 z-30 w-64 rounded-xl border border-border bg-popover backdrop-blur-xl p-1 shadow-2xl"
+                    onMouseLeave={() => setOpen(false)}
+                  >
+                    {models.map((m) => (
+                      <button
+                        key={m.id}
+                        onClick={() => { setModelId(m.id); setOpen(false); }}
+                        className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-left hover:bg-accent hover:text-accent-foreground transition-colors"
+                      >
+                        <div className="min-w-0">
+                          <div className="text-[13px] text-popover-foreground truncate">{m.name}</div>
+                          <div className="text-[11px] text-muted-foreground">{m.provider}</div>
+                        </div>
+                        {m.id === modelId && <Check className="h-3.5 w-3.5 text-primary shrink-0" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+            <button
+              aria-label="Send"
+              className="absolute right-3 bottom-3 grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              <ArrowUp className="h-4 w-4" />
+            </button>
           </div>
+
+          {/* Quick actions */}
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            {quickActions.map((a) => (
+              <button
+                key={a.label}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3.5 py-1.5 text-[12.5px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              >
+                <a.icon className="h-3.5 w-3.5" /> {a.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
