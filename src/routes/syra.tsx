@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Paperclip,
-  ArrowUp,
-  Sparkles,
   FileText,
   Inbox,
   Calendar,
@@ -84,7 +82,7 @@ function SyraPage() {
       {/* Content */}
       <div className="relative h-full flex flex-col items-center justify-center px-6">
         <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-6">
-          <Sparkles className="h-3.5 w-3.5" /> YOUR OPERATIONS AGENT
+          YOUR OPERATIONS AGENT
         </div>
         <h1 className="font-radley text-5xl md:text-6xl font-normal tracking-tight text-foreground text-center">
           Syra
@@ -143,9 +141,9 @@ function SyraPage() {
             </div>
             <button
               aria-label="Send"
-              className="absolute right-3 bottom-3 grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="absolute right-3 bottom-3 h-9 px-4 rounded-lg bg-primary text-primary-foreground text-[12.5px] font-medium hover:bg-primary/90 transition-colors"
             >
-              <ArrowUp className="h-4 w-4" />
+              Send
             </button>
           </div>
 
