@@ -13,7 +13,7 @@ import {
   Bookmark,
   Bell,
   Search,
-  Sparkles,
+
   X,
 } from "lucide-react";
 import { avatarUrl } from "@/lib/avatar";
