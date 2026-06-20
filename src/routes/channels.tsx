@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useTheme } from "@/components/theme-provider";
 import {
   Hash,
   Lock,
@@ -13,8 +12,6 @@ import {
   Bookmark,
   Bell,
   Search,
-  Sun,
-  Moon,
   Sparkles,
   X,
 } from "lucide-react";
