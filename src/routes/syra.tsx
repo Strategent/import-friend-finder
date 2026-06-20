@@ -40,12 +40,15 @@ function SyraPage() {
   const activeModel = models.find((m) => m.id === modelId) ?? models[0];
 
   const bgStart = isDark ? "rgb(10, 10, 14)" : "rgb(250, 249, 252)";
-  const bgEnd = isDark ? "rgb(20, 18, 28)" : "rgb(245, 244, 248)";
-  const c1 = isDark ? "120, 110, 150" : "210, 205, 220";
-  const c2 = isDark ? "90, 85, 115" : "200, 195, 215";
-  const c3 = isDark ? "140, 130, 170" : "215, 210, 225";
-  const c4 = isDark ? "70, 65, 95" : "195, 190, 210";
-  const c5 = isDark ? "105, 95, 135" : "205, 200, 218";
+  const bgEnd = isDark ? "rgb(20, 18, 28)" : "rgb(240, 238, 246)";
+  // Light mode uses richer, saturated tones with multiply blend so the
+  // animated blobs are actually visible against the near-white background.
+  const c1 = isDark ? "120, 110, 150" : "150, 130, 200";
+  const c2 = isDark ? "90, 85, 115" : "120, 110, 180";
+  const c3 = isDark ? "140, 130, 170" : "180, 160, 220";
+  const c4 = isDark ? "70, 65, 95" : "100, 90, 160";
+  const c5 = isDark ? "105, 95, 135" : "160, 145, 210";
+  const blending = isDark ? "soft-light" : "multiply";
 
   return (
     <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
@@ -64,7 +67,7 @@ function SyraPage() {
           thirdColor={c3}
           fourthColor={c4}
           fifthColor={c5}
-          blendingValue="soft-light"
+          blendingValue={blending}
           size="70%"
           containerClassName="h-full w-full"
         />
