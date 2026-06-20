@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { SyraChatWidget } from "@/components/syra-chat-widget";
+import { useTheme } from "@/components/theme-provider";
 import {
   Hash,
   Lock,
@@ -75,7 +75,7 @@ const messages = [
 
 function ChannelsPage() {
   const [active, setActive] = useState("sales-pipeline");
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const { theme, toggleTheme } = useTheme();
   const [showSyraTip, setShowSyraTip] = useState(true);
 
   const dark = theme === "dark";
@@ -108,12 +108,11 @@ function ChannelsPage() {
       };
 
   return (
-    <>
-      <div
-        className="fixed inset-0 overflow-hidden"
-        style={{ background: palette.chatBg }}
-      >
-        <div className="grid grid-cols-12 h-screen w-screen">
+    <div
+      className="w-full overflow-hidden"
+      style={{ height: "calc(100dvh - 53px)", background: palette.chatBg }}
+    >
+      <div className="grid grid-cols-12 h-full w-full">
           {/* Workspace sidebar */}
           <aside
             className="col-span-12 md:col-span-3 lg:col-span-3 flex flex-col"
@@ -129,7 +128,7 @@ function ChannelsPage() {
                 <ChevronDown className="h-3 w-3 shrink-0" />
               </button>
               <button
-                onClick={() => setTheme(dark ? "light" : "dark")}
+                onClick={toggleTheme}
                 className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-white/70 hover:bg-white/10"
                 aria-label="Toggle theme"
               >
@@ -429,9 +428,7 @@ function ChannelsPage() {
               </div>
             </div>
           </main>
-        </div>
       </div>
-      <SyraChatWidget />
-    </>
+    </div>
   );
 }
