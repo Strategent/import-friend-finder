@@ -89,10 +89,10 @@ function InboxPage() {
 
   return (
     <>
-      <div className="flex w-full bg-muted/20 overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
+      <div className="flex w-full bg-muted/30 dark:bg-slate-950 overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
         {/* Thread list */}
-        <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 min-w-0 bg-background">
-          <div className="h-12 px-4 flex items-center gap-2 border-b border-border/60">
+        <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 dark:border-white/[0.06] min-w-0 bg-background dark:bg-slate-900/70">
+          <div className="h-12 px-4 flex items-center gap-2 border-b border-border/60 dark:border-white/[0.06] dark:bg-slate-900/40">
             {/* Mailbox glass pill — opens folder picker */}
             <div className="relative" ref={popoverRef}>
               <button
@@ -164,10 +164,10 @@ function InboxPage() {
                 <button
                   key={t.id}
                   onClick={() => setSelected(t)}
-                  className={`w-full text-left px-4 py-3 border-b border-border/40 transition-colors relative ${
+                  className={`w-full text-left px-4 py-3 border-b border-border/40 dark:border-white/[0.04] transition-colors relative ${
                     active
-                      ? "bg-foreground/[0.05]"
-                      : "hover:bg-foreground/[0.03]"
+                      ? "bg-foreground/[0.05] dark:bg-white/[0.06]"
+                      : "hover:bg-foreground/[0.03] dark:hover:bg-white/[0.03]"
                   }`}
                 >
                   {t.unread && (
@@ -197,9 +197,15 @@ function InboxPage() {
         </section>
 
         {/* Reading pane */}
-        <main className="flex-1 flex flex-col min-w-0 bg-background">
+        <main
+          className="flex-1 flex flex-col min-w-0 bg-background dark:bg-slate-900 m-3 ml-0 rounded-xl border border-border/60 dark:border-white/[0.07] overflow-hidden"
+          style={{
+            boxShadow:
+              "0 1px 0 0 color-mix(in oklab, white 25%, transparent) inset, 0 30px 60px -30px rgba(2,6,23,0.55), 0 10px 30px -12px rgba(2,6,23,0.35)",
+          }}
+        >
           {/* Toolbar */}
-          <div className="h-12 px-4 flex items-center justify-between border-b border-border/60">
+          <div className="h-12 px-4 flex items-center justify-between border-b border-border/60 dark:border-white/[0.06] dark:bg-slate-900/80 backdrop-blur">
             <div className="flex items-center gap-1">
               <ToolbarBtn icon={Archive} label="Archive" />
               <ToolbarBtn icon={Trash2} label="Delete" />
@@ -216,9 +222,9 @@ function InboxPage() {
           </div>
 
           {/* Message header */}
-          <div className="px-8 pt-7 pb-5 border-b border-border/60">
+          <div className="px-8 pt-7 pb-5 border-b border-border/60 dark:border-white/[0.06] dark:bg-slate-900/60">
             <div className="flex items-start gap-4">
-              <div className="h-10 w-10 rounded-full bg-muted text-muted-foreground grid place-items-center text-[12px] font-semibold shrink-0">
+              <div className="h-10 w-10 rounded-full bg-muted dark:bg-white/[0.07] dark:ring-1 dark:ring-white/[0.06] text-muted-foreground grid place-items-center text-[12px] font-semibold shrink-0">
                 {initials(selected.from)}
               </div>
               <div className="min-w-0 flex-1">
@@ -243,7 +249,7 @@ function InboxPage() {
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto px-8 py-6">
+          <div className="flex-1 overflow-y-auto px-8 py-6 dark:bg-slate-900">
             <div className="max-w-2xl text-[14px] leading-relaxed text-foreground/90 whitespace-pre-line">
               {`Hi team,\n\n${selected.preview}\n\nLooking forward to your thoughts. Let me know if a 30-minute sync this week works.\n\nBest,\n${selected.from.split(" ")[0]}`}
             </div>
