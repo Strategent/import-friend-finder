@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Check,
 } from "lucide-react";
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 
 export const Route = createFileRoute("/syra")({
   component: SyraPage,
@@ -37,42 +38,27 @@ function SyraPage() {
   return (
     <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
       <style>{`
-        @keyframes syra-drift-1 { 0%,100% { transform: translate(-8%, 4%) scale(1); } 50% { transform: translate(6%, -4%) scale(1.15); } }
-        @keyframes syra-drift-2 { 0%,100% { transform: translate(10%, -6%) scale(1.1); } 50% { transform: translate(-6%, 8%) scale(0.95); } }
-        @keyframes syra-drift-3 { 0%,100% { transform: translate(0%, 8%) scale(1.05); } 50% { transform: translate(4%, -2%) scale(1.2); } }
-        .syra-blob { position: absolute; border-radius: 9999px; filter: blur(80px); mix-blend-mode: screen; opacity: 0.55; }
         .font-radley { font-family: 'Radley', Georgia, serif; }
       `}</style>
 
-      {/* Animated monochrome fluid background */}
-      <div className="absolute inset-0 bg-[#0a0a0c] pointer-events-none">
-          <div
-            className="syra-blob"
-            style={{
-              top: "-15%", left: "10%", width: "55%", height: "55%",
-              background: "radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%)",
-              animation: "syra-drift-1 18s ease-in-out infinite",
-            }}
-          />
-          <div
-            className="syra-blob"
-            style={{
-              bottom: "-20%", right: "5%", width: "65%", height: "65%",
-              background: "radial-gradient(circle, rgba(220,220,230,0.28) 0%, rgba(255,255,255,0) 70%)",
-              animation: "syra-drift-2 24s ease-in-out infinite",
-            }}
-          />
-          <div
-            className="syra-blob"
-            style={{
-              top: "30%", left: "40%", width: "45%", height: "45%",
-              background: "radial-gradient(circle, rgba(180,180,190,0.22) 0%, rgba(255,255,255,0) 70%)",
-              animation: "syra-drift-3 20s ease-in-out infinite",
-            }}
-          />
-          <div className="absolute inset-0" style={{
-            background: "radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 55%)",
-          }} />
+      {/* Animated on-brand monotone + subtle purple fluid background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundGradientAnimation
+          interactive={false}
+          gradientBackgroundStart="rgb(10, 10, 14)"
+          gradientBackgroundEnd="rgb(20, 18, 28)"
+          firstColor="120, 110, 150"
+          secondColor="90, 85, 115"
+          thirdColor="140, 130, 170"
+          fourthColor="70, 65, 95"
+          fifthColor="105, 95, 135"
+          blendingValue="soft-light"
+          size="70%"
+          containerClassName="h-full w-full"
+        />
+        <div className="absolute inset-0" style={{
+          background: "radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 55%)",
+        }} />
       </div>
 
       {/* Content */}
