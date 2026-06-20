@@ -153,19 +153,23 @@ function CrmPage() {
             className="w-full h-9 pl-9 pr-3 rounded-lg bg-muted/50 border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-foreground/30"
           />
         </div>
-        <div className="flex items-center gap-1 p-0.5 rounded-full bg-muted/50 border border-border">
-          {STAGES.map((s) => (
-            <button
-              key={s}
-              onClick={() => setStage(s)}
-              className={`h-7 px-3 rounded-full text-[11px] font-medium transition-colors ${
-                stage === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {s}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="h-9 px-3 rounded-lg border border-border bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05] flex items-center gap-2 text-[13px]">
+              <Filter className="h-3.5 w-3.5" />
+              <span>Filter</span>
+              <ChevronDown className="h-3 w-3 opacity-50" />
             </button>
-          ))}
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="min-w-[160px]">
+            {STAGES.map((s) => (
+              <DropdownMenuItem key={s} onSelect={() => setStage(s)} className="text-[13px] cursor-pointer">
+                <span className="flex-1">{s}</span>
+                {stage === s && <Check className="h-3.5 w-3.5 opacity-70" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
         {selected.size > 0 && (
           <div className="text-[11px] text-muted-foreground">
             {selected.size} selected
