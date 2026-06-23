@@ -1,23 +1,13 @@
-import adrianEngman from "@/assets/email-adrian-engman.png.asset.json";
-import claireBennett from "@/assets/email-claire-bennett.png.asset.json";
-import danielBrooks from "@/assets/email-daniel-brooks.png.asset.json";
-import elenaSmith from "@/assets/email-elena-smith.png.asset.json";
-import emmaReeves from "@/assets/email-emma-reeves.png.asset.json";
-import lenaFoster from "@/assets/email-lena-foster.png.asset.json";
-import mayaLopez from "@/assets/email-maya-lopez.png.asset.json";
-import ninaMercer from "@/assets/email-nina-mercer.png.asset.json";
-import stripeLogo from "@/assets/email-stripe-logo.png.asset.json";
-
 const senderImages: Record<string, string> = {
-  "Elena Smith": elenaSmith.url,
-  "Emma Reeves": emmaReeves.url,
-  "Adrian Engman": adrianEngman.url,
-  "Claire Bennett": claireBennett.url,
-  "Daniel Brooks": danielBrooks.url,
-  "Lena Foster": lenaFoster.url,
-  "Maya Lopez": mayaLopez.url,
-  "Nina Mercer": ninaMercer.url,
-  Stripe: stripeLogo.url,
+  "Elena Smith": "/email-elena-smith.png",
+  "Emma Reeves": "/email-emma-reeves.png",
+  "Adrian Engman": "/email-adrian-engman.png",
+  "Claire Bennett": "/email-claire-bennett.png",
+  "Daniel Brooks": "/email-daniel-brooks.png",
+  "Lena Foster": "/email-lena-foster.png",
+  "Maya Lopez": "/email-maya-lopez.png",
+  "Nina Mercer": "/email-nina-mercer.png",
+  Stripe: "/email-stripe-logo.png",
 };
 
 const senderEmails: Record<string, string> = {

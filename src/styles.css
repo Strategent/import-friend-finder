@@ -514,7 +514,7 @@
    sits. OKLab interpolation kills banding; sRGB fallback first. */
 .daily-brief-hero-bg {
   background-color: #1a1a1d;
-  background-image: url("/__l5e/assets-v1/824dd61b-fdb3-4cb7-b616-84953977a86e/hero-bg.png");
+  background-image: url("/hero-bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

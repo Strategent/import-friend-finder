@@ -28,8 +28,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import johnHarwickAvatar from "@/assets/john-harwick.png.asset.json";
-import syraSIcon from "@/assets/syra-s.png.asset.json";
+const johnHarwickAvatar = { url: "/john-harwick.png" };
+const syraSIcon = { url: "/syra-s.png" };
 
 const SyraIcon = ({ className }: { className?: string; strokeWidth?: number }) => (
   <span aria-hidden className={`relative inline-grid place-items-center overflow-hidden ${className ?? ""}`}>
