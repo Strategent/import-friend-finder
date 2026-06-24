@@ -30,6 +30,17 @@ main app patterns that need to become reusable: page surfaces, page headers,
 metrics, search, filters, status badges, data tables, row actions, and Syra
 assist.
 
+### Brand Names
+
+Three distinct brands appear in this codebase; do not conflate them:
+
+- **Strategent** is the platform vendor that builds this app. It owns the design
+  system, so the token namespace and primitive token file are "Strategent".
+- **Harwick & Sterne** is the demo tenant: the wealth-management firm shown in
+  the product UI (page titles, sidebar, client/mock data). It is content, not a
+  design-system concept, so shared primitives must not know about it.
+- **Syra** is the in-product AI agent sub-brand.
+
 ## Design Tokens
 
 Tokens are layered from stable primitives to app semantics:
@@ -125,6 +136,11 @@ copy, navigation, a specific workflow, or mock domain data, it belongs in
 toolbars, search fields, status badges, metric strips, data-table wrappers, and
 empty/loading/error states. These modules may know about the app design system,
 but not about a single feature's data model or copy.
+
+> **Status:** `src/components/app` is a planned folder, not yet created. It is
+> introduced in Phase 3 of the frontend standardization work. Until then, only
+> `src/components/ui` exists. This section describes the intended ownership once
+> that folder lands.
 
 ## Integrations
 
