@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PageShell, PageHeader } from "@/components/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/page-shell";
 import { UserPlus } from "lucide-react";
 import { avatarUrl } from "@/lib/avatar";
 
@@ -12,12 +12,48 @@ export const Route = createFileRoute("/team")({
 });
 
 const team = [
-  { name: "Elena Smith", role: "Associate, Harwick & Sterne", status: "Online", tasks: 12, score: 96 },
-  { name: "Emma Reeves", role: "Trustee, Hartley Family Trust", status: "Online", tasks: 9, score: 91 },
-  { name: "Adrian Engman", role: "CFO, Sterling Holdings LLC", status: "Away", tasks: 7, score: 88 },
-  { name: "Claire Bennett", role: "Principal, Caldwell Estate", status: "Online", tasks: 5, score: 94 },
-  { name: "Daniel Brooks", role: "Managing Partner, Marlow Capital", status: "Offline", tasks: 3, score: 90 },
-  { name: "Lena Foster", role: "Family Office Director, Beaumont Group", status: "Online", tasks: 4, score: 92 },
+  {
+    name: "Elena Smith",
+    role: "Associate, Harwick & Sterne",
+    status: "Online",
+    tasks: 12,
+    score: 96,
+  },
+  {
+    name: "Emma Reeves",
+    role: "Trustee, Hartley Family Trust",
+    status: "Online",
+    tasks: 9,
+    score: 91,
+  },
+  {
+    name: "Adrian Engman",
+    role: "CFO, Sterling Holdings LLC",
+    status: "Away",
+    tasks: 7,
+    score: 88,
+  },
+  {
+    name: "Claire Bennett",
+    role: "Principal, Caldwell Estate",
+    status: "Online",
+    tasks: 5,
+    score: 94,
+  },
+  {
+    name: "Daniel Brooks",
+    role: "Managing Partner, Marlow Capital",
+    status: "Offline",
+    tasks: 3,
+    score: 90,
+  },
+  {
+    name: "Lena Foster",
+    role: "Family Office Director, Beaumont Group",
+    status: "Online",
+    tasks: 4,
+    score: 92,
+  },
 ];
 
 function statusDotColor(status: string) {
@@ -73,11 +109,15 @@ function TeamPage() {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Open tasks</div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  Open tasks
+                </div>
                 <div className="mt-1 text-xl font-semibold">{m.tasks}</div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Accountability</div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  Accountability
+                </div>
                 <div className="mt-1 text-xl font-semibold">{m.score}%</div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/app/providers/theme-provider";
 import {
   Hash,
   Lock,
@@ -13,11 +13,10 @@ import {
   Bookmark,
   Bell,
   Search,
-
   X,
 } from "lucide-react";
 import { avatarUrl } from "@/lib/avatar";
-import { SyraMark } from "@/components/syra-mark";
+import { SyraMark } from "@/features/syra/components/syra-mark";
 
 export const Route = createFileRoute("/channels")({
   component: ChannelsPage,
@@ -55,8 +54,7 @@ const messages = [
   },
   {
     user: "Syra",
-    text:
-      "On it. Pulled YTD allocation drift (+2.4% equities, -1.8% fixed income) and drafted a one-page summary. Shared in #sales-pipeline canvas.",
+    text: "On it. Pulled YTD allocation drift (+2.4% equities, -1.8% fixed income) and drafted a one-page summary. Shared in #sales-pipeline canvas.",
     time: "10:44 AM",
     ai: true,
   },
@@ -148,7 +146,9 @@ function ChannelsPage() {
           <div className="px-2 mt-3">
             <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-white/45">
               <span>Channels</span>
-              <button className="opacity-70 hover:opacity-100"><Plus className="h-3 w-3" /></button>
+              <button className="opacity-70 hover:opacity-100">
+                <Plus className="h-3 w-3" />
+              </button>
             </div>
             <div className="space-y-0.5 mt-1">
               {channels.map((c) => {
@@ -160,11 +160,7 @@ function ChannelsPage() {
                     className="w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px] transition-colors"
                     style={{
                       background: isActive ? "#1164A3" : "transparent",
-                      color: isActive
-                        ? "#FFFFFF"
-                        : c.unread
-                          ? "#FFFFFF"
-                          : palette.sidebarText,
+                      color: isActive ? "#FFFFFF" : c.unread ? "#FFFFFF" : palette.sidebarText,
                       fontWeight: c.unread && !isActive ? 700 : 400,
                     }}
                     onMouseEnter={(e) => {
@@ -174,7 +170,11 @@ function ChannelsPage() {
                       if (!isActive) e.currentTarget.style.background = "transparent";
                     }}
                   >
-                    {c.private ? <Lock className="h-3 w-3" /> : <Hash className="h-3.5 w-3.5 opacity-80" />}
+                    {c.private ? (
+                      <Lock className="h-3 w-3" />
+                    ) : (
+                      <Hash className="h-3.5 w-3.5 opacity-80" />
+                    )}
                     <span className="flex-1 text-left truncate">{c.name}</span>
                     {c.unread > 0 && (
                       <span className="text-[11px] font-semibold rounded-full bg-[#CB2431] text-white px-1.5 min-w-[18px] text-center">
@@ -191,7 +191,9 @@ function ChannelsPage() {
           <div className="px-2 mt-4">
             <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-white/45">
               <span>Direct messages</span>
-              <button className="opacity-70 hover:opacity-100"><Plus className="h-3 w-3" /></button>
+              <button className="opacity-70 hover:opacity-100">
+                <Plus className="h-3 w-3" />
+              </button>
             </div>
             <div className="space-y-0.5 mt-1">
               {dms.map((d) => (
@@ -207,16 +209,22 @@ function ChannelsPage() {
                       <SyraMark size={14} flat />
                     ) : (
                       <>
-                        <span className="h-2 w-2 rounded-full inline-block" style={{
-                          background: d.status === "active" ? "#2BAC76" : "transparent",
-                          border: d.status === "active" ? "none" : "1.5px solid rgba(255,255,255,0.5)",
-                        }} />
+                        <span
+                          className="h-2 w-2 rounded-full inline-block"
+                          style={{
+                            background: d.status === "active" ? "#2BAC76" : "transparent",
+                            border:
+                              d.status === "active" ? "none" : "1.5px solid rgba(255,255,255,0.5)",
+                          }}
+                        />
                       </>
                     )}
                   </span>
                   <span className="flex-1 text-left truncate">{d.name}</span>
                   {d.name === "Syra" && (
-                    <span className="text-[9.5px] px-1.5 py-px rounded bg-white/10 text-white/80">AI</span>
+                    <span className="text-[9.5px] px-1.5 py-px rounded bg-white/10 text-white/80">
+                      AI
+                    </span>
                   )}
                 </button>
               ))}
@@ -263,7 +271,10 @@ function ChannelsPage() {
                   <span className="text-[13.5px] font-semibold">Talk to Syra in any channel</span>
                   <span
                     className="text-[10px] px-1.5 py-0.5 rounded"
-                    style={{ background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)", color: palette.textMuted }}
+                    style={{
+                      background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
+                      color: palette.textMuted,
+                    }}
                   >
                     AI
                   </span>
@@ -279,7 +290,8 @@ function ChannelsPage() {
                   >
                     @Syra
                   </span>{" "}
-                  in a message to delegate tasks — draft replies, pull data, schedule meetings, or summarize threads.
+                  in a message to delegate tasks — draft replies, pull data, schedule meetings, or
+                  summarize threads.
                 </p>
               </div>
               <button

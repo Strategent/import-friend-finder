@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Mic, Pause, PhoneForwarded, Headphones, UserPlus } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
-import { callQueue } from "@/components/dashboard/data";
+import { callQueue } from "@/features/dashboard/components/data";
 
 /**
  * CallsCard — single live AI-handled call. Syra captures caller contact
@@ -19,11 +19,17 @@ function fmtDur(total: number): string {
 }
 
 const transcript: { who: "client" | "agent"; text: string }[] = [
-  { who: "agent", text: "Thanks for calling Harwick & Sterne — may I grab your name and best email?" },
+  {
+    who: "agent",
+    text: "Thanks for calling Harwick & Sterne — may I grab your name and best email?",
+  },
   { who: "client", text: "Marcus Vahlen. marcus.vahlen@vahlencap.com — best number is this one." },
   { who: "agent", text: "Got it. What's prompting the call today?" },
   { who: "client", text: "Rollover — two old 401(k)s, around $480K combined." },
-  { who: "agent", text: "Perfect. I'll log you as a new lead and have an advisor reach out this week." },
+  {
+    who: "agent",
+    text: "Perfect. I'll log you as a new lead and have an advisor reach out this week.",
+  },
 ];
 
 const capturedFields = [

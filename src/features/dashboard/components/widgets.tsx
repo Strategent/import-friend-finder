@@ -1,7 +1,7 @@
 import { Plus, Paperclip } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Panel } from "@/components/ui/panel";
-import { planner, team, channels, docTemplates } from "@/components/dashboard/data";
+import { planner, team, channels, docTemplates } from "@/features/dashboard/components/data";
 
 /** PlannerCard — open task list with checkboxes. */
 export function PlannerCard() {
@@ -53,7 +53,8 @@ export function WorkloadCard() {
     <Panel label="Workload">
       <div className="flex items-end gap-3">
         <div className="text-[34px] font-semibold leading-none tracking-tight tabular-nums">
-          {value}<span className="ml-0.5 text-base font-normal text-muted-foreground">%</span>
+          {value}
+          <span className="ml-0.5 text-base font-normal text-muted-foreground">%</span>
         </div>
         <span className="mb-1 inline-flex h-5 items-center rounded-full border border-border bg-foreground/[0.05] px-2 text-[10px] font-medium text-foreground/80">
           Healthy
@@ -61,10 +62,7 @@ export function WorkloadCard() {
       </div>
       <div className="mt-4">
         <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-foreground/[0.08]">
-          <div
-            className="h-full rounded-full bg-foreground/70"
-            style={{ width: `${value}%` }}
-          />
+          <div className="h-full rounded-full bg-foreground/70" style={{ width: `${value}%` }} />
         </div>
         <div className="mt-1.5 flex items-center justify-between">
           {labels.map((l) => (

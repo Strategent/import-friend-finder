@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { PageShell } from "@/components/page-shell";
-import { DashboardShell } from "@/components/layout/dashboard-shell";
-import { BentoGridStack, type BentoItem } from "@/components/layout/bento-grid-stack";
-import { DailyBriefHero } from "@/components/dashboard/hero/daily-brief-hero";
-import { InboxCard } from "@/components/dashboard/inbox/inbox-card";
-import { CalendarCard } from "@/components/dashboard/calendar/calendar-card";
-import { CallsCard } from "@/components/dashboard/calls/calls-card";
-import { BulletinCard } from "@/components/dashboard/bulletin/bulletin-card";
+import { PageShell } from "@/app/shell/page-shell";
+import { DashboardShell } from "@/features/dashboard/layout/dashboard-shell";
+import { BentoGridStack, type BentoItem } from "@/features/dashboard/layout/bento-grid-stack";
+import { DailyBriefHero } from "@/features/dashboard/components/hero/daily-brief-hero";
+import { InboxCard } from "@/features/dashboard/components/inbox/inbox-card";
+import { CalendarCard } from "@/features/dashboard/components/calendar/calendar-card";
+import { CallsCard } from "@/features/dashboard/components/calls/calls-card";
+import { BulletinCard } from "@/features/dashboard/components/bulletin/bulletin-card";
 import { GradientFeatureCard } from "@/components/ui/gradient-feature-card";
 import { PillButton } from "@/components/ui/pill-button";
 import {
@@ -16,7 +16,7 @@ import {
   PlannerCard,
   TeamCard,
   ChannelsCard,
-} from "@/components/dashboard/widgets";
+} from "@/features/dashboard/components/widgets";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -79,51 +79,66 @@ function Home() {
         ),
       },
       { id: "inbox", x: 0, y: 4 + rowShift, w: 8, h: 6, minW: 6, minH: 5, node: <InboxCard /> },
-      { id: "bulletin", x: 8, y: 4 + rowShift, w: 4, h: 6, minW: 4, minH: 4, node: <BulletinCard /> },
+      {
+        id: "bulletin",
+        x: 8,
+        y: 4 + rowShift,
+        w: 4,
+        h: 6,
+        minW: 4,
+        minH: 4,
+        node: <BulletinCard />,
+      },
       { id: "calls", x: 0, y: 10 + rowShift, w: 4, h: 5, minW: 4, minH: 4, node: <CallsCard /> },
-      { id: "calendar", x: 4, y: 10 + rowShift, w: 8, h: 5, minW: 4, minH: 4, node: <CalendarCard /> },
+      {
+        id: "calendar",
+        x: 4,
+        y: 10 + rowShift,
+        w: 8,
+        h: 5,
+        minW: 4,
+        minH: 4,
+        node: <CalendarCard />,
+      },
     ],
     [heroH, rowShift],
   );
 
-  const railItems = useMemo<BentoItem[]>(
-    () => {
-      const onboarding: BentoItem = {
-        id: "onboarding",
-        x: 0,
-        y: 0,
-        w: 1,
-        h: 4,
-        minH: 3,
-        node: (
-          <div className="h-full w-full [&>section]:h-full">
-            <GradientFeatureCard
-              label="Get started"
-              title="Make the most of Syra"
-              description="Connect your inbox, calendar and phone line to unlock automated drafting and call handling."
-              progress={99}
-              cta={
-                <PillButton variant="primary" onClick={finishSetup}>
-                  Finish setup
-                </PillButton>
-              }
-              onDismiss={finishSetup}
-            />
-          </div>
-        ),
-      };
-      const offset = setupDone ? 0 : 4;
-      const rest: BentoItem[] = [
-        { id: "recap", x: 0, y: offset, w: 1, h: 3, minH: 2, node: <RecapCard /> },
-        { id: "workload", x: 0, y: offset + 3, w: 1, h: 3, minH: 2, node: <WorkloadCard /> },
-        { id: "planner", x: 0, y: offset + 6, w: 1, h: 5, minH: 3, node: <PlannerCard /> },
-        { id: "team", x: 0, y: offset + 11, w: 1, h: 4, minH: 3, node: <TeamCard /> },
-        { id: "channels", x: 0, y: offset + 15, w: 1, h: 4, minH: 3, node: <ChannelsCard /> },
-      ];
-      return setupDone ? rest : [onboarding, ...rest];
-    },
-    [setupDone],
-  );
+  const railItems = useMemo<BentoItem[]>(() => {
+    const onboarding: BentoItem = {
+      id: "onboarding",
+      x: 0,
+      y: 0,
+      w: 1,
+      h: 4,
+      minH: 3,
+      node: (
+        <div className="h-full w-full [&>section]:h-full">
+          <GradientFeatureCard
+            label="Get started"
+            title="Make the most of Syra"
+            description="Connect your inbox, calendar and phone line to unlock automated drafting and call handling."
+            progress={99}
+            cta={
+              <PillButton variant="primary" onClick={finishSetup}>
+                Finish setup
+              </PillButton>
+            }
+            onDismiss={finishSetup}
+          />
+        </div>
+      ),
+    };
+    const offset = setupDone ? 0 : 4;
+    const rest: BentoItem[] = [
+      { id: "recap", x: 0, y: offset, w: 1, h: 3, minH: 2, node: <RecapCard /> },
+      { id: "workload", x: 0, y: offset + 3, w: 1, h: 3, minH: 2, node: <WorkloadCard /> },
+      { id: "planner", x: 0, y: offset + 6, w: 1, h: 5, minH: 3, node: <PlannerCard /> },
+      { id: "team", x: 0, y: offset + 11, w: 1, h: 4, minH: 3, node: <TeamCard /> },
+      { id: "channels", x: 0, y: offset + 15, w: 1, h: 4, minH: 3, node: <ChannelsCard /> },
+    ];
+    return setupDone ? rest : [onboarding, ...rest];
+  }, [setupDone]);
 
   return (
     <PageShell>

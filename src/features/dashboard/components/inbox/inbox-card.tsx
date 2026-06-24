@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
-import { emails } from "@/components/dashboard/data";
+import { emails } from "@/features/dashboard/components/data";
 import { avatarUrl, senderEmailAddress } from "@/lib/avatar";
 
 /**
@@ -19,8 +19,11 @@ export function InboxCard() {
   const [justSent, setJustSent] = useState(false);
 
   const visibleEmails = useMemo(
-    () => emails.map((m, i) => ({ ...m, originalIndex: i })).filter((m) => !sentIds.has(m.originalIndex)),
-    [sentIds]
+    () =>
+      emails
+        .map((m, i) => ({ ...m, originalIndex: i }))
+        .filter((m) => !sentIds.has(m.originalIndex)),
+    [sentIds],
   );
 
   const selectedIdx = Math.min(selected, Math.max(visibleEmails.length - 1, 0));
@@ -125,7 +128,9 @@ export function InboxCard() {
                   <div className="flex items-center justify-between gap-2">
                     <div
                       className={`truncate text-[12.5px] ${
-                        unread ? "font-semibold text-foreground" : "font-semibold text-foreground/90"
+                        unread
+                          ? "font-semibold text-foreground"
+                          : "font-semibold text-foreground/90"
                       }`}
                     >
                       {m.sender}
@@ -177,7 +182,10 @@ export function InboxCard() {
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0 truncate text-[12.5px] text-foreground/95">
                   <span className="font-semibold">{e.sender}</span>
-                  <span className="font-normal text-muted-foreground"> &lt;{senderEmailAddress(e.sender)}&gt;</span>
+                  <span className="font-normal text-muted-foreground">
+                    {" "}
+                    &lt;{senderEmailAddress(e.sender)}&gt;
+                  </span>
                 </div>
                 <div className="shrink-0 text-[10.5px] tabular-nums text-muted-foreground">
                   {e.time}
@@ -203,10 +211,9 @@ export function InboxCard() {
                 <Check className="h-3 w-3" strokeWidth={2.5} />
               </span>
               <span className="text-[11.5px] text-foreground/85">
-                Sent to <span className="font-medium text-foreground">{e.sender.split(" ")[0]}</span>
-                {justSent && (
-                  <span className="ml-1 text-muted-foreground">· just now</span>
-                )}
+                Sent to{" "}
+                <span className="font-medium text-foreground">{e.sender.split(" ")[0]}</span>
+                {justSent && <span className="ml-1 text-muted-foreground">· just now</span>}
               </span>
             </div>
           ) : (
@@ -227,12 +234,7 @@ export function InboxCard() {
                 className="block w-full resize-none bg-transparent px-3 py-2 text-[11.5px] leading-snug text-foreground/90 placeholder:text-muted-foreground/60 outline-none focus:outline-none"
               />
               <div className="flex items-center gap-1.5 px-3 pb-2.5">
-                <PillButton
-                  variant="brand"
-                  size="xs"
-                  onClick={handleSend}
-                  disabled={sending}
-                >
+                <PillButton variant="brand" size="xs" onClick={handleSend} disabled={sending}>
                   {sending ? "Sending…" : "Send"}
                 </PillButton>
                 <PillButton variant="secondary" size="xs">

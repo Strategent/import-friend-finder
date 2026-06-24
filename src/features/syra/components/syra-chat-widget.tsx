@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Send, X, Bot } from "lucide-react";
-import { SyraMark } from "@/components/syra-mark";
+import { SyraMark } from "@/features/syra/components/syra-mark";
 
 type Msg = { role: "syra" | "user"; text: string };
 
@@ -72,11 +72,7 @@ export function SyraChatWidget() {
                       ? "text-white rounded-br-md"
                       : "bg-foreground/[0.05] text-foreground rounded-bl-md border border-border/60"
                   }`}
-                  style={
-                    m.role === "user"
-                      ? { background: "var(--gradient-primary)" }
-                      : undefined
-                  }
+                  style={m.role === "user" ? { background: "var(--gradient-primary)" } : undefined}
                 >
                   {m.text}
                 </div>

@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bell, Search, Sun, Moon, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { SyraChatWidget } from "@/components/syra-chat-widget";
-import { useTheme } from "@/components/theme-provider";
+import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
+import { useTheme } from "@/app/providers/theme-provider";
 
 export function Topbar() {
   const { theme, toggleTheme } = useTheme();
@@ -80,18 +80,13 @@ export function Topbar() {
             <Sun className="h-4 w-4" fill="currentColor" />
           )}
         </button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground hover:text-foreground"
-        >
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
           <Bell className="h-4 w-4" />
         </Button>
       </div>
     </div>
   );
 }
-
 
 export function PageHeader({
   eyebrow,
@@ -112,13 +107,9 @@ export function PageHeader({
             {eyebrow}
           </Badge>
         )}
-        <h1 className="mt-3 text-3xl md:text-[34px] font-semibold tracking-tight">
-          {title}
-        </h1>
+        <h1 className="mt-3 text-3xl md:text-[34px] font-semibold tracking-tight">{title}</h1>
         {description && (
-          <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">
-            {description}
-          </p>
+          <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">{description}</p>
         )}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

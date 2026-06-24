@@ -1,15 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  Paperclip,
-  FileText,
-  Inbox,
-  Calendar,
-  ChevronDown,
-  Check,
-} from "lucide-react";
+import { Paperclip, FileText, Inbox, Calendar, ChevronDown, Check } from "lucide-react";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/app/providers/theme-provider";
 
 export const Route = createFileRoute("/syra")({
   component: SyraPage,
@@ -42,13 +35,11 @@ function SyraPage() {
   // Light mode: extremely desaturated, subtle gray-lavender blobs so the
   // animation is visible but never overwhelms the near-white background.
   const c1 = isDark ? "120, 110, 150" : "225, 223, 230";
-  const c2 = isDark ? "90, 85, 115"   : "215, 213, 222";
+  const c2 = isDark ? "90, 85, 115" : "215, 213, 222";
   const c3 = isDark ? "140, 130, 170" : "230, 228, 235";
-  const c4 = isDark ? "70, 65, 95"    : "210, 208, 218";
-  const c5 = isDark ? "105, 95, 135"  : "220, 218, 228";
+  const c4 = isDark ? "70, 65, 95" : "210, 208, 218";
+  const c5 = isDark ? "105, 95, 135" : "220, 218, 228";
   const blending = isDark ? "soft-light" : "normal";
-
-
 
   return (
     <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
@@ -127,14 +118,21 @@ function SyraPage() {
                     {models.map((m) => (
                       <button
                         key={m.id}
-                        onClick={() => { setModelId(m.id); setOpen(false); }}
+                        onClick={() => {
+                          setModelId(m.id);
+                          setOpen(false);
+                        }}
                         className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-left hover:bg-accent hover:text-accent-foreground transition-colors"
                       >
                         <div className="min-w-0">
-                          <div className="text-[13px] text-popover-foreground truncate">{m.name}</div>
+                          <div className="text-[13px] text-popover-foreground truncate">
+                            {m.name}
+                          </div>
                           <div className="text-[11px] text-muted-foreground">{m.provider}</div>
                         </div>
-                        {m.id === modelId && <Check className="h-3.5 w-3.5 text-primary shrink-0" />}
+                        {m.id === modelId && (
+                          <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                        )}
                       </button>
                     ))}
                   </div>

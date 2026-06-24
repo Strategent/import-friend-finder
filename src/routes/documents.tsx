@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PageShell, PageHeader } from "@/components/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/page-shell";
 import { FileText, FileSpreadsheet, FileImage, Upload, MoreHorizontal } from "lucide-react";
 
 export const Route = createFileRoute("/documents")({
@@ -10,15 +10,38 @@ export const Route = createFileRoute("/documents")({
 });
 
 const docs = [
-  { name: "Acme — Master Service Agreement.pdf", type: "pdf", size: "1.4 MB", updated: "2m ago", by: "Avery" },
-  { name: "Q2 Pipeline Forecast.xlsx", type: "sheet", size: "248 KB", updated: "1h ago", by: "Syra" },
-  { name: "Brand Guidelines v3.pdf", type: "pdf", size: "8.2 MB", updated: "yesterday", by: "Jenna" },
+  {
+    name: "Acme — Master Service Agreement.pdf",
+    type: "pdf",
+    size: "1.4 MB",
+    updated: "2m ago",
+    by: "Avery",
+  },
+  {
+    name: "Q2 Pipeline Forecast.xlsx",
+    type: "sheet",
+    size: "248 KB",
+    updated: "1h ago",
+    by: "Syra",
+  },
+  {
+    name: "Brand Guidelines v3.pdf",
+    type: "pdf",
+    size: "8.2 MB",
+    updated: "yesterday",
+    by: "Jenna",
+  },
   { name: "Onboarding flow.png", type: "img", size: "612 KB", updated: "2d ago", by: "Marcus" },
-  { name: "Northwind — Discovery Notes.pdf", type: "pdf", size: "320 KB", updated: "3d ago", by: "Syra" },
+  {
+    name: "Northwind — Discovery Notes.pdf",
+    type: "pdf",
+    size: "320 KB",
+    updated: "3d ago",
+    by: "Syra",
+  },
 ];
 
-const icon = (t: string) =>
-  t === "sheet" ? FileSpreadsheet : t === "img" ? FileImage : FileText;
+const icon = (t: string) => (t === "sheet" ? FileSpreadsheet : t === "img" ? FileImage : FileText);
 
 function DocumentsPage() {
   return (
@@ -44,10 +67,14 @@ function DocumentsPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-[13px] font-semibold truncate">{d.name}</div>
-                  <div className="text-xs text-muted-foreground">{d.size} · updated {d.updated}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {d.size} · updated {d.updated}
+                  </div>
                   <div className="text-[11px] text-muted-foreground mt-1">by {d.by}</div>
                 </div>
-                <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
               </div>
             </Card>
           );

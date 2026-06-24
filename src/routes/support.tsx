@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageShell, PageHeader } from "@/components/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/page-shell";
 import { LifeBuoy, Send, MessageSquare, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/support")({
@@ -12,9 +12,27 @@ export const Route = createFileRoute("/support")({
 });
 
 const threads = [
-  { id: 1, subject: "Calendar sync delay on Outlook", status: "open", updated: "12m ago", icon: AlertCircle },
-  { id: 2, subject: "Request: bulk export for CRM contacts", status: "in review", updated: "2h ago", icon: Clock },
-  { id: 3, subject: "Syra draft tone calibration", status: "resolved", updated: "Yesterday", icon: CheckCircle2 },
+  {
+    id: 1,
+    subject: "Calendar sync delay on Outlook",
+    status: "open",
+    updated: "12m ago",
+    icon: AlertCircle,
+  },
+  {
+    id: 2,
+    subject: "Request: bulk export for CRM contacts",
+    status: "in review",
+    updated: "2h ago",
+    icon: Clock,
+  },
+  {
+    id: 3,
+    subject: "Syra draft tone calibration",
+    status: "resolved",
+    updated: "Yesterday",
+    icon: CheckCircle2,
+  },
 ];
 
 function SupportPage() {
@@ -24,7 +42,11 @@ function SupportPage() {
   return (
     <PageShell>
       <PageHeader
-        eyebrow={<><LifeBuoy className="h-3.5 w-3.5" /> Support</>}
+        eyebrow={
+          <>
+            <LifeBuoy className="h-3.5 w-3.5" /> Support
+          </>
+        }
         title="Strategent Support"
         description="Message our team for fixes, updates, or new requests. We typically reply within a few hours."
       />
@@ -37,14 +59,20 @@ function SupportPage() {
                 <MessageSquare className="h-4 w-4 text-foreground/80" strokeWidth={1.5} />
               </div>
               <div>
-                <div className="text-[15px] font-medium tracking-tight">Open a new conversation</div>
-                <div className="text-[12px] text-muted-foreground">Fixes, feature requests, or anything else.</div>
+                <div className="text-[15px] font-medium tracking-tight">
+                  Open a new conversation
+                </div>
+                <div className="text-[12px] text-muted-foreground">
+                  Fixes, feature requests, or anything else.
+                </div>
               </div>
             </div>
 
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Subject</label>
+                <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Subject
+                </label>
                 <input
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
@@ -53,7 +81,9 @@ function SupportPage() {
                 />
               </div>
               <div>
-                <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Message</label>
+                <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Message
+                </label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -63,7 +93,9 @@ function SupportPage() {
                 />
               </div>
               <div className="flex items-center justify-between">
-                <div className="text-[11px] text-muted-foreground">Replies arrive to your inbox.</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Replies arrive to your inbox.
+                </div>
                 <Button className="h-9 px-4 text-[13px] gap-2">
                   <Send className="h-3.5 w-3.5" /> Send to Strategent
                 </Button>
@@ -106,7 +138,8 @@ function SupportPage() {
           <div className="bento p-5">
             <div className="text-[13px] font-medium tracking-tight mb-1">Need it urgently?</div>
             <div className="text-[12px] text-muted-foreground">
-              Email <span className="text-foreground/80">team@strategent.app</span> and we'll prioritize it.
+              Email <span className="text-foreground/80">team@strategent.app</span> and we'll
+              prioritize it.
             </div>
           </div>
         </div>

@@ -31,7 +31,7 @@ import {
   Minus,
   X,
 } from "lucide-react";
-import { SyraChatWidget } from "@/components/syra-chat-widget";
+import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 
 export const Route = createFileRoute("/inbox")({
   component: InboxPage,
@@ -49,17 +49,85 @@ const folders = [
 ];
 
 const threads = [
-  { id: 1, from: "Sarah Lin", company: "Acme Corp", subject: "Re: Proposal v2 — minor tweaks", preview: "Looks great overall. Two small notes on pricing tier 2 and timing for kickoff…", time: "2m", unread: true, tag: "Hot lead" },
-  { id: 2, from: "Marcus Reed", company: "Northwind", subject: "Onboarding questions", preview: "Hey team, before we sign, can you confirm SOC2 status and data residency…", time: "23m", unread: true, tag: "Sales" },
-  { id: 3, from: "Stripe", company: "Payouts", subject: "Payout $12,840 scheduled", preview: "Your payout of $12,840.00 will arrive on May 30…", time: "1h", unread: false, tag: "Billing" },
-  { id: 4, from: "Jenna Park", company: "Helios", subject: "Renewal in 14 days", preview: "Quick heads up — annual renewal coming up. Happy with the value so far…", time: "3h", unread: false, tag: "Renewal" },
-  { id: 5, from: "Linear", company: "Notifications", subject: "3 issues assigned to Syra", preview: "OPS-128, OPS-129, OPS-131 are now in Syra's queue…", time: "6h", unread: false, tag: "System" },
-  { id: 6, from: "Olivia Chen", company: "Bridgewater", subject: "Quick intro to our ops lead", preview: "Wanted to connect you with Priya who runs revenue ops at Bridgewater…", time: "Yesterday", unread: false, tag: "Intro" },
-  { id: 7, from: "DocuSign", company: "Agreements", subject: "Signed: MSA — Northwind", preview: "All parties have completed the document. View completed envelope…", time: "Yesterday", unread: false, tag: "Legal" },
+  {
+    id: 1,
+    from: "Sarah Lin",
+    company: "Acme Corp",
+    subject: "Re: Proposal v2 — minor tweaks",
+    preview: "Looks great overall. Two small notes on pricing tier 2 and timing for kickoff…",
+    time: "2m",
+    unread: true,
+    tag: "Hot lead",
+  },
+  {
+    id: 2,
+    from: "Marcus Reed",
+    company: "Northwind",
+    subject: "Onboarding questions",
+    preview: "Hey team, before we sign, can you confirm SOC2 status and data residency…",
+    time: "23m",
+    unread: true,
+    tag: "Sales",
+  },
+  {
+    id: 3,
+    from: "Stripe",
+    company: "Payouts",
+    subject: "Payout $12,840 scheduled",
+    preview: "Your payout of $12,840.00 will arrive on May 30…",
+    time: "1h",
+    unread: false,
+    tag: "Billing",
+  },
+  {
+    id: 4,
+    from: "Jenna Park",
+    company: "Helios",
+    subject: "Renewal in 14 days",
+    preview: "Quick heads up — annual renewal coming up. Happy with the value so far…",
+    time: "3h",
+    unread: false,
+    tag: "Renewal",
+  },
+  {
+    id: 5,
+    from: "Linear",
+    company: "Notifications",
+    subject: "3 issues assigned to Syra",
+    preview: "OPS-128, OPS-129, OPS-131 are now in Syra's queue…",
+    time: "6h",
+    unread: false,
+    tag: "System",
+  },
+  {
+    id: 6,
+    from: "Olivia Chen",
+    company: "Bridgewater",
+    subject: "Quick intro to our ops lead",
+    preview: "Wanted to connect you with Priya who runs revenue ops at Bridgewater…",
+    time: "Yesterday",
+    unread: false,
+    tag: "Intro",
+  },
+  {
+    id: 7,
+    from: "DocuSign",
+    company: "Agreements",
+    subject: "Signed: MSA — Northwind",
+    preview: "All parties have completed the document. View completed envelope…",
+    time: "Yesterday",
+    unread: false,
+    tag: "Legal",
+  },
 ];
 
 function initials(name: string) {
-  return name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase();
+  return name
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }
 
 function InboxPage() {
@@ -89,7 +157,10 @@ function InboxPage() {
 
   return (
     <>
-      <div className="flex w-full bg-muted/20 overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
+      <div
+        className="flex w-full bg-muted/20 overflow-hidden"
+        style={{ height: "calc(100dvh - 53px)" }}
+      >
         {/* Thread list */}
         <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 min-w-0 bg-background">
           <div className="h-12 px-4 flex items-center gap-2 border-b border-border/60">
@@ -131,7 +202,9 @@ function InboxPage() {
                         <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
                         <span className="flex-1 text-left">{f.name}</span>
                         {f.count != null && (
-                          <span className="text-[11px] text-muted-foreground tabular-nums">{f.count}</span>
+                          <span className="text-[11px] text-muted-foreground tabular-nums">
+                            {f.count}
+                          </span>
                         )}
                       </button>
                     );
@@ -165,21 +238,25 @@ function InboxPage() {
                   key={t.id}
                   onClick={() => setSelected(t)}
                   className={`w-full text-left px-4 py-3 border-b border-border/40 transition-colors relative ${
-                    active
-                      ? "bg-foreground/[0.05]"
-                      : "hover:bg-foreground/[0.03]"
+                    active ? "bg-foreground/[0.05]" : "hover:bg-foreground/[0.03]"
                   }`}
                 >
                   {t.unread && (
                     <span className="absolute left-1.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-foreground/70" />
                   )}
                   <div className="flex items-center justify-between gap-2">
-                    <div className={`text-[13px] truncate ${t.unread ? "font-semibold text-foreground" : "font-medium text-foreground/90"}`}>
+                    <div
+                      className={`text-[13px] truncate ${t.unread ? "font-semibold text-foreground" : "font-medium text-foreground/90"}`}
+                    >
                       {t.from}
                     </div>
-                    <div className="text-[11px] text-muted-foreground shrink-0 tabular-nums">{t.time}</div>
+                    <div className="text-[11px] text-muted-foreground shrink-0 tabular-nums">
+                      {t.time}
+                    </div>
                   </div>
-                  <div className={`text-[12.5px] truncate mt-0.5 ${t.unread ? "text-foreground" : "text-foreground/80"}`}>
+                  <div
+                    className={`text-[12.5px] truncate mt-0.5 ${t.unread ? "text-foreground" : "text-foreground/80"}`}
+                  >
                     {t.subject}
                   </div>
                   <div className="text-[12px] text-muted-foreground line-clamp-2 mt-0.5 leading-snug">
@@ -225,7 +302,10 @@ function InboxPage() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-[14px] font-semibold tracking-tight truncate">
-                      {selected.from} <span className="text-muted-foreground font-normal">· {selected.company}</span>
+                      {selected.from}{" "}
+                      <span className="text-muted-foreground font-normal">
+                        · {selected.company}
+                      </span>
                     </div>
                     <div className="text-[12px] text-muted-foreground mt-0.5">
                       To: me · {selected.time} ago
@@ -258,7 +338,13 @@ function InboxPage() {
   );
 }
 
-function ToolbarBtn({ icon: Icon, label }: { icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; label: string }) {
+function ToolbarBtn({
+  icon: Icon,
+  label,
+}: {
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  label: string;
+}) {
   return (
     <button
       aria-label={label}
@@ -319,10 +405,16 @@ function ComposeWindow({
           New message
         </div>
         <div className="flex items-center gap-0.5 text-muted-foreground">
-          <button className="grid h-6 w-6 place-items-center rounded hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="Minimize">
+          <button
+            className="grid h-6 w-6 place-items-center rounded hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
+            aria-label="Minimize"
+          >
             <Minus className="h-3.5 w-3.5" />
           </button>
-          <button className="grid h-6 w-6 place-items-center rounded hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="Close">
+          <button
+            className="grid h-6 w-6 place-items-center rounded hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
+            aria-label="Close"
+          >
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
@@ -353,11 +445,15 @@ function ComposeWindow({
       <div className="px-4 py-4 min-h-[180px] text-[13.5px] leading-relaxed text-foreground/90">
         <p>Hi {firstName},</p>
         <p className="mt-3">
-          Thanks for the notes — happy to adjust tier 2 pricing as proposed and lock kickoff
-          for the week of June 10th. I'll send an updated SOW shortly and a calendar invite
-          for a 30-min walkthrough.
+          Thanks for the notes — happy to adjust tier 2 pricing as proposed and lock kickoff for the
+          week of June 10th. I'll send an updated SOW shortly and a calendar invite for a 30-min
+          walkthrough.
         </p>
-        <p className="mt-3 text-muted-foreground/80">Best,<br />Syra</p>
+        <p className="mt-3 text-muted-foreground/80">
+          Best,
+          <br />
+          Syra
+        </p>
       </div>
 
       {/* Formatting toolbar */}
@@ -401,10 +497,16 @@ function ComposeWindow({
           <button className="h-7 px-2.5 text-[11.5px] rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]">
             Syra: Regenerate
           </button>
-          <button className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="More">
+          <button
+            className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
+            aria-label="More"
+          >
             <MoreHorizontal className="h-4 w-4" />
           </button>
-          <button className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]" aria-label="Discard">
+          <button
+            className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
+            aria-label="Discard"
+          >
             <Trash2 className="h-4 w-4" />
           </button>
         </div>

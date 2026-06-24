@@ -30,8 +30,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme]);
 
   const setTheme = (t: Theme) => setThemeState(t);
-  const toggleTheme = () =>
-    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+  const toggleTheme = () => setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>

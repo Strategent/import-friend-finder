@@ -8,6 +8,7 @@ Goal: the last swipe must never snap back, flash, or glitch.
 Open the Daily Brief from the hero button, then:
 
 ### Forward swipes (left)
+
 - [ ] Card 1 → 2: throws cleanly left, card 2 lifts smoothly into place.
 - [ ] Card 2 → 3: same — no flicker on the incoming card.
 - [ ] Card 3 (last) → close: card 3 throws fully off-screen and does **not**
@@ -16,22 +17,25 @@ Open the Daily Brief from the hero button, then:
 - [ ] After close, reopening starts at card 1 (index reset).
 
 ### Backward swipes (right)
+
 - [ ] Card 1: drag right is rejected — card springs back to center (no exit).
 - [ ] Card 2 → 1 and Card 3 → 2: previous card reveals during drag, settles smoothly.
 
 ### Drag-cancel
+
 - [ ] Slow drag under threshold (< ~104px, low velocity) springs back without
       jitter in both directions.
 - [ ] Fast flick over threshold completes the throw even on short distance.
 
 ### Dots / keyboard / a11y
+
 - [ ] Clicking a progress dot jumps to that card without animation glitches.
 - [ ] `Esc` closes the dialog; reopening resets to card 1.
 - [ ] `DialogTitle` remains `sr-only` (no Radix a11y warning in console).
 
 ## Code invariants (grep before shipping)
 
-In `src/components/dashboard/hero/daily-brief-stack.tsx`:
+In `src/features/dashboard/components/hero/daily-brief-stack.tsx`:
 
 - [ ] `handleSwipeComplete` on the last card returns `i + 1` (index advances
       **past** `total - 1`) so the thrown card is no longer `isTop` and its

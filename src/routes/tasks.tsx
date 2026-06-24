@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PageShell, PageHeader } from "@/components/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/page-shell";
 import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/tasks")({
@@ -52,13 +52,24 @@ function TasksPage() {
             </div>
             <div className="space-y-1">
               {g.items.map((t, i) => (
-                <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.04]">
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.04]"
+                >
                   <Checkbox defaultChecked={t.done} />
-                  <div className={`flex-1 text-[13px] ${t.done ? "line-through text-muted-foreground" : ""}`}>{t.title}</div>
-                  <Badge className={`border ${t.priority === "High" ? "bg-accent/15 text-accent border-accent/30" : t.priority === "Med" ? "bg-primary/15 text-primary border-primary/30" : "bg-white/5 text-muted-foreground border-border/60"}`}>
+                  <div
+                    className={`flex-1 text-[13px] ${t.done ? "line-through text-muted-foreground" : ""}`}
+                  >
+                    {t.title}
+                  </div>
+                  <Badge
+                    className={`border ${t.priority === "High" ? "bg-accent/15 text-accent border-accent/30" : t.priority === "Med" ? "bg-primary/15 text-primary border-primary/30" : "bg-white/5 text-muted-foreground border-border/60"}`}
+                  >
                     {t.priority}
                   </Badge>
-                  <div className="text-[11px] text-muted-foreground w-16 text-right">{t.assignee}</div>
+                  <div className="text-[11px] text-muted-foreground w-16 text-right">
+                    {t.assignee}
+                  </div>
                 </div>
               ))}
             </div>

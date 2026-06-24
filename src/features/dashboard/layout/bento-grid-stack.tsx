@@ -170,13 +170,13 @@ function BentoGridStackImpl({
         if (!disposed) setReady(true);
       });
 
-    // Disable drag/resize on small screens; re-enable above the breakpoint.
+      // Disable drag/resize on small screens; re-enable above the breakpoint.
       const mq = window.matchMedia(STATIC_QUERY);
       const applyStatic = () => grid.setStatic(mq.matches);
       applyStatic();
       mq.addEventListener("change", applyStatic);
 
-    // Reset to the default layout (and clear storage) on demand — no reload.
+      // Reset to the default layout (and clear storage) on demand — no reload.
       const onReset = () => {
         try {
           localStorage.removeItem(storageKey);

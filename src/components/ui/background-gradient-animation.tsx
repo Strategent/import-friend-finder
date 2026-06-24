@@ -2,6 +2,8 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
+type GradientStyle = React.CSSProperties & Record<`--${string}`, string>;
+
 export const BackgroundGradientAnimation = ({
   gradientBackgroundStart = "rgb(10, 10, 14)",
   gradientBackgroundEnd = "rgb(18, 16, 26)",
@@ -62,18 +64,18 @@ export const BackgroundGradientAnimation = ({
     setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
   }, []);
 
-  const styleVars = {
-    ["--gradient-background-start" as any]: gradientBackgroundStart,
-    ["--gradient-background-end" as any]: gradientBackgroundEnd,
-    ["--first-color" as any]: firstColor,
-    ["--second-color" as any]: secondColor,
-    ["--third-color" as any]: thirdColor,
-    ["--fourth-color" as any]: fourthColor,
-    ["--fifth-color" as any]: fifthColor,
-    ["--pointer-color" as any]: pointerColor,
-    ["--size" as any]: size,
-    ["--blending-value" as any]: blendingValue,
-  } as React.CSSProperties;
+  const styleVars: GradientStyle = {
+    "--gradient-background-start": gradientBackgroundStart,
+    "--gradient-background-end": gradientBackgroundEnd,
+    "--first-color": firstColor,
+    "--second-color": secondColor,
+    "--third-color": thirdColor,
+    "--fourth-color": fourthColor,
+    "--fifth-color": fifthColor,
+    "--pointer-color": pointerColor,
+    "--size": size,
+    "--blending-value": blendingValue,
+  };
 
   return (
     <div
@@ -100,7 +102,12 @@ export const BackgroundGradientAnimation = ({
         <defs>
           <filter id="bga-blurMe">
             <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+              result="goo"
+            />
             <feBlend in="SourceGraphic" in2="goo" />
           </filter>
         </defs>

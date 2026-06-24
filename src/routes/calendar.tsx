@@ -1,14 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Video,
-  Globe,
-  Check,
-} from "lucide-react";
-import { SyraChatWidget } from "@/components/syra-chat-widget";
+import { ChevronLeft, ChevronRight, Clock, Video, Globe, Check } from "lucide-react";
+import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 
 export const Route = createFileRoute("/calendar")({
   component: CalendarPage,
@@ -19,22 +12,84 @@ type Meeting = { time: string; client: string; status: "Confirmed" | "Pending"; 
 
 // Booked meetings keyed by day-of-month (assumes current viewing month)
 const bookings: Record<number, Meeting[]> = {
-  7:  [{ time: "10:00",  client: "Hartley Family Review",           status: "Confirmed", zoom: "https://zoom.us/j/0000000001" }],
-  16: [
-    { time: "09:00", client: "Hartley Family Trust",                status: "Confirmed", zoom: "https://zoom.us/j/0000000010" },
-    { time: "11:30", client: "Denis Marlow — Rebalance",            status: "Confirmed", zoom: "https://zoom.us/j/0000000011" },
-    { time: "14:00", client: "Sterling Holdings Review",            status: "Pending",   zoom: "https://zoom.us/j/0000000012" },
-    { time: "16:30", client: "Caldwell Estate Planning",            status: "Confirmed", zoom: "https://zoom.us/j/0000000013" },
+  7: [
+    {
+      time: "10:00",
+      client: "Hartley Family Review",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000001",
+    },
   ],
-  20: [{ time: "09:00", client: "CIO Roundtable — Valdai Fund",     status: "Confirmed", zoom: "https://zoom.us/j/0000000020" }],
-  22: [{ time: "13:30", client: "Sterling Holdings Estate Review",  status: "Confirmed", zoom: "https://zoom.us/j/0000000022" }],
-  28: [{ time: "16:00", client: "All-Hands — Q1 Planning",          status: "Confirmed", zoom: "https://zoom.us/j/0000000028" }],
+  16: [
+    {
+      time: "09:00",
+      client: "Hartley Family Trust",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000010",
+    },
+    {
+      time: "11:30",
+      client: "Denis Marlow — Rebalance",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000011",
+    },
+    {
+      time: "14:00",
+      client: "Sterling Holdings Review",
+      status: "Pending",
+      zoom: "https://zoom.us/j/0000000012",
+    },
+    {
+      time: "16:30",
+      client: "Caldwell Estate Planning",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000013",
+    },
+  ],
+  20: [
+    {
+      time: "09:00",
+      client: "CIO Roundtable — Valdai Fund",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000020",
+    },
+  ],
+  22: [
+    {
+      time: "13:30",
+      client: "Sterling Holdings Estate Review",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000022",
+    },
+  ],
+  28: [
+    {
+      time: "16:00",
+      client: "All-Hands — Q1 Planning",
+      status: "Confirmed",
+      zoom: "https://zoom.us/j/0000000028",
+    },
+  ],
 };
 
 const TIME_SLOTS = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00",
+  "09:00",
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
 ];
 
 function CalendarPage() {
@@ -70,16 +125,17 @@ function CalendarPage() {
 
   return (
     <>
-      <div className="w-full bg-background flex flex-col" style={{ minHeight: "calc(100dvh - 53px)" }}>
+      <div
+        className="w-full bg-background flex flex-col"
+        style={{ minHeight: "calc(100dvh - 53px)" }}
+      >
         {/* Top bar — Calendly-style */}
         <div className="px-8 pt-7 pb-5 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
           <div>
             <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
               Harwick & Sterne · Scheduling
             </div>
-            <h1 className="mt-2 text-[28px] font-semibold tracking-tight">
-              Book a meeting
-            </h1>
+            <h1 className="mt-2 text-[28px] font-semibold tracking-tight">Book a meeting</h1>
           </div>
           <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
             <Globe className="h-3.5 w-3.5" />
@@ -168,8 +224,8 @@ function CalendarPage() {
                         isSelected
                           ? "bg-foreground text-background font-semibold"
                           : isToday
-                          ? "border border-foreground/60 text-foreground font-semibold hover:bg-foreground/[0.05]"
-                          : "text-foreground/85 hover:bg-foreground/[0.06]"
+                            ? "border border-foreground/60 text-foreground font-semibold hover:bg-foreground/[0.05]"
+                            : "text-foreground/85 hover:bg-foreground/[0.06]"
                       }`}
                     >
                       {d}

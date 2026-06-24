@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Video } from "lucide-react";
 import { Panel } from "@/components/ui/panel";
-import { todaysMeetings } from "@/components/dashboard/data";
+import { todaysMeetings } from "@/features/dashboard/components/data";
 
 /**
  * CalendarCard — Monday-start week strip + today's meetings with Join buttons.

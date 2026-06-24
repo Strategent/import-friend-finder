@@ -2,12 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageShell, PageHeader } from "@/components/page-shell";
-import {
-  Plug,
-  Plus,
-  Check,
-} from "lucide-react";
+import { PageShell, PageHeader } from "@/app/shell/page-shell";
+import { Plug, Plus, Check } from "lucide-react";
 
 export const Route = createFileRoute("/connectors")({
   component: ConnectorsPage,
@@ -20,7 +16,12 @@ const connectors = [
   { name: "Gmail", desc: "Email sync & drafts", slug: "gmail", connected: true },
   { name: "Google Drive", desc: "Document storage", slug: "googledrive", connected: false },
   { name: "Slack", desc: "Team messaging", slug: "slack", connected: true },
-  { name: "Google Calendar", desc: "Meetings & scheduling", slug: "googlecalendar", connected: false },
+  {
+    name: "Google Calendar",
+    desc: "Meetings & scheduling",
+    slug: "googlecalendar",
+    connected: false,
+  },
   { name: "HubSpot", desc: "CRM & pipeline", slug: "hubspot", connected: false },
   { name: "Notion", desc: "Notes & wikis", slug: "notion", connected: false },
   { name: "QuickBooks", desc: "Accounting & books", slug: "quickbooks", connected: false },
@@ -50,14 +51,15 @@ function ConnectorsPage() {
   return (
     <PageShell>
       <PageHeader
-        eyebrow={<><Plug className="h-3.5 w-3.5" /> Connectors</>}
+        eyebrow={
+          <>
+            <Plug className="h-3.5 w-3.5" /> Connectors
+          </>
+        }
         title="Connectors"
         description="All of your connected business apps in one place."
         actions={
-          <Button
-            onClick={() => setRequesting((v) => !v)}
-            className="h-9 px-4 text-[13px] gap-2"
-          >
+          <Button onClick={() => setRequesting((v) => !v)} className="h-9 px-4 text-[13px] gap-2">
             <Plus className="h-3.5 w-3.5" /> Request connector
           </Button>
         }
@@ -67,7 +69,9 @@ function ConnectorsPage() {
         <div className="bento p-5 flex flex-col md:flex-row md:items-center gap-3">
           <div className="flex-1">
             <div className="text-[13px] font-medium tracking-tight">Request a new connector</div>
-            <div className="text-[12px] text-muted-foreground">Tell us which app you need and we'll add it.</div>
+            <div className="text-[12px] text-muted-foreground">
+              Tell us which app you need and we'll add it.
+            </div>
           </div>
           <input
             value={requestName}

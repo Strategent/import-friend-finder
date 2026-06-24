@@ -11,10 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { Topbar } from "@/components/page-shell";
-import { ThemeProvider } from "@/components/theme-provider";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AppSidebar } from "@/app/shell/app-sidebar";
+import { Topbar } from "@/app/shell/page-shell";
+import { ThemeProvider } from "@/app/providers/theme-provider";
+import { reportAppError } from "../lib/error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -42,7 +42,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportAppError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Private wealth admin console for Harwick & Sterne: portfolios, client meetings, planner, documents and the Syra agent.",
       },
-      { name: "author", content: "Lovable" },
+      { name: "author", content: "Strategent" },
       { property: "og:title", content: "strategent | demo build" },
       {
         property: "og:description",
@@ -96,13 +96,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "strategent | demo build" },
-      { name: "description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { property: "og:description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { name: "twitter:description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp" },
+      {
+        name: "twitter:description",
+        content:
+          "Private wealth admin console for Harwick & Sterne across portfolios, meetings, planner and the Syra agent.",
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
