@@ -66,7 +66,10 @@ function CallsPage() {
         title="Calls"
         description="Inbound and outbound calls handled by your team and the Syra voice agent."
         actions={
-          <Button className="text-white border-0" style={{ background: "var(--gradient-primary)" }}>
+          <Button
+            className="text-primary-foreground border-0"
+            style={{ background: "var(--gradient-primary)" }}
+          >
             <Phone className="h-4 w-4 mr-2" /> Place Call
           </Button>
         }
@@ -92,7 +95,7 @@ function CallsPage() {
       </div>
       <Card className="bento p-2">
         {calls.map((c, i) => (
-          <div key={i} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/[0.04]">
+          <div key={i} className="flex items-center gap-4 p-3 rounded-lg hover:bg-state-hover">
             <div className="h-9 w-9 rounded-lg grid place-items-center border border-border/60 bg-primary/10">
               {c.dir === "in" ? (
                 <PhoneIncoming className="h-4 w-4 text-primary" />

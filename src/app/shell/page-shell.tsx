@@ -23,7 +23,7 @@ export function Topbar() {
     ? now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })
     : "—";
   return (
-    <div className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+    <div className="sticky top-0 z-20 border-b border-border/60 bg-chrome backdrop-blur-xl">
       <div className="px-6 py-3 flex items-center gap-3">
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
         <div className="flex-1" />
@@ -34,7 +34,7 @@ export function Topbar() {
               onClick={() => setSearchOpen((v) => !v)}
               aria-label={searchOpen ? "Close search" : "Open search"}
               aria-expanded={searchOpen}
-              className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+              className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"
             >
               {searchOpen ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
             </button>
@@ -63,7 +63,7 @@ export function Topbar() {
             {time}
           </div>
           <div className="flex items-center gap-1 text-[12px] text-muted-foreground leading-none">
-            <Sun className="h-3 w-3 text-amber-400/80" />
+            <Sun className="h-3 w-3 text-status-warning/80" />
             <span className="tabular-nums">64°</span>
             <span className="hidden md:inline">Sunny · Brentwood</span>
           </div>

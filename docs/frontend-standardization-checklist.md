@@ -21,7 +21,7 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 - [x] Normalize dark-mode tokens.
 - [x] Add high-contrast-friendly token choices where practical.
 - [x] Remove or scope the global negative letter-spacing.
-- [ ] Replace scattered `#hex`, `rgba`, and one-off color classes with tokens. Started with global CSS and CRM stage/table states; the remaining route/component sweep is still open.
+- [x] Replace scattered `#hex`, `rgba`, and one-off color classes with tokens. Route/component sweep completed; remaining scan hits are Recharts selector literals and token-channel gradient syntax.
 - [x] Decide which branded tokens belong to Strategent/Syra and which are generic app tokens.
 
 ## 2. Layout System

@@ -51,7 +51,10 @@ function DocumentsPage() {
         title="Documents"
         description="Contracts, briefs and assets — all searchable by Syra."
         actions={
-          <Button className="text-white border-0" style={{ background: "var(--gradient-primary)" }}>
+          <Button
+            className="text-primary-foreground border-0"
+            style={{ background: "var(--gradient-primary)" }}
+          >
             <Upload className="h-4 w-4 mr-2" /> Upload
           </Button>
         }

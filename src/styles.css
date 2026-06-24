@@ -69,6 +69,7 @@
   --color-surface-foreground: var(--surface-foreground);
   --color-surface-raised: var(--surface-raised);
   --color-surface-hover: var(--surface-hover);
+  --color-chrome: var(--chrome);
   --color-toolbar: var(--toolbar);
   --color-toolbar-border: var(--toolbar-border);
   --color-table: var(--table);
@@ -78,6 +79,7 @@
   --color-table-row-selected: var(--table-row-selected);
   --color-focus: var(--focus);
   --color-focus-contrast: var(--focus-contrast);
+  --color-dialog-overlay: var(--dialog-overlay);
   --color-state-hover: var(--state-hover);
   --color-state-active: var(--state-active);
   --color-state-selected: var(--state-selected);
@@ -104,9 +106,21 @@
   --color-status-closed-fg: var(--status-closed-fg);
   --color-status-closed-border: var(--status-closed-border);
   --color-status-success: var(--status-success);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-success-fg: var(--status-success-fg);
+  --color-status-success-border: var(--status-success-border);
   --color-status-warning: var(--status-warning);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-warning-fg: var(--status-warning-fg);
+  --color-status-warning-border: var(--status-warning-border);
   --color-status-danger: var(--status-danger);
+  --color-status-danger-bg: var(--status-danger-bg);
+  --color-status-danger-fg: var(--status-danger-fg);
+  --color-status-danger-border: var(--status-danger-border);
   --color-status-info: var(--status-info);
+  --color-status-info-bg: var(--status-info-bg);
+  --color-status-info-fg: var(--status-info-fg);
+  --color-status-info-border: var(--status-info-border);
   --shadow-panel: var(--elevation-panel);
   --shadow-popover: var(--elevation-popover);
   --shadow-focus: var(--elevation-focus);
@@ -166,6 +180,7 @@
   --surface-raised: oklch(1 0 0 / 72%);
   --surface-raised-hover: oklch(1 0 0 / 88%);
   --surface-hover: oklch(0 0 0 / 4%);
+  --chrome: color-mix(in oklab, var(--background) 70%, transparent);
   --toolbar: color-mix(in oklab, var(--background) 72%, var(--surface));
   --toolbar-border: var(--border);
   --table: var(--background);
@@ -205,8 +220,39 @@
   --elevation-panel: var(--card-shadow);
   --elevation-popover: 0 18px 40px color-mix(in oklab, var(--primitive-black) 14%, transparent);
   --elevation-focus: 0 0 0 3px color-mix(in oklab, var(--focus) 28%, transparent);
+  --elevation-syra-chat:
+    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 30%, transparent) inset,
+    0 30px 60px -20px color-mix(in oklab, var(--primitive-blue-800) 35%, transparent),
+    0 12px 30px -12px color-mix(in oklab, var(--primary) 30%, transparent);
   --hero-bento-bg: linear-gradient(180deg, oklch(0.98 0.004 270), oklch(0.94 0.006 270));
   --hero-brief-bg: var(--primitive-neutral-900);
+  --hero-brief-cta-bg: oklch(0.23 0.004 270 / 90%);
+  --hero-brief-cta-bg-hover: oklch(0.3 0.004 270 / 90%);
+  --spotlight-border: color-mix(in oklab, var(--primitive-white) 16%, transparent);
+  --spotlight-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 12%, transparent) inset,
+    0 20px 50px -36px color-mix(in oklab, var(--primitive-blue-800) 70%, transparent);
+  --syra-mark-bg: radial-gradient(
+    circle at 30% 25%,
+    oklch(0.36 0.006 270) 0%,
+    oklch(0.24 0.006 270) 60%,
+    oklch(0.17 0.006 270) 100%
+  );
+  --syra-mark-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 8%, transparent) inset,
+    0 4px 12px -4px color-mix(in oklab, var(--primitive-black) 50%, transparent);
+  --syra-gradient-bg-start: oklch(0.985 0.003 285);
+  --syra-gradient-bg-end: oklch(0.965 0.006 285);
+  --syra-gradient-orb-1: 225 223 230;
+  --syra-gradient-orb-2: 215 213 222;
+  --syra-gradient-orb-3: 230 228 235;
+  --syra-gradient-orb-4: 210 208 218;
+  --syra-gradient-orb-5: 220 218 228;
+  --syra-gradient-pointer: 225 220 235;
+  --syra-gradient-blending: normal;
+  --syra-gradient-vignette:
+    radial-gradient(120% 80% at 50% 100%, rgb(255 255 255 / 70%) 0%, rgb(255 255 255 / 0%) 60%),
+    radial-gradient(120% 80% at 50% 0%, rgb(255 255 255 / 60%) 0%, rgb(255 255 255 / 0%) 55%);
   --scrollbar-thumb: oklch(0 0 0 / 18%);
   --scrollbar-thumb-hover: oklch(0 0 0 / 28%);
 
@@ -219,6 +265,18 @@
   --status-warning: var(--primitive-amber-500);
   --status-danger: var(--primitive-red-500);
   --status-info: var(--primitive-cyan-500);
+  --status-success-bg: color-mix(in oklab, var(--status-success) 12%, transparent);
+  --status-success-fg: oklch(0.4 0.12 155);
+  --status-success-border: color-mix(in oklab, var(--status-success) 30%, transparent);
+  --status-warning-bg: color-mix(in oklab, var(--status-warning) 14%, transparent);
+  --status-warning-fg: oklch(0.46 0.12 80);
+  --status-warning-border: color-mix(in oklab, var(--status-warning) 32%, transparent);
+  --status-danger-bg: color-mix(in oklab, var(--status-danger) 12%, transparent);
+  --status-danger-fg: oklch(0.44 0.16 25);
+  --status-danger-border: color-mix(in oklab, var(--status-danger) 30%, transparent);
+  --status-info-bg: color-mix(in oklab, var(--status-info) 12%, transparent);
+  --status-info-fg: oklch(0.42 0.12 220);
+  --status-info-border: color-mix(in oklab, var(--status-info) 30%, transparent);
   --status-lead-bg: color-mix(in oklab, var(--status-lead) 12%, transparent);
   --status-lead-fg: oklch(0.44 0.16 265);
   --status-lead-border: color-mix(in oklab, var(--status-lead) 30%, transparent);
@@ -290,6 +348,7 @@
   --surface-raised: oklch(1 0 0 / 3.5%);
   --surface-raised-hover: oklch(1 0 0 / 6%);
   --surface-hover: oklch(1 0 0 / 4%);
+  --chrome: color-mix(in oklab, var(--background) 70%, transparent);
   --toolbar: oklch(0.105 0.003 268 / 70%);
   --toolbar-border: var(--border);
   --table: var(--background);
@@ -329,8 +388,39 @@
   --elevation-panel: var(--card-shadow);
   --elevation-popover: 0 18px 44px color-mix(in oklab, var(--primitive-black) 45%, transparent);
   --elevation-focus: 0 0 0 3px color-mix(in oklab, var(--focus) 32%, transparent);
+  --elevation-syra-chat:
+    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 30%, transparent) inset,
+    0 30px 60px -20px color-mix(in oklab, var(--primitive-blue-800) 35%, transparent),
+    0 12px 30px -12px color-mix(in oklab, var(--primary) 30%, transparent);
   --hero-bento-bg: linear-gradient(180deg, oklch(0.175 0.008 270), oklch(0.13 0.005 270));
   --hero-brief-bg: oklch(0.16 0.006 270);
+  --hero-brief-cta-bg: oklch(0.23 0.004 270 / 90%);
+  --hero-brief-cta-bg-hover: oklch(0.3 0.004 270 / 90%);
+  --spotlight-border: color-mix(in oklab, var(--primitive-white) 10%, transparent);
+  --spotlight-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 10%, transparent) inset,
+    0 20px 50px -36px color-mix(in oklab, var(--primitive-blue-800) 70%, transparent);
+  --syra-mark-bg: radial-gradient(
+    circle at 30% 25%,
+    oklch(0.36 0.006 270) 0%,
+    oklch(0.24 0.006 270) 60%,
+    oklch(0.17 0.006 270) 100%
+  );
+  --syra-mark-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 8%, transparent) inset,
+    0 4px 12px -4px color-mix(in oklab, var(--primitive-black) 50%, transparent);
+  --syra-gradient-bg-start: oklch(0.105 0.006 285);
+  --syra-gradient-bg-end: oklch(0.16 0.014 285);
+  --syra-gradient-orb-1: 120 110 150;
+  --syra-gradient-orb-2: 90 85 115;
+  --syra-gradient-orb-3: 140 130 170;
+  --syra-gradient-orb-4: 70 65 95;
+  --syra-gradient-orb-5: 105 95 135;
+  --syra-gradient-pointer: 150 130 200;
+  --syra-gradient-blending: soft-light;
+  --syra-gradient-vignette:
+    radial-gradient(120% 80% at 50% 100%, rgb(0 0 0 / 55%) 0%, rgb(0 0 0 / 0%) 60%),
+    radial-gradient(120% 80% at 50% 0%, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 0%) 55%);
   --scrollbar-thumb: oklch(1 0 0 / 18%);
   --scrollbar-thumb-hover: oklch(1 0 0 / 28%);
 
@@ -343,6 +433,18 @@
   --status-warning: var(--primitive-amber-500);
   --status-danger: var(--primitive-red-500);
   --status-info: var(--primitive-cyan-500);
+  --status-success-bg: color-mix(in oklab, var(--status-success) 15%, transparent);
+  --status-success-fg: oklch(0.86 0.08 155);
+  --status-success-border: color-mix(in oklab, var(--status-success) 32%, transparent);
+  --status-warning-bg: color-mix(in oklab, var(--status-warning) 15%, transparent);
+  --status-warning-fg: oklch(0.89 0.08 80);
+  --status-warning-border: color-mix(in oklab, var(--status-warning) 34%, transparent);
+  --status-danger-bg: color-mix(in oklab, var(--status-danger) 15%, transparent);
+  --status-danger-fg: oklch(0.86 0.08 25);
+  --status-danger-border: color-mix(in oklab, var(--status-danger) 32%, transparent);
+  --status-info-bg: color-mix(in oklab, var(--status-info) 15%, transparent);
+  --status-info-fg: oklch(0.87 0.08 220);
+  --status-info-border: color-mix(in oklab, var(--status-info) 32%, transparent);
   --status-lead-bg: color-mix(in oklab, var(--status-lead) 15%, transparent);
   --status-lead-fg: oklch(0.86 0.08 258);
   --status-lead-border: color-mix(in oklab, var(--status-lead) 32%, transparent);

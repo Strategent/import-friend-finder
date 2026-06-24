@@ -44,10 +44,10 @@ export function CalendarCard() {
       bodyClassName="gap-4"
       action={
         <div className="flex items-center gap-1">
-          <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-foreground/[0.05] text-foreground/80 hover:bg-foreground/[0.1]">
+          <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover">
             <ChevronLeft className="h-3.5 w-3.5" />
           </button>
-          <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-foreground/[0.05] text-foreground/80 hover:bg-foreground/[0.1]">
+          <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover">
             <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
@@ -84,8 +84,8 @@ export function CalendarCard() {
                 <span
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-[14px] leading-none tabular-nums transition-colors ${
                     isToday
-                      ? "bg-white text-black font-semibold"
-                      : "text-foreground/85 font-normal hover:bg-foreground/[0.06]"
+                      ? "bg-surface text-surface-foreground font-semibold"
+                      : "text-foreground/85 font-normal hover:bg-state-hover"
                   }`}
                 >
                   {d.getDate()}
@@ -130,7 +130,7 @@ export function CalendarCard() {
                 href={m.zoom}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md border border-border bg-foreground/[0.06] px-3 text-[11px] font-semibold text-foreground/90 transition-colors hover:bg-foreground/[0.12]"
+                className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md border border-border bg-surface-raised px-3 text-[11px] font-semibold text-foreground/90 transition-colors hover:bg-surface-hover"
               >
                 <Video className="h-3 w-3" /> Join
               </a>

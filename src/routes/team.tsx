@@ -59,13 +59,13 @@ const team = [
 function statusDotColor(status: string) {
   switch (status) {
     case "Online":
-      return "#2BAC76";
+      return "var(--status-success)";
     case "Away":
-      return "#EBB02C";
+      return "var(--status-warning)";
     case "Offline":
-      return "#CB2431";
+      return "var(--status-danger)";
     default:
-      return "#888";
+      return "var(--muted-foreground)";
   }
 }
 

@@ -26,8 +26,11 @@ export function ScoreBar({
       >
         {showMarker && (
           <span
-            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.5)] ring-1 ring-black/20"
-            style={{ left: `calc(${pct}% - 6px)` }}
+            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-background ring-1 ring-foreground/20"
+            style={{
+              left: `calc(${pct}% - 6px)`,
+              boxShadow: "0 1px 3px color-mix(in oklab, var(--foreground) 30%, transparent)",
+            }}
           />
         )}
       </div>

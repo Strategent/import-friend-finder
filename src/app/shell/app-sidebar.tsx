@@ -100,8 +100,8 @@ export function AppSidebar() {
                     collapsed ? "justify-center px-0 [&>a]:justify-center" : ""
                   } ${
                     active
-                      ? "bg-foreground/[0.07] text-foreground border border-border"
-                      : "text-muted-foreground/80 hover:text-foreground hover:bg-foreground/[0.04] border border-transparent"
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground border border-sidebar-border"
+                      : "text-muted-foreground/80 hover:text-foreground hover:bg-sidebar-accent border border-transparent"
                   }`}
                 >
                   <Link
@@ -137,7 +137,7 @@ export function AppSidebar() {
           </div>
         )}
         <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-border bg-foreground/[0.06]">
+          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-border bg-sidebar-accent">
             <img
               src={johnHarwickAvatar.url}
               alt="John Harwick"
@@ -172,7 +172,7 @@ export function AppSidebar() {
               Powered by
             </span>
             <span
-              className="font-serif-display text-[23px] font-light leading-none text-neutral-400/80"
+              className="font-serif-display text-[23px] font-light leading-none text-muted-foreground/80"
               style={{ fontFamily: '"Radley", Georgia, serif' }}
             >
               strategent
@@ -187,7 +187,7 @@ export function AppSidebar() {
               Powered by
             </span>
             <span
-              className="font-serif-display text-[7px] font-light leading-none text-neutral-400/80"
+              className="font-serif-display text-[7px] font-light leading-none text-muted-foreground/80"
               style={{ fontFamily: '"Radley", Georgia, serif' }}
             >
               strategent

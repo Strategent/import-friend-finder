@@ -33,8 +33,7 @@ export function SyraChatWidget() {
         <div
           className="w-[360px] max-w-[calc(100vw-2.5rem)] h-[480px] rounded-[26px] bg-card/95 backdrop-blur-2xl border border-border flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200"
           style={{
-            boxShadow:
-              "0 1px 0 0 color-mix(in oklab, white 30%, transparent) inset, 0 30px 60px -20px rgba(15,20,40,0.35), 0 12px 30px -12px color-mix(in oklab, var(--primary) 30%, transparent)",
+            boxShadow: "var(--elevation-syra-chat)",
           }}
         >
           {/* Header */}
@@ -44,7 +43,7 @@ export function SyraChatWidget() {
               <div className="leading-tight">
                 <div className="text-[13px] font-semibold tracking-tight">Syra</div>
                 <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-status-success animate-pulse" />
                   Active
                 </div>
               </div>
@@ -52,7 +51,7 @@ export function SyraChatWidget() {
             <button
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="h-7 w-7 grid place-items-center rounded-full text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
+              className="h-7 w-7 grid place-items-center rounded-full text-muted-foreground hover:text-foreground hover:bg-state-hover transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -69,8 +68,8 @@ export function SyraChatWidget() {
                 <div
                   className={`max-w-[80%] px-3 py-2 rounded-2xl text-[13px] leading-snug ${
                     m.role === "user"
-                      ? "text-white rounded-br-md"
-                      : "bg-foreground/[0.05] text-foreground rounded-bl-md border border-border/60"
+                      ? "text-primary-foreground rounded-br-md"
+                      : "bg-surface-raised text-foreground rounded-bl-md border border-border/60"
                   }`}
                   style={m.role === "user" ? { background: "var(--gradient-primary)" } : undefined}
                 >
@@ -86,7 +85,7 @@ export function SyraChatWidget() {
               <button
                 key={s}
                 onClick={() => setInput(s)}
-                className="h-6 px-2.5 rounded-full text-[10.5px] font-medium border border-border bg-foreground/[0.03] text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] transition-colors"
+                className="h-6 px-2.5 rounded-full text-[10.5px] font-medium border border-border bg-surface-raised text-muted-foreground hover:text-foreground hover:bg-state-hover transition-colors"
               >
                 {s}
               </button>
@@ -95,7 +94,7 @@ export function SyraChatWidget() {
 
           {/* Composer */}
           <div className="px-3 pb-3 pt-1">
-            <div className="flex items-center gap-2 h-11 px-3 rounded-full bg-foreground/[0.04] border border-border">
+            <div className="flex items-center gap-2 h-11 px-3 rounded-full bg-surface-raised border border-border">
               <Bot className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 value={input}
@@ -107,7 +106,7 @@ export function SyraChatWidget() {
               <button
                 onClick={send}
                 aria-label="Send"
-                className="h-7 w-7 grid place-items-center rounded-full text-white"
+                className="h-7 w-7 grid place-items-center rounded-full text-primary-foreground"
                 style={{ background: "var(--gradient-primary)" }}
               >
                 <Send className="h-3 w-3" />

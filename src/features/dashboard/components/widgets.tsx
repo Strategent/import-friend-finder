@@ -10,7 +10,7 @@ export function PlannerCard() {
     <Panel
       label="Planner"
       action={
-        <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-foreground/[0.06] text-foreground/80 transition-colors hover:bg-foreground/[0.12]">
+        <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 transition-colors hover:bg-surface-hover">
           <Plus className="h-3.5 w-3.5" />
         </button>
       }
@@ -22,13 +22,13 @@ export function PlannerCard() {
         {planner.slice(0, 5).map((t, i) => (
           <div
             key={i}
-            className={`group flex items-center gap-3 px-1 py-2 transition-colors hover:bg-foreground/[0.03] ${
+            className={`group flex items-center gap-3 px-1 py-2 transition-colors hover:bg-state-hover ${
               i === 0 ? "" : "border-t border-border/40"
             }`}
           >
             <Checkbox
               checked={t.done}
-              className="h-4 w-4 rounded-full border-border data-[state=checked]:border-foreground/60 data-[state=checked]:bg-foreground/80 data-[state=checked]:text-background"
+              className="h-4 w-4 rounded-full border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
             />
             <div
               className={`min-w-0 flex-1 truncate text-[13px] leading-snug ${
@@ -56,13 +56,13 @@ export function WorkloadCard() {
           {value}
           <span className="ml-0.5 text-base font-normal text-muted-foreground">%</span>
         </div>
-        <span className="mb-1 inline-flex h-5 items-center rounded-full border border-border bg-foreground/[0.05] px-2 text-[10px] font-medium text-foreground/80">
+        <span className="mb-1 inline-flex h-5 items-center rounded-full border border-border bg-surface-raised px-2 text-[10px] font-medium text-foreground/80">
           Healthy
         </span>
       </div>
       <div className="mt-4">
-        <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-foreground/[0.08]">
-          <div className="h-full rounded-full bg-foreground/70" style={{ width: `${value}%` }} />
+        <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-muted">
+          <div className="h-full rounded-full bg-primary" style={{ width: `${value}%` }} />
         </div>
         <div className="mt-1.5 flex items-center justify-between">
           {labels.map((l) => (
@@ -109,11 +109,11 @@ export function TeamCard() {
       <div className="flex min-h-0 flex-1 flex-col gap-1.5">
         {team.slice(0, 4).map((m) => (
           <div key={m.name} className="flex items-center gap-2.5 py-1">
-            <div className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.07] text-[10.5px] font-semibold text-foreground/90">
+            <div className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-surface-raised text-[10.5px] font-semibold text-foreground/90">
               {m.initials}
               <span
                 className={`ring-card absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full ring-2 ${
-                  m.status === "online" ? "bg-emerald-400" : "bg-amber-400"
+                  m.status === "online" ? "bg-status-success" : "bg-status-warning"
                 }`}
               />
             </div>
@@ -139,7 +139,7 @@ export function ChannelsCard() {
       <div className="flex min-h-0 flex-1 flex-col gap-1.5">
         {channels.slice(0, 4).map((c) => (
           <div key={c.name} className="flex items-center gap-2.5 py-1">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-foreground/[0.06] text-[12px] font-semibold text-foreground/70">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-surface-raised text-[12px] font-semibold text-foreground/70">
               #
             </div>
             <div className="min-w-0 flex-1 leading-tight">
@@ -185,7 +185,7 @@ export function DocumentsCard() {
               <div className="mt-0.5 text-[9.5px] text-muted-foreground">{d.uses} uses</div>
             </div>
             <button
-              className="mt-2 h-6 self-stretch rounded-md text-[10px] font-semibold text-white"
+              className="mt-2 h-6 self-stretch rounded-md text-[10px] font-semibold text-primary-foreground"
               style={{ background: "var(--gradient-primary)" }}
             >
               Autofill

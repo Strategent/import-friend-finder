@@ -148,7 +148,7 @@ function CalendarPage() {
           <aside className="col-span-12 md:col-span-3 border-r border-border/60 px-8 py-7 flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <div
-                className="h-10 w-10 rounded-full grid place-items-center text-[12px] font-semibold text-white"
+                className="h-10 w-10 rounded-full grid place-items-center text-[12px] font-semibold text-primary-foreground"
                 style={{ background: "var(--gradient-primary)" }}
               >
                 HS
@@ -189,14 +189,14 @@ function CalendarPage() {
                 <button
                   onClick={() => navMonth(-1)}
                   aria-label="Previous month"
-                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-foreground/[0.04] text-foreground/80 hover:bg-foreground/[0.08]"
+                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => navMonth(1)}
                   aria-label="Next month"
-                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-foreground/[0.04] text-foreground/80 hover:bg-foreground/[0.08]"
+                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -222,15 +222,15 @@ function CalendarPage() {
                       onClick={() => setSelectedDay(d)}
                       className={`relative flex h-11 w-11 items-center justify-center rounded-full text-[14px] tabular-nums transition-colors ${
                         isSelected
-                          ? "bg-foreground text-background font-semibold"
+                          ? "bg-primary text-primary-foreground font-semibold"
                           : isToday
-                            ? "border border-foreground/60 text-foreground font-semibold hover:bg-foreground/[0.05]"
-                            : "text-foreground/85 hover:bg-foreground/[0.06]"
+                            ? "border border-primary/60 text-foreground font-semibold hover:bg-state-hover"
+                            : "text-foreground/85 hover:bg-state-hover"
                       }`}
                     >
                       {d}
                       {hasMeeting && !isSelected && (
-                        <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-foreground/60" />
+                        <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-primary" />
                       )}
                     </button>
                   </div>
@@ -254,7 +254,7 @@ function CalendarPage() {
                   return (
                     <div
                       key={slot}
-                      className="px-3 py-2.5 border border-border rounded-lg bg-muted/30"
+                      className="px-3 py-2.5 border border-border rounded-lg bg-surface-raised"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <div className="min-w-0">
@@ -278,7 +278,7 @@ function CalendarPage() {
                           href={meeting.zoom}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="shrink-0 inline-flex h-8 items-center gap-1.5 rounded-md bg-foreground text-background px-3 text-[11.5px] font-semibold hover:bg-foreground/90 transition-colors"
+                          className="shrink-0 inline-flex h-8 items-center gap-1.5 rounded-md bg-primary text-primary-foreground px-3 text-[11.5px] font-semibold hover:bg-primary/90 transition-colors"
                         >
                           <Video className="h-3 w-3" /> Join
                         </a>
@@ -289,7 +289,7 @@ function CalendarPage() {
                 return (
                   <button
                     key={slot}
-                    className="w-full h-10 px-3 rounded-lg border border-border text-[12.5px] font-medium tabular-nums text-foreground/85 hover:border-foreground/40 hover:bg-foreground/[0.04] transition-colors text-left"
+                    className="w-full h-10 px-3 rounded-lg border border-border text-[12.5px] font-medium tabular-nums text-foreground/85 hover:border-primary/40 hover:bg-state-hover transition-colors text-left"
                   >
                     {slot}
                   </button>

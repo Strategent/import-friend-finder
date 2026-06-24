@@ -62,9 +62,21 @@ const STATUS_STYLES: Record<
   BriefPriority["status"],
   { label: string; badge: string; dot: string }
 > = {
-  urgent: { label: "Urgent", badge: "bg-[#e7e7fb] text-[#5a5bd6]", dot: "bg-[#7b7cf0]" },
-  "this-week": { label: "This week", badge: "bg-[#f0f0f0] text-[#6b6b6b]", dot: "bg-[#c4c4c4]" },
-  closed: { label: "Closed", badge: "bg-[#e3f3e3] text-[#3f8a4a]", dot: "bg-[#9ed4a3]" },
+  urgent: {
+    label: "Urgent",
+    badge: "bg-status-info-bg text-status-info-fg",
+    dot: "bg-status-info",
+  },
+  "this-week": {
+    label: "This week",
+    badge: "bg-muted text-muted-foreground",
+    dot: "bg-muted-foreground",
+  },
+  closed: {
+    label: "Closed",
+    badge: "bg-status-success-bg text-status-success-fg",
+    dot: "bg-status-success",
+  },
 };
 
 export function DailyBriefHero({
@@ -89,50 +101,50 @@ export function DailyBriefHero({
       >
         {/* Left zone — eyebrow, headline, summary (no button) */}
         <div className="relative z-10 flex h-full flex-col justify-center px-7 py-8 lg:max-w-[52%] lg:px-12 lg:py-12">
-          <span className="font-serif-display text-[12px] uppercase tracking-[0.18em] text-white/85 lg:text-[13px]">
+          <span className="font-serif-display text-[12px] uppercase tracking-[0.18em] text-primary-foreground/85 lg:text-[13px]">
             Syra <span className="mx-1.5">→</span> Daily Brief
           </span>
 
           <h1
-            className="font-serif-display mt-10 font-normal leading-[1.05] text-white lg:mt-12"
+            className="font-serif-display mt-10 font-normal leading-[1.05] text-primary-foreground lg:mt-12"
             style={{ fontSize: "clamp(34px, 4vw, 56px)" }}
           >
             Welcome back, John.
           </h1>
 
-          <p className="mt-5 max-w-[28rem] text-[14px] leading-relaxed text-white/85 lg:text-[15px]">
+          <p className="mt-5 max-w-[28rem] text-[14px] leading-relaxed text-primary-foreground/85 lg:text-[15px]">
             {summary}
           </p>
 
           <button
             type="button"
             onClick={handleClick}
-            className="mt-24 w-fit rounded-md bg-[#2a2a2e]/90 px-7 py-3 text-[14px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-colors hover:bg-[#3a3a3e]/90"
+            className="mt-24 w-fit rounded-md px-7 py-3 text-[14px] text-primary-foreground shadow-popover backdrop-blur-sm transition-colors [background:var(--hero-brief-cta-bg)] hover:[background:var(--hero-brief-cta-bg-hover)]"
           >
             Read daily brief
           </button>
         </div>
 
         {/* Right zone — white brief document, top-aligned with margin */}
-        <div className="daily-brief-document absolute z-10 hidden overflow-hidden rounded-[6px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] lg:block">
-          <p className="font-sans text-[5px] uppercase tracking-[0.1em] text-neutral-500 whitespace-nowrap">
+        <div className="daily-brief-document absolute z-10 hidden overflow-hidden rounded-[6px] bg-surface shadow-popover lg:block">
+          <p className="font-sans text-[5px] uppercase tracking-[0.1em] text-muted-foreground whitespace-nowrap">
             {brief.date} · {brief.workspace}
           </p>
-          <h2 className="font-serif-display mt-3 text-[18px] font-normal leading-tight text-neutral-900">
+          <h2 className="font-serif-display mt-3 text-[18px] font-normal leading-tight text-surface-foreground">
             daily brief
           </h2>
-          <p className="mt-2 text-[8.5px] leading-relaxed text-neutral-600">{brief.summary}</p>
+          <p className="mt-2 text-[8.5px] leading-relaxed text-muted-foreground">{brief.summary}</p>
 
           <div className="mt-5 grid grid-cols-3 gap-3">
             {brief.stats.map((s) => (
               <div key={s.label}>
-                <div className="text-[14px] font-semibold text-neutral-900">{s.value}</div>
-                <div className="mt-0.5 text-[7px] text-neutral-500">{s.label}</div>
+                <div className="text-[14px] font-semibold text-surface-foreground">{s.value}</div>
+                <div className="mt-0.5 text-[7px] text-muted-foreground">{s.label}</div>
               </div>
             ))}
           </div>
 
-          <p className="font-label mt-5 text-[7px] uppercase tracking-[0.14em] text-neutral-500">
+          <p className="font-label mt-5 text-[7px] uppercase tracking-[0.14em] text-muted-foreground">
             Priorities
           </p>
           <div className="mt-2 flex flex-col gap-2.5">
@@ -147,15 +159,15 @@ export function DailyBriefHero({
                     >
                       {s.label}
                     </span>
-                    <span className="truncate text-[8.5px] font-semibold text-neutral-900">
+                    <span className="truncate text-[8.5px] font-semibold text-surface-foreground">
                       {p.title}
                     </span>
                   </div>
-                  <p className="mt-0.5 pl-[9px] text-[7.5px] leading-snug text-neutral-600">
+                  <p className="mt-0.5 pl-[9px] text-[7.5px] leading-snug text-muted-foreground">
                     {p.description}
                   </p>
                   {p.meta && (
-                    <p className="mt-0.5 pl-[9px] text-[7px] text-neutral-500">{p.meta}</p>
+                    <p className="mt-0.5 pl-[9px] text-[7px] text-muted-foreground">{p.meta}</p>
                   )}
                 </div>
               );

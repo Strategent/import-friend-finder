@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Paperclip, FileText, Inbox, Calendar, ChevronDown, Check } from "lucide-react";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
-import { useTheme } from "@/app/providers/theme-provider";
 
 export const Route = createFileRoute("/syra")({
   component: SyraPage,
@@ -23,23 +22,10 @@ const models = [
 ];
 
 function SyraPage() {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
   const [input, setInput] = useState("");
   const [modelId, setModelId] = useState(models[0].id);
   const [open, setOpen] = useState(false);
   const activeModel = models.find((m) => m.id === modelId) ?? models[0];
-
-  const bgStart = isDark ? "rgb(10, 10, 14)" : "rgb(250, 249, 252)";
-  const bgEnd = isDark ? "rgb(20, 18, 28)" : "rgb(245, 244, 248)";
-  // Light mode: extremely desaturated, subtle gray-lavender blobs so the
-  // animation is visible but never overwhelms the near-white background.
-  const c1 = isDark ? "120, 110, 150" : "225, 223, 230";
-  const c2 = isDark ? "90, 85, 115" : "215, 213, 222";
-  const c3 = isDark ? "140, 130, 170" : "230, 228, 235";
-  const c4 = isDark ? "70, 65, 95" : "210, 208, 218";
-  const c5 = isDark ? "105, 95, 135" : "220, 218, 228";
-  const blending = isDark ? "soft-light" : "normal";
 
   return (
     <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
@@ -51,25 +37,10 @@ function SyraPage() {
       <div className="absolute inset-0 pointer-events-none">
         <BackgroundGradientAnimation
           interactive={false}
-          gradientBackgroundStart={bgStart}
-          gradientBackgroundEnd={bgEnd}
-          firstColor={c1}
-          secondColor={c2}
-          thirdColor={c3}
-          fourthColor={c4}
-          fifthColor={c5}
-          blendingValue={blending}
           size="70%"
           containerClassName="h-full w-full"
         />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: isDark
-              ? "radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 55%)"
-              : "radial-gradient(120% 80% at 50% 100%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 60%), radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 55%)",
-          }}
-        />
+        <div className="absolute inset-0 [background:var(--syra-gradient-vignette)]" />
       </div>
 
       {/* Content */}

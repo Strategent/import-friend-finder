@@ -40,7 +40,7 @@ export const BentoGridItem = ({
   return (
     <div
       className={cn(
-        "group/bento row-span-1 flex flex-col justify-between space-y-4 rounded-xl border border-neutral-200/60 bg-white p-4 shadow-[0_2px_3px_-1px_rgba(0,0,0,0.05),0_1px_0_0_rgba(25,28,33,0.02),0_0_0_1px_rgba(25,28,33,0.08)] transition duration-200 hover:shadow-xl dark:border-white/[0.12] dark:bg-neutral-950 dark:shadow-none",
+        "group/bento row-span-1 flex flex-col justify-between space-y-4 rounded-xl border border-border bg-card p-4 shadow-panel transition duration-200 hover:shadow-popover",
         className,
       )}
     >
@@ -50,14 +50,10 @@ export const BentoGridItem = ({
         <div className="transition duration-200 group-hover/bento:translate-x-1">
           {icon}
           {title && (
-            <div className="mt-2 mb-2 font-sans font-semibold text-neutral-700 dark:text-neutral-200">
-              {title}
-            </div>
+            <div className="mt-2 mb-2 font-sans font-semibold text-foreground">{title}</div>
           )}
           {description && (
-            <div className="font-sans text-xs font-normal text-neutral-600 dark:text-neutral-300">
-              {description}
-            </div>
+            <div className="font-sans text-xs font-normal text-muted-foreground">{description}</div>
           )}
         </div>
       )}

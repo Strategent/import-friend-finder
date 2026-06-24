@@ -77,7 +77,7 @@ function ConnectorsPage() {
             value={requestName}
             onChange={(e) => setRequestName(e.target.value)}
             placeholder="e.g. Salesforce, Xero, Calendly…"
-            className="h-10 px-3 rounded-lg bg-white/[0.03] border border-white/10 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 md:w-72"
+            className="h-10 px-3 rounded-lg bg-surface-raised border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 md:w-72"
           />
           <Button className="h-10 px-4 text-[13px]">Submit request</Button>
         </div>
@@ -91,11 +91,11 @@ function ConnectorsPage() {
                 <div className="flex items-start justify-between">
                   <ConnectorIcon slug={c.slug} name={c.name} />
                   {c.connected ? (
-                    <Badge className="bg-white/[0.06] text-foreground/80 border border-white/10 hover:bg-white/[0.06] gap-1">
+                    <Badge className="bg-surface-raised text-foreground/80 border border-border hover:bg-surface-raised gap-1">
                       <Check className="h-3 w-3" /> Connected
                     </Badge>
                   ) : (
-                    <Badge className="bg-transparent text-muted-foreground border border-white/10 hover:bg-transparent">
+                    <Badge className="bg-transparent text-muted-foreground border border-border hover:bg-transparent">
                       Not connected
                     </Badge>
                   )}
@@ -106,7 +106,7 @@ function ConnectorsPage() {
                 </div>
                 <Button
                   variant="ghost"
-                  className="h-8 px-3 text-[12px] justify-start -ml-3 text-foreground/80 hover:text-foreground hover:bg-white/[0.04] w-fit"
+                  className="h-8 px-3 text-[12px] justify-start -ml-3 text-foreground/80 hover:text-foreground hover:bg-state-hover w-fit"
                 >
                   {c.connected ? "Manage" : "Connect"}
                 </Button>

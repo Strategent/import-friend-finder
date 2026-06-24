@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useTheme } from "@/app/providers/theme-provider";
 import {
   Hash,
   Lock,
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import { avatarUrl } from "@/lib/avatar";
 import { SyraMark } from "@/features/syra/components/syra-mark";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/channels")({
   component: ChannelsPage,
@@ -72,51 +72,16 @@ const messages = [
 
 function ChannelsPage() {
   const [active, setActive] = useState("sales-pipeline");
-  const { theme } = useTheme();
   const [showSyraTip, setShowSyraTip] = useState(true);
 
-  const dark = theme === "dark";
-
-  const palette = dark
-    ? {
-        sidebar: "#1E1525",
-        sidebarHover: "rgba(255,255,255,0.08)",
-        sidebarText: "rgba(255,255,255,0.72)",
-        sidebarHeader: "#1A1D21",
-        chatBg: "#1A1D21",
-        chatBorder: "rgba(255,255,255,0.08)",
-        textPrimary: "#E8E8E8",
-        textMuted: "rgba(232,232,232,0.55)",
-        inputBg: "#222529",
-        hover: "rgba(255,255,255,0.04)",
-      }
-    : {
-        sidebar: "#3F0E40",
-        sidebarHover: "rgba(255,255,255,0.12)",
-        sidebarText: "rgba(255,255,255,0.85)",
-        sidebarHeader: "#FFFFFF",
-        chatBg: "#FFFFFF",
-        chatBorder: "rgba(0,0,0,0.08)",
-        textPrimary: "#1D1C1D",
-        textMuted: "rgba(29,28,29,0.6)",
-        inputBg: "#FFFFFF",
-        hover: "rgba(0,0,0,0.04)",
-      };
-
   return (
-    <div
-      className="w-full overflow-hidden"
-      style={{ height: "calc(100dvh - 53px)", background: palette.chatBg }}
-    >
+    <div className="w-full overflow-hidden bg-background" style={{ height: "calc(100dvh - 53px)" }}>
       <div className="grid grid-cols-12 h-full w-full">
         {/* Workspace sidebar */}
-        <aside
-          className="col-span-12 md:col-span-3 lg:col-span-3 flex flex-col"
-          style={{ background: palette.sidebar, color: palette.sidebarText }}
-        >
+        <aside className="col-span-12 flex flex-col bg-sidebar text-sidebar-foreground md:col-span-3 lg:col-span-3">
           {/* Workspace header */}
           <div className="flex items-center justify-between px-4 py-3">
-            <button className="flex items-center gap-1 text-white font-semibold text-[12.5px] whitespace-nowrap truncate min-w-0">
+            <button className="flex min-w-0 items-center gap-1 truncate whitespace-nowrap text-[12.5px] font-semibold text-sidebar-foreground">
               <span className="truncate">Harwick &amp; Sterne</span>
               <ChevronDown className="h-3 w-3 shrink-0" />
             </button>
@@ -131,10 +96,7 @@ function ChannelsPage() {
             ].map((l) => (
               <button
                 key={l.label}
-                className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md transition-colors"
-                style={{ color: palette.sidebarText }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = palette.sidebarHover)}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
               >
                 <l.icon className="h-3.5 w-3.5 opacity-80" />
                 {l.label}
@@ -144,7 +106,7 @@ function ChannelsPage() {
 
           {/* Channels */}
           <div className="px-2 mt-3">
-            <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-white/45">
+            <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-sidebar-foreground/45">
               <span>Channels</span>
               <button className="opacity-70 hover:opacity-100">
                 <Plus className="h-3 w-3" />
@@ -157,18 +119,14 @@ function ChannelsPage() {
                   <button
                     key={c.name}
                     onClick={() => setActive(c.name)}
-                    className="w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px] transition-colors"
-                    style={{
-                      background: isActive ? "#1164A3" : "transparent",
-                      color: isActive ? "#FFFFFF" : c.unread ? "#FFFFFF" : palette.sidebarText,
-                      fontWeight: c.unread && !isActive ? 700 : 400,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) e.currentTarget.style.background = palette.sidebarHover;
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) e.currentTarget.style.background = "transparent";
-                    }}
+                    className={cn(
+                      "w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px] transition-colors",
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : c.unread
+                          ? "font-bold text-sidebar-foreground hover:bg-sidebar-accent"
+                          : "font-normal text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                    )}
                   >
                     {c.private ? (
                       <Lock className="h-3 w-3" />
@@ -177,7 +135,7 @@ function ChannelsPage() {
                     )}
                     <span className="flex-1 text-left truncate">{c.name}</span>
                     {c.unread > 0 && (
-                      <span className="text-[11px] font-semibold rounded-full bg-[#CB2431] text-white px-1.5 min-w-[18px] text-center">
+                      <span className="min-w-[18px] rounded-full bg-status-danger px-1.5 text-center text-[11px] font-semibold text-primary-foreground">
                         {c.unread}
                       </span>
                     )}
@@ -189,7 +147,7 @@ function ChannelsPage() {
 
           {/* DMs */}
           <div className="px-2 mt-4">
-            <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-white/45">
+            <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-sidebar-foreground/45">
               <span>Direct messages</span>
               <button className="opacity-70 hover:opacity-100">
                 <Plus className="h-3 w-3" />
@@ -199,10 +157,7 @@ function ChannelsPage() {
               {dms.map((d) => (
                 <button
                   key={d.name}
-                  className="w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px]"
-                  style={{ color: palette.sidebarText }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = palette.sidebarHover)}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                  className="w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px] text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
                 >
                   <span className="relative">
                     {d.status === "ai" ? (
@@ -210,19 +165,19 @@ function ChannelsPage() {
                     ) : (
                       <>
                         <span
-                          className="h-2 w-2 rounded-full inline-block"
-                          style={{
-                            background: d.status === "active" ? "#2BAC76" : "transparent",
-                            border:
-                              d.status === "active" ? "none" : "1.5px solid rgba(255,255,255,0.5)",
-                          }}
+                          className={cn(
+                            "inline-block h-2 w-2 rounded-full border",
+                            d.status === "active"
+                              ? "border-status-success bg-status-success"
+                              : "border-sidebar-foreground/50 bg-transparent",
+                          )}
                         />
                       </>
                     )}
                   </span>
                   <span className="flex-1 text-left truncate">{d.name}</span>
                   {d.name === "Syra" && (
-                    <span className="text-[9.5px] px-1.5 py-px rounded bg-white/10 text-white/80">
+                    <span className="rounded bg-sidebar-accent px-1.5 py-px text-[9.5px] text-sidebar-foreground/80">
                       AI
                     </span>
                   )}
@@ -233,24 +188,15 @@ function ChannelsPage() {
         </aside>
 
         {/* Main pane */}
-        <main
-          className="col-span-12 md:col-span-9 lg:col-span-9 flex flex-col min-w-0"
-          style={{ background: palette.chatBg, color: palette.textPrimary }}
-        >
+        <main className="col-span-12 flex min-w-0 flex-col bg-background text-foreground md:col-span-9 lg:col-span-9">
           {/* Channel header */}
-          <div
-            className="flex items-center justify-between px-5 py-3 border-b"
-            style={{ borderColor: palette.chatBorder }}
-          >
+          <div className="flex items-center justify-between border-b border-border px-5 py-3">
             <div className="flex items-center gap-2 min-w-0">
-              <Hash className="h-4 w-4" style={{ color: palette.textMuted }} />
+              <Hash className="h-4 w-4 text-muted-foreground" />
               <div className="font-bold text-[15px] truncate">{active}</div>
-              <ChevronDown className="h-3.5 w-3.5" style={{ color: palette.textMuted }} />
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
-            <div
-              className="hidden md:flex items-center gap-2 rounded-md border px-2 py-1 text-[12px]"
-              style={{ borderColor: palette.chatBorder, color: palette.textMuted }}
-            >
+            <div className="hidden items-center gap-2 rounded-md border border-border px-2 py-1 text-[12px] text-muted-foreground md:flex">
               <Search className="h-3.5 w-3.5" />
               <span>Search {active}</span>
             </div>
@@ -258,36 +204,18 @@ function ChannelsPage() {
 
           {/* Syra mention tip card */}
           {showSyraTip && (
-            <div
-              className="mx-4 mt-3 rounded-lg border p-3.5 flex items-start gap-3"
-              style={{
-                borderColor: palette.chatBorder,
-                background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
-              }}
-            >
+            <div className="mx-4 mt-3 flex items-start gap-3 rounded-lg border border-border bg-surface-raised p-3.5">
               <SyraMark size={36} className="shrink-0 rounded-md" />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-[13.5px] font-semibold">Talk to Syra in any channel</span>
-                  <span
-                    className="text-[10px] px-1.5 py-0.5 rounded"
-                    style={{
-                      background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-                      color: palette.textMuted,
-                    }}
-                  >
+                  <span className="rounded bg-state-hover px-1.5 py-0.5 text-[10px] text-muted-foreground">
                     AI
                   </span>
                 </div>
-                <p className="text-[12.5px] mt-0.5" style={{ color: palette.textMuted }}>
+                <p className="mt-0.5 text-[12.5px] text-muted-foreground">
                   Mention{" "}
-                  <span
-                    className="inline-flex items-center rounded px-1 font-medium"
-                    style={{
-                      background: dark ? "rgba(29,155,209,0.18)" : "rgba(29,155,209,0.12)",
-                      color: dark ? "#79C0FF" : "#1264A3",
-                    }}
-                  >
+                  <span className="inline-flex items-center rounded bg-status-info/15 px-1 font-medium text-status-info">
                     @Syra
                   </span>{" "}
                   in a message to delegate tasks — draft replies, pull data, schedule meetings, or
@@ -296,8 +224,7 @@ function ChannelsPage() {
               </div>
               <button
                 onClick={() => setShowSyraTip(false)}
-                className="shrink-0 grid h-6 w-6 place-items-center rounded-md hover:bg-black/5"
-                style={{ color: palette.textMuted }}
+                className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-state-hover"
                 aria-label="Dismiss"
               >
                 <X className="h-3.5 w-3.5" />
@@ -323,38 +250,19 @@ function ChannelsPage() {
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
-                      <div className="font-bold text-[14px]" style={{ color: palette.textPrimary }}>
-                        {m.user}
-                      </div>
+                      <div className="text-[14px] font-bold">{m.user}</div>
                       {isAi && (
-                        <span
-                          className="text-[10px] px-1.5 py-0.5 rounded"
-                          style={{
-                            background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-                            color: palette.textMuted,
-                          }}
-                        >
+                        <span className="rounded bg-state-hover px-1.5 py-0.5 text-[10px] text-muted-foreground">
                           APP
                         </span>
                       )}
-                      <div className="text-[11.5px]" style={{ color: palette.textMuted }}>
-                        {m.time}
-                      </div>
+                      <div className="text-[11.5px] text-muted-foreground">{m.time}</div>
                     </div>
-                    <div
-                      className="text-[14px] mt-0.5 leading-relaxed"
-                      style={{ color: palette.textPrimary }}
-                    >
+                    <div className="mt-0.5 text-[14px] leading-relaxed">
                       {m.mentionsSyra ? (
                         <>
                           {m.text.split("@Syra")[0]}
-                          <span
-                            className="inline-flex items-center rounded px-1 font-medium"
-                            style={{
-                              background: dark ? "rgba(29,155,209,0.18)" : "rgba(29,155,209,0.12)",
-                              color: dark ? "#79C0FF" : "#1264A3",
-                            }}
-                          >
+                          <span className="inline-flex items-center rounded bg-status-info/15 px-1 font-medium text-status-info">
                             @Syra
                           </span>
                           {m.text.split("@Syra")[1]}
@@ -371,36 +279,31 @@ function ChannelsPage() {
 
           {/* Composer */}
           <div className="px-4 pb-4">
-            <div
-              className="rounded-lg border"
-              style={{ borderColor: palette.chatBorder, background: palette.inputBg }}
-            >
+            <div className="rounded-lg border border-border bg-surface-raised">
               <input
                 placeholder={`Message #${active}`}
                 className="w-full bg-transparent px-3.5 pt-3 pb-2 text-[14px] focus:outline-none"
-                style={{ color: palette.textPrimary }}
               />
               <div className="flex items-center justify-between px-2 pb-2">
-                <div className="flex items-center gap-0.5" style={{ color: palette.textMuted }}>
+                <div className="flex items-center gap-0.5 text-muted-foreground">
                   {[Plus, Paperclip, AtSign, Smile].map((Ic, idx) => (
                     <button
                       key={idx}
-                      className="grid h-7 w-7 place-items-center rounded-md hover:bg-black/10 transition-colors"
+                      className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-state-hover"
                     >
                       <Ic className="h-3.5 w-3.5" />
                     </button>
                   ))}
                 </div>
                 <button
-                  className="grid h-7 w-7 place-items-center rounded-md text-white"
-                  style={{ background: "#007A5A" }}
+                  className="grid h-7 w-7 place-items-center rounded-md bg-status-success text-primary-foreground"
                   aria-label="Send"
                 >
                   <Send className="h-3.5 w-3.5" />
                 </button>
               </div>
             </div>
-            <div className="mt-1.5 text-[11px]" style={{ color: palette.textMuted }}>
+            <div className="mt-1.5 text-[11px] text-muted-foreground">
               Tip: type <span className="font-semibold">@Syra</span> to delegate a task.
             </div>
           </div>

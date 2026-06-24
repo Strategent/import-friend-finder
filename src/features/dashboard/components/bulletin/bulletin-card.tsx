@@ -64,14 +64,16 @@ function Sparkline({ data, up }: { data: number[]; up: boolean }) {
     const area = `${path} L${w},${h} L0,${h} Z`;
     return { path, area, w, h };
   }, [data]);
-  const stroke = up ? "rgba(134,239,172,0.95)" : "rgba(252,165,165,0.95)";
-  const fillTop = up ? "rgba(134,239,172,0.18)" : "rgba(252,165,165,0.18)";
+  const stroke = up ? "var(--status-success)" : "var(--status-danger)";
+  const fillTop = up
+    ? "color-mix(in oklab, var(--status-success) 18%, transparent)"
+    : "color-mix(in oklab, var(--status-danger) 18%, transparent)";
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-full w-full">
       <defs>
         <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor={fillTop} />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+          <stop offset="100%" stopColor="transparent" />
         </linearGradient>
       </defs>
       <path d={area} fill="url(#spark-fill)" />
@@ -131,8 +133,8 @@ export function BulletinCard() {
       action={
         <span className="inline-flex items-center gap-1.5 text-[10.5px] tabular-nums text-muted-foreground/80">
           <span className="relative grid h-1.5 w-1.5 place-items-center">
-            <span className="absolute inset-0 animate-ping rounded-full bg-foreground/30" />
-            <span className="relative h-1.5 w-1.5 rounded-full bg-foreground/70" />
+            <span className="absolute inset-0 animate-ping rounded-full bg-status-info-bg" />
+            <span className="relative h-1.5 w-1.5 rounded-full bg-status-info" />
           </span>
           <span suppressHydrationWarning>{clock || "—"} ET</span>
         </span>
@@ -151,7 +153,7 @@ export function BulletinCard() {
           </div>
           <div
             className={`text-right text-[11px] font-medium leading-tight tabular-nums ${
-              spxUp ? "text-emerald-300/90" : "text-rose-300/90"
+              spxUp ? "text-status-success/90" : "text-status-danger/90"
             }`}
           >
             <div>
@@ -198,7 +200,7 @@ export function BulletinCard() {
                 </div>
                 <div
                   className={`text-[10.5px] font-medium tabular-nums ${
-                    up ? "text-emerald-300/85" : "text-rose-300/85"
+                    up ? "text-status-success/85" : "text-status-danger/85"
                   }`}
                 >
                   {up ? "+" : ""}

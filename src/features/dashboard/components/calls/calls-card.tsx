@@ -55,10 +55,10 @@ export function CallsCard() {
       label="Call handling"
       bodyClassName="gap-4"
       action={
-        <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-border/60 bg-foreground/[0.04] px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-border/60 bg-surface-raised px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           <span className="relative grid h-1.5 w-1.5 place-items-center">
-            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-            <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="absolute inset-0 animate-ping rounded-full bg-status-success/60" />
+            <span className="relative h-1.5 w-1.5 rounded-full bg-status-success" />
           </span>
           On call
         </span>
@@ -67,7 +67,7 @@ export function CallsCard() {
       {/* Live call header — single avatar, no inner card */}
       <div className="flex shrink-0 flex-col gap-3">
         <div className="flex items-center gap-3">
-          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[15px] font-semibold tracking-tight text-foreground/90">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-border bg-surface-raised text-[15px] font-semibold tracking-tight text-foreground/90">
             MV
           </div>
           <div className="min-w-0 flex-1">
@@ -123,8 +123,8 @@ export function CallsCard() {
                 <div
                   className={`max-w-[80%] rounded-2xl px-3 py-1.5 text-[12px] leading-snug ${
                     line.who === "agent"
-                      ? "bg-foreground/[0.10] text-foreground/95"
-                      : "bg-foreground/[0.04] text-foreground/85"
+                      ? "bg-state-selected text-foreground/95"
+                      : "bg-surface-raised text-foreground/85"
                   }`}
                 >
                   {line.text}
@@ -141,8 +141,8 @@ export function CallsCard() {
                 <span
                   className={`grid h-5 w-5 shrink-0 place-items-center rounded-full ${
                     f.done
-                      ? "bg-foreground/[0.08] text-foreground/80"
-                      : "bg-emerald-500/10 text-emerald-400"
+                      ? "bg-state-selected text-foreground/80"
+                      : "bg-status-success-bg text-status-success"
                   }`}
                 >
                   {f.done ? (
@@ -168,7 +168,7 @@ export function CallsCard() {
                 </div>
                 <div
                   className={`min-w-0 flex-1 truncate text-[12px] ${
-                    f.done ? "text-foreground/90" : "text-emerald-400"
+                    f.done ? "text-foreground/90" : "text-status-success"
                   }`}
                 >
                   {f.value}
@@ -185,7 +185,7 @@ function CallAction({ icon: Icon, label }: { icon: typeof Mic; label: string }) 
     <button
       aria-label={label}
       title={label}
-      className="grid h-11 w-11 place-items-center rounded-full border border-border bg-foreground/[0.06] text-foreground/90 transition-colors hover:bg-foreground/[0.12]"
+      className="grid h-11 w-11 place-items-center rounded-full border border-border bg-surface-raised text-foreground/90 transition-colors hover:bg-surface-hover"
     >
       <Icon className="h-4 w-4" strokeWidth={1.75} />
     </button>

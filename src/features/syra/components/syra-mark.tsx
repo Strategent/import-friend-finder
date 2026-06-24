@@ -21,10 +21,8 @@ export function SyraMark({
       style={{
         height: size,
         width: size,
-        background: "radial-gradient(circle at 30% 25%, #3a3a40 0%, #1f1f24 60%, #141418 100%)",
-        boxShadow: flat
-          ? undefined
-          : "0 1px 0 0 rgba(255,255,255,0.08) inset, 0 4px 12px -4px rgba(0,0,0,0.5)",
+        background: "var(--syra-mark-bg)",
+        boxShadow: flat ? undefined : "var(--syra-mark-shadow)",
       }}
     >
       <img

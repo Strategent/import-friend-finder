@@ -38,7 +38,10 @@ function TasksPage() {
         title="Tasks"
         description="Human + agent work, tracked together."
         actions={
-          <Button className="text-white border-0" style={{ background: "var(--gradient-primary)" }}>
+          <Button
+            className="text-primary-foreground border-0"
+            style={{ background: "var(--gradient-primary)" }}
+          >
             <Plus className="h-4 w-4 mr-2" /> New Task
           </Button>
         }
@@ -54,7 +57,7 @@ function TasksPage() {
               {g.items.map((t, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.04]"
+                  className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-state-hover"
                 >
                   <Checkbox defaultChecked={t.done} />
                   <div
@@ -63,7 +66,7 @@ function TasksPage() {
                     {t.title}
                   </div>
                   <Badge
-                    className={`border ${t.priority === "High" ? "bg-accent/15 text-accent border-accent/30" : t.priority === "Med" ? "bg-primary/15 text-primary border-primary/30" : "bg-white/5 text-muted-foreground border-border/60"}`}
+                    className={`border ${t.priority === "High" ? "bg-status-danger-bg text-status-danger-fg border-status-danger-border" : t.priority === "Med" ? "bg-status-warning-bg text-status-warning-fg border-status-warning-border" : "bg-surface-raised text-muted-foreground border-border/60"}`}
                   >
                     {t.priority}
                   </Badge>

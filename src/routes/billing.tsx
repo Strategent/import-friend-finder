@@ -26,7 +26,10 @@ function BillingPage() {
         title="Billing"
         description="Subscriptions, invoices and payouts."
         actions={
-          <Button className="text-white border-0" style={{ background: "var(--gradient-primary)" }}>
+          <Button
+            className="text-primary-foreground border-0"
+            style={{ background: "var(--gradient-primary)" }}
+          >
             <CreditCard className="h-4 w-4 mr-2" /> New Invoice
           </Button>
         }
@@ -58,7 +61,7 @@ function BillingPage() {
           {invoices.map((inv) => (
             <div
               key={inv.id}
-              className="grid grid-cols-12 items-center px-5 py-3 text-[13px] hover:bg-white/[0.03]"
+              className="grid grid-cols-12 items-center px-5 py-3 text-[13px] hover:bg-state-hover"
             >
               <div className="col-span-3 font-mono text-muted-foreground">{inv.id}</div>
               <div className="col-span-4 font-medium">{inv.client}</div>

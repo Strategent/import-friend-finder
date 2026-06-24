@@ -71,10 +71,10 @@ function SettingsPage() {
             ].map((u) => (
               <div
                 key={u.name}
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-state-hover"
               >
                 <div
-                  className="h-8 w-8 rounded-full grid place-items-center text-[11px] font-semibold"
+                  className="h-8 w-8 rounded-full grid place-items-center text-[11px] font-semibold text-primary-foreground"
                   style={{ background: "var(--gradient-primary)" }}
                 >
                   {u.name
@@ -83,7 +83,7 @@ function SettingsPage() {
                     .join("")}
                 </div>
                 <div className="text-[13px] flex-1">{u.name}</div>
-                <Badge className="bg-black/5 dark:bg-white/5 text-muted-foreground border border-border/60">
+                <Badge className="bg-surface-raised text-muted-foreground border border-border/60">
                   {u.role}
                 </Badge>
               </div>

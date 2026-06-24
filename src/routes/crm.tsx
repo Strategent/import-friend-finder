@@ -252,7 +252,7 @@ function CrmPage() {
               <Filter className="h-4 w-4 mr-2" /> Filter
             </Button>
             <Button
-              className="text-white border-0"
+              className="text-primary-foreground border-0"
               style={{ background: "var(--gradient-primary)" }}
             >
               <Plus className="h-4 w-4 mr-2" /> New client
@@ -297,7 +297,7 @@ function CrmPage() {
                 onClick={() => setStage(s)}
                 className={`h-7 px-3 rounded-full text-[11px] font-medium transition-colors ${
                   stage === s
-                    ? "bg-foreground text-background"
+                    ? "bg-surface text-surface-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -320,7 +320,7 @@ function CrmPage() {
                     type="checkbox"
                     checked={allChecked}
                     onChange={toggleAll}
-                    className="h-3.5 w-3.5 accent-foreground cursor-pointer"
+                    className="h-3.5 w-3.5 accent-primary cursor-pointer"
                   />
                 </th>
                 <th className="py-3 px-2 w-6"></th>
@@ -355,7 +355,7 @@ function CrmPage() {
                         type="checkbox"
                         checked={checked}
                         onChange={() => toggle(c.id)}
-                        className="h-3.5 w-3.5 accent-foreground cursor-pointer"
+                        className="h-3.5 w-3.5 accent-primary cursor-pointer"
                       />
                     </td>
                     <td className="py-3 px-2">
@@ -366,7 +366,7 @@ function CrmPage() {
                     <td className="py-3 px-2">
                       <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className="h-8 w-8 shrink-0 rounded-full grid place-items-center text-[11px] font-semibold text-white"
+                          className="h-8 w-8 shrink-0 rounded-full grid place-items-center text-[11px] font-semibold text-primary-foreground"
                           style={{ background: "var(--gradient-primary)" }}
                         >
                           {c.name
@@ -416,19 +416,19 @@ function CrmPage() {
                     <td className="py-3 px-2 pr-4">
                       <div className="flex items-center justify-end gap-1">
                         <button
-                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]"
+                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover"
                           aria-label="Call"
                         >
                           <Phone className="h-3.5 w-3.5" />
                         </button>
                         <button
-                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]"
+                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover"
                           aria-label="Email"
                         >
                           <Mail className="h-3.5 w-3.5" />
                         </button>
                         <button
-                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]"
+                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover"
                           aria-label="More"
                         >
                           <MoreHorizontal className="h-3.5 w-3.5" />

@@ -12,11 +12,10 @@ const pillVariants = cva(
   {
     variants: {
       variant: {
-        primary:
-          "bg-white text-black border border-black/10 dark:border-transparent hover:bg-white/90",
+        primary: "bg-surface text-surface-foreground border border-border hover:bg-surface-hover",
         secondary:
-          "border border-white/12 bg-white/[0.08] text-foreground/90 backdrop-blur-sm hover:bg-white/[0.13]",
-        brand: "text-white",
+          "border border-border bg-surface-raised text-foreground/90 backdrop-blur-sm hover:bg-surface-hover",
+        brand: "text-primary-foreground",
       },
       size: {
         sm: "h-8 px-4 text-[12.5px]",

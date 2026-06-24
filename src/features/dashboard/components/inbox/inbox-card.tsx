@@ -112,7 +112,7 @@ export function InboxCard() {
                 key={m.originalIndex}
                 onClick={() => setSelected(i)}
                 className={`relative flex items-start gap-2.5 px-3 py-1.5 text-left transition-colors ${
-                  active ? "bg-primary/[0.08]" : "hover:bg-foreground/[0.035]"
+                  active ? "bg-state-selected" : "hover:bg-state-hover"
                 }`}
               >
                 {active && (
@@ -164,7 +164,7 @@ export function InboxCard() {
             </h2>
             <button
               aria-label="Flag"
-              className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+              className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"
             >
               <Star className="h-3.5 w-3.5" strokeWidth={1.75} />
             </button>
@@ -206,8 +206,8 @@ export function InboxCard() {
 
           {/* Reply composer */}
           {isSent ? (
-            <div className="m-3 mt-2 flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.06] px-3 py-2.5">
-              <span className="grid h-5 w-5 place-items-center rounded-full bg-emerald-500/20 text-emerald-400">
+            <div className="m-3 mt-2 flex shrink-0 items-center gap-2 rounded-lg border border-status-success-border bg-status-success-bg px-3 py-2.5">
+              <span className="grid h-5 w-5 place-items-center rounded-full bg-status-success-bg text-status-success">
                 <Check className="h-3 w-3" strokeWidth={2.5} />
               </span>
               <span className="text-[11.5px] text-foreground/85">
@@ -217,7 +217,7 @@ export function InboxCard() {
               </span>
             </div>
           ) : (
-            <div className="m-3 mt-2 shrink-0 rounded-lg border border-border/60 bg-foreground/[0.02]">
+            <div className="m-3 mt-2 shrink-0 rounded-lg border border-border/60 bg-surface-raised">
               <div className="flex items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10.5px] text-muted-foreground">
                 <span>
                   Reply to <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
@@ -254,7 +254,7 @@ function IconBtn({ icon: Icon, label }: { icon: typeof Reply; label: string }) {
     <button
       aria-label={label}
       title={label}
-      className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+      className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"
     >
       <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
     </button>

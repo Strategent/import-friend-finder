@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export const CardSpotlight = ({
   children,
   radius = 350,
-  color = "#262626",
+  color = "color-mix(in oklab, var(--primary) 16%, transparent)",
   className,
   ...props
 }: {
@@ -29,7 +29,7 @@ export const CardSpotlight = ({
   return (
     <div
       className={cn(
-        "group/spotlight relative rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-black/40",
+        "group/spotlight relative rounded-2xl border border-border bg-card p-5",
         className,
       )}
       onMouseMove={handleMouseMove}
