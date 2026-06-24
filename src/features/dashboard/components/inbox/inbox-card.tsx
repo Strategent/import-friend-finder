@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucide-react";
-import { Panel } from "@/components/ui/panel";
-import { PillButton } from "@/components/ui/pill-button";
+import { Panel } from "@/components/app/panel";
+import { PillButton } from "@/components/app/pill-button";
 import { emails } from "@/features/dashboard/components/data";
 import { avatarUrl, senderEmailAddress } from "@/lib/avatar";
 

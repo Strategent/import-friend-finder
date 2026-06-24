@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Panel } from "@/components/ui/panel";
+import { Panel } from "@/components/app/panel";
 
 /**
  * MarketsCard — sleek monochrome market widget: one S&P 500 sparkline up top,

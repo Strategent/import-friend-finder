@@ -1,8 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { PageSurface, PageBandHeader, StatStrip, PageToolbar, PageBody } from "@/app/shell/layout";
+import { PageSurface, PageBandHeader, PageToolbar, PageBody } from "@/app/shell/layout";
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
-import { Plus, Filter, Search, ArrowUpDown, MoreHorizontal, Star, Phone, Mail } from "lucide-react";
+import {
+  ActionMenu,
+  DataTable,
+  type DataTableColumn,
+  EmptyState,
+  FilterBar,
+  IconButton,
+  MetricStrip,
+  SearchField,
+  StatusBadge,
+  type StatusBadgeVariant,
+} from "@/components/app";
+import { Plus, Filter, ArrowUpDown, Star, Phone, Mail, FileText } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/crm")({
@@ -12,27 +24,12 @@ export const Route = createFileRoute("/crm")({
 
 type Stage = "Lead" | "Qualified" | "Proposal" | "Negotiation" | "Closed";
 
-const stageStyle: Record<Stage, { dot: string; chip: string }> = {
-  Lead: {
-    dot: "var(--status-lead)",
-    chip: "bg-status-lead-bg text-status-lead-fg border-status-lead-border",
-  },
-  Qualified: {
-    dot: "var(--status-qualified)",
-    chip: "bg-status-qualified-bg text-status-qualified-fg border-status-qualified-border",
-  },
-  Proposal: {
-    dot: "var(--status-proposal)",
-    chip: "bg-status-proposal-bg text-status-proposal-fg border-status-proposal-border",
-  },
-  Negotiation: {
-    dot: "var(--status-negotiation)",
-    chip: "bg-status-negotiation-bg text-status-negotiation-fg border-status-negotiation-border",
-  },
-  Closed: {
-    dot: "var(--status-closed)",
-    chip: "bg-status-closed-bg text-status-closed-fg border-status-closed-border",
-  },
+const stageVariant: Record<Stage, StatusBadgeVariant> = {
+  Lead: "lead",
+  Qualified: "qualified",
+  Proposal: "proposal",
+  Negotiation: "negotiation",
+  Closed: "closed",
 };
 
 type Client = {
@@ -175,6 +172,7 @@ const clients: Client[] = [
 ];
 
 const STAGES: ("All" | Stage)[] = ["All", "Lead", "Qualified", "Proposal", "Negotiation", "Closed"];
+const stageOptions = STAGES.map((s) => ({ value: s, label: s }));
 
 function fmtAum(v: number) {
   if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
@@ -231,6 +229,106 @@ function CrmPage() {
     });
   };
 
+  const columns: DataTableColumn<Client>[] = [
+    {
+      id: "starred",
+      header: "",
+      className: "w-6",
+      headerClassName: "w-6",
+      cell: (c) => (
+        <Star
+          className={`h-3.5 w-3.5 ${c.starred ? "fill-status-warning text-status-warning" : "text-muted-foreground/40"}`}
+        />
+      ),
+    },
+    {
+      id: "client",
+      header: (
+        <span className="inline-flex items-center gap-1">
+          Client <ArrowUpDown className="h-3 w-3 opacity-50" />
+        </span>
+      ),
+      cell: (c) => (
+        <div className="flex min-w-0 items-center gap-3">
+          <div
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-primary-foreground"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            {c.name
+              .split(" ")
+              .map((n) => n[0])
+              .slice(0, 2)
+              .join("")}
+          </div>
+          <div className="min-w-0">
+            <div className="truncate font-medium text-foreground/95">{c.name}</div>
+            <div className="truncate text-[11px] text-muted-foreground">{c.company}</div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "stage",
+      header: "Stage",
+      cell: (c) => <StatusBadge variant={stageVariant[c.stage]}>{c.stage}</StatusBadge>,
+    },
+    {
+      id: "aum",
+      header: (
+        <span className="inline-flex items-center gap-1">
+          AUM <ArrowUpDown className="h-3 w-3 opacity-50" />
+        </span>
+      ),
+      align: "right",
+      className: "font-semibold tabular-nums",
+      cell: (c) => fmtAum(c.aum),
+    },
+    {
+      id: "owner",
+      header: "Owner",
+      cell: (c) => (
+        <div className="flex items-center gap-2">
+          <div className="grid h-6 w-6 place-items-center rounded-full border border-border bg-muted text-[10px] font-semibold text-foreground/80">
+            {c.owner.initials}
+          </div>
+          <div className="truncate text-[12px] text-foreground/80">{c.owner.name}</div>
+        </div>
+      ),
+    },
+    {
+      id: "lastContact",
+      header: "Last contact",
+      className: "whitespace-nowrap text-[12px] text-muted-foreground",
+      cell: (c) => c.lastContact,
+    },
+    {
+      id: "nextAction",
+      header: "Next action",
+      className: "max-w-[220px] truncate text-[12px] text-foreground/80",
+      cell: (c) => c.nextAction,
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      align: "right",
+      headerClassName: "w-24 pr-4",
+      className: "pr-4",
+      cell: () => (
+        <div className="flex items-center justify-end gap-1">
+          <IconButton label="Call" icon={Phone} />
+          <IconButton label="Email" icon={Mail} />
+          <ActionMenu
+            actions={[
+              { label: "Open profile", icon: FileText },
+              { label: "Call", icon: Phone },
+              { label: "Email", icon: Mail },
+            ]}
+          />
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <PageSurface variant="flush">
@@ -253,8 +351,8 @@ function CrmPage() {
           }
         />
 
-        <StatStrip
-          stats={[
+        <MetricStrip
+          metrics={[
             { label: "Total clients", value: clients.length.toString() },
             { label: "Showing", value: totals.count.toString() },
             { label: "Open relationships", value: totals.open.toString() },
@@ -263,172 +361,41 @@ function CrmPage() {
         />
 
         <PageToolbar>
-          <div className="relative flex-1 min-w-[220px] max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search clients, companies, email…"
-              className="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-raised border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-focus"
-            />
-          </div>
-          <div className="flex items-center gap-1 p-0.5 rounded-full bg-surface-raised border border-border">
-            {STAGES.map((s) => (
-              <button
-                key={s}
-                onClick={() => setStage(s)}
-                className={`h-7 px-3 rounded-full text-[11px] font-medium transition-colors ${
-                  stage === s
-                    ? "bg-surface text-surface-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
+          <SearchField
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onClear={() => setQuery("")}
+            placeholder="Search clients, companies, email..."
+            containerClassName="max-w-md"
+          />
+          <FilterBar
+            ariaLabel="Client stage"
+            value={stage}
+            options={stageOptions}
+            onValueChange={setStage}
+          />
           {selected.size > 0 && (
             <div className="text-[11px] text-muted-foreground">{selected.size} selected</div>
           )}
         </PageToolbar>
 
         {/* Table — full width, no card */}
-        <PageBody className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground border-b border-border/60 bg-table-header">
-              <tr>
-                <th className="py-3 pl-4 pr-2 w-8">
-                  <input
-                    type="checkbox"
-                    checked={allChecked}
-                    onChange={toggleAll}
-                    className="h-3.5 w-3.5 accent-primary cursor-pointer"
-                  />
-                </th>
-                <th className="py-3 px-2 w-6"></th>
-                <th className="py-3 px-2">
-                  <span className="inline-flex items-center gap-1">
-                    Client <ArrowUpDown className="h-3 w-3 opacity-50" />
-                  </span>
-                </th>
-                <th className="py-3 px-2">Stage</th>
-                <th className="py-3 px-2 text-right">
-                  <span className="inline-flex items-center gap-1">
-                    AUM <ArrowUpDown className="h-3 w-3 opacity-50" />
-                  </span>
-                </th>
-                <th className="py-3 px-2">Owner</th>
-                <th className="py-3 px-2">Last contact</th>
-                <th className="py-3 px-2">Next action</th>
-                <th className="py-3 px-2 w-24 text-right pr-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-[13px]">
-              {filtered.map((c) => {
-                const checked = selected.has(c.id);
-                const sty = stageStyle[c.stage];
-                return (
-                  <tr
-                    key={c.id}
-                    className={`border-b border-border/40 hover:bg-table-row-hover transition-colors ${checked ? "bg-table-row-selected" : ""}`}
-                  >
-                    <td className="py-3 pl-4 pr-2">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggle(c.id)}
-                        className="h-3.5 w-3.5 accent-primary cursor-pointer"
-                      />
-                    </td>
-                    <td className="py-3 px-2">
-                      <Star
-                        className={`h-3.5 w-3.5 ${c.starred ? "text-status-warning fill-status-warning" : "text-muted-foreground/40"}`}
-                      />
-                    </td>
-                    <td className="py-3 px-2">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div
-                          className="h-8 w-8 shrink-0 rounded-full grid place-items-center text-[11px] font-semibold text-primary-foreground"
-                          style={{ background: "var(--gradient-primary)" }}
-                        >
-                          {c.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .slice(0, 2)
-                            .join("")}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="font-medium text-foreground/95 truncate">{c.name}</div>
-                          <div className="text-[11px] text-muted-foreground truncate">
-                            {c.company}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-3 px-2">
-                      <span
-                        className={`inline-flex items-center gap-1.5 h-6 px-2 rounded-full text-[10px] font-medium border ${sty.chip}`}
-                      >
-                        <span
-                          className="h-1.5 w-1.5 rounded-full"
-                          style={{ background: sty.dot }}
-                        />
-                        {c.stage}
-                      </span>
-                    </td>
-                    <td className="py-3 px-2 text-right font-semibold tabular-nums">
-                      {fmtAum(c.aum)}
-                    </td>
-                    <td className="py-3 px-2">
-                      <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 rounded-full grid place-items-center text-[10px] font-semibold bg-muted text-foreground/80 border border-border">
-                          {c.owner.initials}
-                        </div>
-                        <div className="text-[12px] text-foreground/80 truncate">
-                          {c.owner.name}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-3 px-2 text-[12px] text-muted-foreground whitespace-nowrap">
-                      {c.lastContact}
-                    </td>
-                    <td className="py-3 px-2 text-[12px] text-foreground/80 truncate max-w-[220px]">
-                      {c.nextAction}
-                    </td>
-                    <td className="py-3 px-2 pr-4">
-                      <div className="flex items-center justify-end gap-1">
-                        <button
-                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover"
-                          aria-label="Call"
-                        >
-                          <Phone className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover"
-                          aria-label="Email"
-                        >
-                          <Mail className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          className="h-7 w-7 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover"
-                          aria-label="More"
-                        >
-                          <MoreHorizontal className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={9} className="py-12 text-center text-[13px] text-muted-foreground">
-                    No clients match your filters.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <PageBody>
+          <DataTable
+            rows={filtered}
+            columns={columns}
+            getRowKey={(c) => c.id}
+            selectedRows={selected}
+            onSelectRow={(c) => toggle(c.id)}
+            onSelectAll={toggleAll}
+            empty={
+              <EmptyState
+                title="No clients match your filters"
+                description="Adjust the search or stage filter to widen the list."
+                className="min-h-0 py-0"
+              />
+            }
+          />
         </PageBody>
       </PageSurface>
       <SyraChatWidget />

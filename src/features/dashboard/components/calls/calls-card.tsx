@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Mic, Pause, PhoneForwarded, Headphones, UserPlus } from "lucide-react";
-import { Panel } from "@/components/ui/panel";
+import { Panel } from "@/components/app/panel";
 import { callQueue } from "@/features/dashboard/components/data";
 
 /**

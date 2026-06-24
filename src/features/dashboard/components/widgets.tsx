@@ -1,6 +1,6 @@
 import { Plus, Paperclip } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Panel } from "@/components/ui/panel";
+import { Panel } from "@/components/app/panel";
 import { planner, team, channels, docTemplates } from "@/features/dashboard/components/data";
 
 /** PlannerCard — open task list with checkboxes. */

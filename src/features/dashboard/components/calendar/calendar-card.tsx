@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Video } from "lucide-react";
-import { Panel } from "@/components/ui/panel";
+import { Panel } from "@/components/app/panel";
 import { todaysMeetings } from "@/features/dashboard/components/data";
 
 /**

@@ -40,21 +40,21 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 3. Shared Components
 
-- [ ] Audit `src/components/ui` and separate primitives from product-specific visuals.
-- [ ] Keep Radix/shadcn-style primitives in `components/ui`.
-- [ ] Move branded or decorative components out of generic UI.
-- [ ] Add `components/app` for composed reusable app patterns.
-- [ ] Create `SearchField`.
-- [ ] Create `FilterBar`.
-- [ ] Create `StatusBadge`.
-- [ ] Create `MetricTile` or `MetricStrip`.
-- [ ] Create `DataTable`.
-- [ ] Create `ActionMenu`.
-- [ ] Create `EmptyState`.
-- [ ] Create `LoadingState`.
-- [ ] Create `ErrorState`.
-- [ ] Standardize icon-only button behavior and labels.
-- [ ] Standardize compact buttons, segmented controls, tabs, and badges.
+- [x] Audit `src/components/ui` and separate primitives from product-specific visuals. See `docs/frontend-shared-components-audit.md`.
+- [x] Keep Radix/shadcn-style primitives in `components/ui`. Transitional re-export shims remain for moved app components.
+- [x] Move branded or decorative components out of generic UI. Moved product-facing components into `src/components/app`.
+- [x] Add `components/app` for composed reusable app patterns.
+- [x] Create `SearchField`.
+- [x] Create `FilterBar`.
+- [x] Create `StatusBadge`.
+- [x] Create `MetricTile` or `MetricStrip`.
+- [x] Create `DataTable`.
+- [x] Create `ActionMenu`.
+- [x] Create `EmptyState`.
+- [x] Create `LoadingState`.
+- [x] Create `ErrorState`.
+- [x] Standardize icon-only button behavior and labels. Added `IconButton`; CRM uses it as the pilot.
+- [x] Standardize compact buttons, segmented controls, tabs, and badges. Added `SegmentedControl`, `FilterBar`, and `StatusBadge`; full route migration can continue during feature refactors.
 
 ## 4. Feature Refactor
 
