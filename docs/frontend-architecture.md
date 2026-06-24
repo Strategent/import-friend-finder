@@ -30,27 +30,42 @@ main app patterns that need to become reusable: page surfaces, page headers,
 metrics, search, filters, status badges, data tables, row actions, and Syra
 assist.
 
+## Design Tokens
+
+Tokens are layered from stable primitives to app semantics:
+
+- `src/styles/tokens.css` owns theme-independent primitives: typography,
+  spacing, shape, motion, elevation, z-index, color ramps, and brand accents.
+- `src/styles.css` owns light/dark semantic tokens: app backgrounds, surfaces,
+  panels, tables, toolbars, component tokens, interaction states, and statuses.
+- Shared UI and feature modules should use semantic tokens or Tailwind utilities
+  generated from semantic tokens. They should not reach for primitive color
+  ramps unless they are defining a new semantic token.
+- Strategent brand tokens belong in the primitive token file. Syra-specific
+  accent tokens may stay there only when they are cross-feature brand accents;
+  feature-only Syra styling belongs in `src/features/syra`.
+
 ## Current Routes And Workflows
 
 The sidebar groups the current user workflows into Workspace, Collaboration,
 and Operations:
 
-| Route         | Workflow                                                        |
-| ------------- | --------------------------------------------------------------- |
-| `/`           | Dashboard, daily brief, workload, planner, and meeting widgets. |
+| Route         | Workflow                                                         |
+| ------------- | ---------------------------------------------------------------- |
+| `/`           | Dashboard, daily brief, workload, planner, and meeting widgets.  |
 | `/inbox`      | Email triage, folders, message reading, composer, and Syra help. |
-| `/calls`      | Call log review, call outcomes, and AI-handled call indicators. |
-| `/crm`        | Client relationships, stages, AUM, owners, and next actions.    |
-| `/tasks`      | Human and agent task tracking by time horizon.                  |
-| `/documents`  | Document library, upload flow, and searchable client assets.    |
-| `/calendar`   | Monthly schedule, meetings, availability, and booking details.  |
-| `/connectors` | Connected tools and integration status.                         |
-| `/team`       | Team roster, status, task load, and score indicators.           |
-| `/channels`   | Team channels, direct messages, and Syra handoff conversation.  |
-| `/syra`       | Syra chat and quick agent actions.                              |
-| `/billing`    | Invoices, payment state, and billing actions.                   |
-| `/support`    | Support threads and help requests.                              |
-| `/settings`   | Workspace settings, theme, security, notifications, and access. |
+| `/calls`      | Call log review, call outcomes, and AI-handled call indicators.  |
+| `/crm`        | Client relationships, stages, AUM, owners, and next actions.     |
+| `/tasks`      | Human and agent task tracking by time horizon.                   |
+| `/documents`  | Document library, upload flow, and searchable client assets.     |
+| `/calendar`   | Monthly schedule, meetings, availability, and booking details.   |
+| `/connectors` | Connected tools and integration status.                          |
+| `/team`       | Team roster, status, task load, and score indicators.            |
+| `/channels`   | Team channels, direct messages, and Syra handoff conversation.   |
+| `/syra`       | Syra chat and quick agent actions.                               |
+| `/billing`    | Invoices, payment state, and billing actions.                    |
+| `/support`    | Support threads and help requests.                               |
+| `/settings`   | Workspace settings, theme, security, notifications, and access.  |
 
 ## Route Rules
 

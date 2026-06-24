@@ -13,24 +13,24 @@ type Stage = "Lead" | "Qualified" | "Proposal" | "Negotiation" | "Closed";
 
 const stageStyle: Record<Stage, { dot: string; chip: string }> = {
   Lead: {
-    dot: "#3b82f6",
-    chip: "bg-blue-500/10 text-blue-700 dark:text-blue-200 border-blue-500/30",
+    dot: "var(--status-lead)",
+    chip: "bg-status-lead-bg text-status-lead-fg border-status-lead-border",
   },
   Qualified: {
-    dot: "#8b5cf6",
-    chip: "bg-violet-500/10 text-violet-700 dark:text-violet-200 border-violet-500/30",
+    dot: "var(--status-qualified)",
+    chip: "bg-status-qualified-bg text-status-qualified-fg border-status-qualified-border",
   },
   Proposal: {
-    dot: "#d97706",
-    chip: "bg-amber-500/10 text-amber-700 dark:text-amber-200 border-amber-500/30",
+    dot: "var(--status-proposal)",
+    chip: "bg-status-proposal-bg text-status-proposal-fg border-status-proposal-border",
   },
   Negotiation: {
-    dot: "#0891b2",
-    chip: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-200 border-cyan-500/30",
+    dot: "var(--status-negotiation)",
+    chip: "bg-status-negotiation-bg text-status-negotiation-fg border-status-negotiation-border",
   },
   Closed: {
-    dot: "#059669",
-    chip: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 border-emerald-500/30",
+    dot: "var(--status-closed)",
+    chip: "bg-status-closed-bg text-status-closed-fg border-status-closed-border",
   },
 };
 
@@ -287,10 +287,10 @@ function CrmPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search clients, companies, email…"
-              className="w-full h-9 pl-9 pr-3 rounded-lg bg-muted/50 border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-foreground/30"
+              className="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-raised border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-focus"
             />
           </div>
-          <div className="flex items-center gap-1 p-0.5 rounded-full bg-muted/50 border border-border">
+          <div className="flex items-center gap-1 p-0.5 rounded-full bg-surface-raised border border-border">
             {STAGES.map((s) => (
               <button
                 key={s}
@@ -313,7 +313,7 @@ function CrmPage() {
         {/* Table — full width, no card */}
         <div className="flex-1 overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground border-b border-border/60 bg-muted/20">
+            <thead className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground border-b border-border/60 bg-table-header">
               <tr>
                 <th className="py-3 pl-4 pr-2 w-8">
                   <input
@@ -348,7 +348,7 @@ function CrmPage() {
                 return (
                   <tr
                     key={c.id}
-                    className={`border-b border-border/40 hover:bg-foreground/[0.025] transition-colors ${checked ? "bg-foreground/[0.04]" : ""}`}
+                    className={`border-b border-border/40 hover:bg-table-row-hover transition-colors ${checked ? "bg-table-row-selected" : ""}`}
                   >
                     <td className="py-3 pl-4 pr-2">
                       <input
@@ -360,7 +360,7 @@ function CrmPage() {
                     </td>
                     <td className="py-3 px-2">
                       <Star
-                        className={`h-3.5 w-3.5 ${c.starred ? "text-amber-400 fill-amber-400" : "text-muted-foreground/40"}`}
+                        className={`h-3.5 w-3.5 ${c.starred ? "text-status-warning fill-status-warning" : "text-muted-foreground/40"}`}
                       />
                     </td>
                     <td className="py-3 px-2">

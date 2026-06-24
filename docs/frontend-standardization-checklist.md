@@ -13,16 +13,16 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 1. Design Tokens
 
-- [ ] Define primitive tokens: color, spacing, radius, shadow, typography, motion, z-index.
-- [ ] Define semantic tokens: background, foreground, muted, border, panel, sidebar, table, toolbar.
-- [ ] Define component tokens: button, badge, input, card, table row, nav item, dialog, popover.
-- [ ] Define interaction tokens: hover, active, selected, disabled, focus, error.
-- [ ] Define status tokens: lead, qualified, proposal, negotiation, closed, success, warning, danger, info.
-- [ ] Normalize dark-mode tokens.
-- [ ] Add high-contrast-friendly token choices where practical.
-- [ ] Remove or scope the global negative letter-spacing.
-- [ ] Replace scattered `#hex`, `rgba`, and one-off color classes with tokens.
-- [ ] Decide which branded tokens belong to Strategent/Syra and which are generic app tokens.
+- [x] Define primitive tokens: color, spacing, radius, shadow, typography, motion, z-index.
+- [x] Define semantic tokens: background, foreground, muted, border, panel, sidebar, table, toolbar.
+- [x] Define component tokens: button, badge, input, card, table row, nav item, dialog, popover.
+- [x] Define interaction tokens: hover, active, selected, disabled, focus, error.
+- [x] Define status tokens: lead, qualified, proposal, negotiation, closed, success, warning, danger, info.
+- [x] Normalize dark-mode tokens.
+- [x] Add high-contrast-friendly token choices where practical.
+- [x] Remove or scope the global negative letter-spacing.
+- [ ] Replace scattered `#hex`, `rgba`, and one-off color classes with tokens. Started with global CSS and CRM stage/table states; the remaining route/component sweep is still open.
+- [x] Decide which branded tokens belong to Strategent/Syra and which are generic app tokens.
 
 ## 2. Layout System
 
