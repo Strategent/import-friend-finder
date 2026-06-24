@@ -3,9 +3,10 @@ import { cn } from "@/lib/utils";
 
 /**
  * PillButton — Origin's CTA pills.
- *  - primary:   white pill, dark text (e.g. "Read full briefing", "Add accounts")
- *  - secondary: elevated dark/glass pill (e.g. "Review drafts")
- *  - brand:     Strategent gradient fill (kept for in-card actions like "Send")
+ *  - primary:      white pill, dark text (e.g. "Read full briefing", "Add accounts")
+ *  - secondary:    elevated dark/glass pill (e.g. "Review drafts")
+ *  - brand:        Strategent gradient fill (kept for in-card actions like "Send")
+ *  - dark-surface: fixed white pill for always-dark surfaces (e.g. feature card)
  */
 const pillVariants = cva(
   "inline-flex items-center justify-center gap-1.5 rounded-md font-medium tracking-tight whitespace-nowrap transition-all hover:scale-[1.02] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
@@ -16,6 +17,7 @@ const pillVariants = cva(
         secondary:
           "border border-border bg-surface-raised text-foreground/90 backdrop-blur-sm hover:bg-surface-hover",
         brand: "text-primary-foreground",
+        "dark-surface": "bg-white text-neutral-950 hover:bg-white/90",
       },
       size: {
         sm: "h-8 px-4 text-[12.5px]",

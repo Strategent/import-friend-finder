@@ -92,6 +92,11 @@
   --primitive-blue-700: oklch(0.49 0.18 265);
   --primitive-blue-800: oklch(0.38 0.17 265);
 
+  /* Navy ramp — dark near-black stops used for the feature card gradient */
+  --primitive-navy-950: oklch(0.2395 0.0423 277);
+  --primitive-navy-900: oklch(0.2679 0.0541 276);
+  --primitive-navy-800: oklch(0.2979 0.0581 277);
+
   --primitive-violet-300: oklch(0.78 0.12 300);
   --primitive-violet-500: oklch(0.63 0.18 295);
   --primitive-violet-700: oklch(0.46 0.2 295);
@@ -124,9 +129,18 @@
   );
   --spotlight-feature: linear-gradient(
     150deg,
-    var(--primitive-blue-800) 0%,
-    var(--primitive-blue-700) 52%,
-    var(--primitive-blue-500) 100%
+    var(--primitive-navy-950) 0%,
+    var(--primitive-navy-900) 55%,
+    var(--primitive-navy-800) 100%
+  );
+  --spotlight-feature-border: oklch(1 0 0 / 6%);
+  --spotlight-feature-shadow:
+    0 1px 0 0 oklch(1 0 0 / 6%) inset,
+    0 20px 50px -36px oklch(0.12 0.04 277 / 70%);
+  --spotlight-feature-overlay: radial-gradient(
+    90% 80% at 100% 100%,
+    oklch(0.65 0.04 277 / 8%),
+    transparent 60%
   );
   --score-gradient: linear-gradient(
     90deg,

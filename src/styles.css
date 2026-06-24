@@ -228,10 +228,6 @@
   --hero-brief-bg: var(--primitive-neutral-900);
   --hero-brief-cta-bg: oklch(0.23 0.004 270 / 90%);
   --hero-brief-cta-bg-hover: oklch(0.3 0.004 270 / 90%);
-  --spotlight-border: color-mix(in oklab, var(--primitive-white) 16%, transparent);
-  --spotlight-shadow:
-    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 12%, transparent) inset,
-    0 20px 50px -36px color-mix(in oklab, var(--primitive-blue-800) 70%, transparent);
   --syra-mark-bg: radial-gradient(
     circle at 30% 25%,
     oklch(0.36 0.006 270) 0%,
@@ -396,10 +392,6 @@
   --hero-brief-bg: oklch(0.16 0.006 270);
   --hero-brief-cta-bg: oklch(0.23 0.004 270 / 90%);
   --hero-brief-cta-bg-hover: oklch(0.3 0.004 270 / 90%);
-  --spotlight-border: color-mix(in oklab, var(--primitive-white) 10%, transparent);
-  --spotlight-shadow:
-    0 1px 0 0 color-mix(in oklab, var(--primitive-white) 10%, transparent) inset,
-    0 20px 50px -36px color-mix(in oklab, var(--primitive-blue-800) 70%, transparent);
   --syra-mark-bg: radial-gradient(
     circle at 30% 25%,
     oklch(0.36 0.006 270) 0%,

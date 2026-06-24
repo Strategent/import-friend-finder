@@ -120,7 +120,7 @@ function Home() {
             description="Connect your inbox, calendar and phone line to unlock automated drafting and call handling."
             progress={99}
             cta={
-              <PillButton variant="primary" onClick={finishSetup}>
+              <PillButton variant="dark-surface" onClick={finishSetup}>
                 Finish setup
               </PillButton>
             }
