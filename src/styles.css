@@ -467,6 +467,24 @@
     border-color: var(--border);
   }
 
+  /* Lock a subtree to light-mode tokens regardless of a .dark ancestor.
+     Only re-declares tokens that .dark overrides and that are actually used
+     inside .theme-light elements (surface, muted, status badges). */
+  .dark .theme-light {
+    color-scheme: light;
+    --surface: var(--primitive-white);
+    --surface-foreground: var(--primitive-neutral-950);
+    --muted-foreground: var(--primitive-neutral-500);
+    --muted: oklch(0.94 0.02 270);
+    --border: oklch(0 0 0 / 10%);
+    --status-info: var(--primitive-blue-600);
+    --status-info-bg: color-mix(in oklab, var(--status-info) 12%, transparent);
+    --status-info-fg: oklch(0.44 0.16 265);
+    --status-success: var(--primitive-green-500);
+    --status-success-bg: color-mix(in oklab, var(--status-success) 12%, transparent);
+    --status-success-fg: oklch(0.4 0.12 155);
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);

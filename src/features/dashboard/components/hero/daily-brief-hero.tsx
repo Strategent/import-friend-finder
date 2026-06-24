@@ -125,8 +125,8 @@ export function DailyBriefHero({
           </button>
         </div>
 
-        {/* Right zone — white brief document, top-aligned with margin */}
-        <div className="daily-brief-document absolute z-10 hidden overflow-hidden rounded-[6px] bg-surface shadow-popover lg:block">
+        {/* Right zone — white brief document, always light regardless of theme */}
+        <div className="daily-brief-document theme-light absolute z-10 hidden overflow-hidden rounded-[6px] bg-surface shadow-popover lg:block">
           <p className="font-sans text-[5px] uppercase tracking-[0.1em] text-muted-foreground whitespace-nowrap">
             {brief.date} · {brief.workspace}
           </p>
