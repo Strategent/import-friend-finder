@@ -58,15 +58,15 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 4. Feature Refactor
 
-- [ ] Refactor `crm.tsx` into a thin route plus `features/crm`.
-- [ ] Move CRM mock data into feature-local fixtures.
-- [ ] Move CRM types into feature-local `types.ts`.
-- [ ] Move CRM table, filters, stats, and actions into feature components.
-- [ ] Refactor `inbox.tsx` into `features/inbox`.
-- [ ] Refactor `channels.tsx` into `features/channels`.
-- [ ] Refactor `calendar.tsx` into `features/calendar`.
-- [ ] Refactor `syra.tsx` into `features/syra` where still needed.
-- [ ] Keep route files responsible only for route setup and rendering the feature screen.
+- [x] Refactor `crm.tsx` into a thin route plus `features/crm`.
+- [x] Move CRM mock data into feature-local fixtures.
+- [x] Move CRM types into feature-local `types.ts`.
+- [x] Move CRM table, filters, stats, and actions into feature components.
+- [x] Refactor `inbox.tsx` into `features/inbox`.
+- [x] Refactor `channels.tsx` into `features/channels`.
+- [x] Refactor `calendar.tsx` into `features/calendar`.
+- [x] Refactor `syra.tsx` into `features/syra` where still needed.
+- [x] Keep route files responsible only for route setup and rendering the feature screen.
 
 ## 5. Accessibility
 
