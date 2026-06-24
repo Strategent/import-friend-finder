@@ -26,17 +26,17 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 2. Layout System
 
-- [ ] Create canonical page surface primitives.
-- [ ] Standardize default app background behavior.
-- [ ] Create a standard `PageHeader` pattern.
-- [ ] Create a standard stat/metric strip pattern.
-- [ ] Create a standard toolbar/search/filter row pattern.
-- [ ] Create a standard data-table page pattern.
-- [ ] Create a standard split-pane workflow pattern.
-- [ ] Create a standard full-bleed workflow pattern for special surfaces.
-- [ ] Make every route explicitly use one approved layout variant.
-- [ ] Remove route-specific background styling where a shared surface should handle it.
-- [ ] Apply the layout system to CRM first.
+- [x] Create canonical page surface primitives. `PageSurface` in `src/app/shell/layout` with two variants: `padded` and `flush`.
+- [x] Standardize default app background behavior. `PageSurface` owns `bg-background`; `PageShell` now wraps `PageSurface variant="padded"`.
+- [x] Create a standard `PageHeader` pattern. Padded pages use `PageHeader`; flush pages use `PageBandHeader` (same eyebrow/title/description/actions model).
+- [x] Create a standard stat/metric strip pattern. `StatStrip` (divided columns, no cards).
+- [x] Create a standard toolbar/search/filter row pattern. `PageToolbar` band.
+- [x] Create a standard data-table page pattern. Flush surface + header/stat/toolbar bands + `PageBody`; reusable table extraction is Phase 3 (`DataTable`).
+- [ ] Create a standard split-pane workflow pattern. Deferred — Inbox/Channels still hand-roll split panes; extract when those routes migrate.
+- [x] Create a standard full-bleed workflow pattern for special surfaces. `PageSurface variant="flush"` fills the viewport below the Topbar via the new `--topbar-h` token.
+- [~] Make every route explicitly use one approved layout variant. CRM uses `flush`; the 9 `PageShell` routes are `padded` via the shared surface. Inbox/Channels/Calendar/Syra still use bespoke full-height containers (now on `--topbar-h`) pending their own migration.
+- [~] Remove route-specific background styling where a shared surface should handle it. Done for CRM and all `PageShell` routes. Remaining full-bleed routes still set their own `bg-*`/height; replaced the hardcoded `53px` with `var(--topbar-h)` as an interim step.
+- [x] Apply the layout system to CRM first. CRM refactored to `PageSurface`/`PageBandHeader`/`StatStrip`/`PageToolbar`/`PageBody`; no visual change.
 
 ## 3. Shared Components
 
