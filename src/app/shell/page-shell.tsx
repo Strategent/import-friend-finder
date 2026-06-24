@@ -6,6 +6,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 import { useTheme } from "@/app/providers/theme-provider";
 import { PageSurface } from "@/app/shell/layout/page-surface";
+import { cn } from "@/lib/utils";
 
 export function Topbar() {
   const { theme, toggleTheme } = useTheme();
@@ -25,7 +26,10 @@ export function Topbar() {
     : "—";
   return (
     <div className="sticky top-0 z-20 border-b border-border/60 bg-chrome backdrop-blur-xl">
-      <div className="px-6 py-3 flex items-center gap-3">
+      {/* Fixed height so flush page surfaces can subtract it reliably via the
+          --topbar-h token. Keep this height and --topbar-h in src/styles/tokens.css
+          in sync (60px row + 1px border = 61px). */}
+      <div className="h-[60px] px-6 flex items-center gap-3">
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
         <div className="flex-1" />
         <div className="hidden sm:flex items-center gap-3 pr-1">
@@ -94,15 +98,17 @@ export function PageHeader({
   title,
   description,
   actions,
+  className,
 }: {
   eyebrow?: ReactNode;
   title: ReactNode;
-  description?: string;
+  description?: ReactNode;
   actions?: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="flex items-end justify-between flex-wrap gap-4">
-      <div>
+    <div className={cn("flex items-end justify-between flex-wrap gap-4", className)}>
+      <div className="min-w-0">
         {eyebrow && (
           <Badge className="bg-primary/15 text-primary border border-primary/30 hover:bg-primary/15">
             {eyebrow}

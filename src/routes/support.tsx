@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageShell, PageHeader } from "@/app/shell/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/layout";
 import { LifeBuoy, Send, MessageSquare, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/support")({

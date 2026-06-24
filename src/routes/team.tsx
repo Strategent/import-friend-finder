@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PageShell, PageHeader } from "@/app/shell/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/layout";
 import { UserPlus } from "lucide-react";
 import { avatarUrl } from "@/lib/avatar";
 

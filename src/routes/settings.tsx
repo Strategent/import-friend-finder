@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { PageShell, PageHeader } from "@/app/shell/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/layout";
 import { useTheme } from "@/app/providers/theme-provider";
 import { Shield, Users, Palette, KeyRound, Bell } from "lucide-react";
 

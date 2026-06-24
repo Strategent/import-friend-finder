@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PageShell, PageHeader } from "@/app/shell/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/layout";
 import { FileText, FileSpreadsheet, FileImage, Upload, MoreHorizontal } from "lucide-react";
 
 export const Route = createFileRoute("/documents")({

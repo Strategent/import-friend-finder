@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageShell, PageHeader } from "@/app/shell/page-shell";
+import { PageShell, PageHeader } from "@/app/shell/layout";
 import { Plug, Plus, Check } from "lucide-react";
 
 export const Route = createFileRoute("/connectors")({

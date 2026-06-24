@@ -135,8 +135,7 @@
   );
   --spotlight-feature-border: oklch(1 0 0 / 6%);
   --spotlight-feature-shadow:
-    0 1px 0 0 oklch(1 0 0 / 6%) inset,
-    0 20px 50px -36px oklch(0.12 0.04 277 / 70%);
+    0 1px 0 0 oklch(1 0 0 / 6%) inset, 0 20px 50px -36px oklch(0.12 0.04 277 / 70%);
   --spotlight-feature-overlay: radial-gradient(
     90% 80% at 100% 100%,
     oklch(0.65 0.04 277 / 8%),
@@ -155,7 +154,8 @@
   --rail-w: 370px;
   --shell-gap: 20px;
   /* Height of the sticky app Topbar. Full-bleed page surfaces subtract this
-     from the viewport so they fill exactly the area below the bar. Keep in
-     sync with the Topbar's height in src/app/shell/page-shell.tsx. */
-  --topbar-h: 53px;
+     from the viewport so they fill exactly the area below the bar. The Topbar
+     in src/app/shell/page-shell.tsx pins its row to 60px; +1px border = 61px.
+     Keep this value and that row height in sync. */
+  --topbar-h: 61px;
 }

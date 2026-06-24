@@ -60,6 +60,15 @@ export function PageBandHeader({
  * StatStrip — a divided row of metric columns (no cards), with a bottom
  * divider. Two columns on small screens; `mdCols` columns from md up (default
  * 4). Static classes are listed so Tailwind's JIT keeps them.
+ *
+ * Dividers use the "gap-px over a border-colored track" technique: the
+ * border-colored grid shows through 1px gaps between cells. Unlike `divide-x`,
+ * this draws correct lines both between columns and between wrapped rows at the
+ * mobile breakpoint, with no missing or trailing edges.
+ *
+ * Contract: `mdCols` should divide `stats.length` evenly (e.g. 4 stats / 4
+ * cols, or 2 cols on mobile) so the grid has no empty trailing cells — an
+ * empty cell would render as a solid block of the track color.
  */
 const mdColsClass: Record<2 | 3 | 4 | 5 | 6, string> = {
   2: "md:grid-cols-2",
@@ -81,13 +90,13 @@ export function StatStrip({
   return (
     <div
       className={cn(
-        "grid grid-cols-2 border-b border-border/60 divide-x divide-border/60",
+        "grid grid-cols-2 gap-px border-b border-border/60 bg-border/60",
         mdColsClass[mdCols],
         className,
       )}
     >
       {stats.map((s) => (
-        <div key={s.label} className={cn(BAND_X, "py-5")}>
+        <div key={s.label} className={cn(BAND_X, "py-5 bg-background")}>
           <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
             {s.label}
           </div>

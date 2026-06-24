@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 type PageSurfaceVariant = "padded" | "flush";
 
 const variantClass: Record<PageSurfaceVariant, string> = {
-  padded: "min-h-screen px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5",
+  padded: "px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5",
   flush: "flex flex-col",
 };
 
@@ -37,9 +37,9 @@ export function PageSurface({
   return (
     <div
       className={cn("w-full bg-background", variantClass[variant], className)}
-      // Flush surfaces fill the viewport minus the sticky Topbar. min-height
-      // (not height) lets long tables grow and scroll past the fold.
-      style={variant === "flush" ? { minHeight: "calc(100dvh - var(--topbar-h))" } : undefined}
+      // Both variants fill at least the viewport below the sticky Topbar.
+      // min-height (not height) lets content grow and scroll past the fold.
+      style={{ minHeight: "calc(100dvh - var(--topbar-h))" }}
     >
       {children}
     </div>

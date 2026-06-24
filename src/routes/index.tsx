@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { PageShell } from "@/app/shell/page-shell";
+import { PageShell } from "@/app/shell/layout";
 import { DashboardShell } from "@/features/dashboard/layout/dashboard-shell";
 import { BentoGridStack, type BentoItem } from "@/features/dashboard/layout/bento-grid-stack";
 import { DailyBriefHero } from "@/features/dashboard/components/hero/daily-brief-hero";
