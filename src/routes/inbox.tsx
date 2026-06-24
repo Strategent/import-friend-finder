@@ -159,7 +159,7 @@ function InboxPage() {
     <>
       <div
         className="flex w-full bg-muted/20 overflow-hidden"
-        style={{ height: "calc(100dvh - 53px)" }}
+        style={{ height: "calc(100dvh - var(--topbar-h))" }}
       >
         {/* Thread list */}
         <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 min-w-0 bg-background">

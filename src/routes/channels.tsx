@@ -75,7 +75,10 @@ function ChannelsPage() {
   const [showSyraTip, setShowSyraTip] = useState(true);
 
   return (
-    <div className="w-full overflow-hidden bg-background" style={{ height: "calc(100dvh - 53px)" }}>
+    <div
+      className="w-full overflow-hidden bg-background"
+      style={{ height: "calc(100dvh - var(--topbar-h))" }}
+    >
       <div className="grid grid-cols-12 h-full w-full">
         {/* Workspace sidebar */}
         <aside className="col-span-12 flex flex-col bg-sidebar text-sidebar-foreground md:col-span-3 lg:col-span-3">

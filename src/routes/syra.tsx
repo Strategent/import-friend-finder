@@ -28,7 +28,10 @@ function SyraPage() {
   const activeModel = models.find((m) => m.id === modelId) ?? models[0];
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 53px)" }}>
+    <div
+      className="relative w-full overflow-hidden"
+      style={{ height: "calc(100dvh - var(--topbar-h))" }}
+    >
       <style>{`
         .font-radley { font-family: 'Radley', Georgia, serif; }
       `}</style>

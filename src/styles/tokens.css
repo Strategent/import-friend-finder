@@ -154,4 +154,8 @@
   /* Layout primitives */
   --rail-w: 370px;
   --shell-gap: 20px;
+  /* Height of the sticky app Topbar. Full-bleed page surfaces subtract this
+     from the viewport so they fill exactly the area below the bar. Keep in
+     sync with the Topbar's height in src/app/shell/page-shell.tsx. */
+  --topbar-h: 53px;
 }

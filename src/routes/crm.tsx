@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { PageSurface, PageBandHeader, StatStrip, PageToolbar, PageBody } from "@/app/shell/layout";
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 import { Plus, Filter, Search, ArrowUpDown, MoreHorizontal, Star, Phone, Mail } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -232,55 +233,36 @@ function CrmPage() {
 
   return (
     <>
-      <div
-        className="w-full bg-background flex flex-col"
-        style={{ minHeight: "calc(100dvh - 53px)" }}
-      >
-        {/* Header */}
-        <div className="px-8 pt-8 pb-6 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
-              Clients
-            </div>
-            <h1 className="mt-2 text-[32px] font-semibold tracking-tight">CRM</h1>
-            <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">
-              Every relationship in one place — accounts, owners, AUM and the next move.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" className="border-border bg-transparent">
-              <Filter className="h-4 w-4 mr-2" /> Filter
-            </Button>
-            <Button
-              className="text-primary-foreground border-0"
-              style={{ background: "var(--gradient-primary)" }}
-            >
-              <Plus className="h-4 w-4 mr-2" /> New client
-            </Button>
-          </div>
-        </div>
+      <PageSurface variant="flush">
+        <PageBandHeader
+          eyebrow="Clients"
+          title="CRM"
+          description="Every relationship in one place — accounts, owners, AUM and the next move."
+          actions={
+            <>
+              <Button variant="outline" className="border-border bg-transparent">
+                <Filter className="h-4 w-4 mr-2" /> Filter
+              </Button>
+              <Button
+                className="text-primary-foreground border-0"
+                style={{ background: "var(--gradient-primary)" }}
+              >
+                <Plus className="h-4 w-4 mr-2" /> New client
+              </Button>
+            </>
+          }
+        />
 
-        {/* Stat strip — divided columns, no cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 border-b border-border/60 divide-x divide-border/60">
-          {[
+        <StatStrip
+          stats={[
             { label: "Total clients", value: clients.length.toString() },
             { label: "Showing", value: totals.count.toString() },
             { label: "Open relationships", value: totals.open.toString() },
             { label: "AUM (filtered)", value: fmtAum(totals.aum) },
-          ].map((s) => (
-            <div key={s.label} className="px-8 py-5">
-              <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                {s.label}
-              </div>
-              <div className="mt-1.5 text-[22px] font-semibold tracking-tight tabular-nums">
-                {s.value}
-              </div>
-            </div>
-          ))}
-        </div>
+          ]}
+        />
 
-        {/* Toolbar */}
-        <div className="px-8 py-3 border-b border-border/60 flex flex-wrap items-center gap-3">
+        <PageToolbar>
           <div className="relative flex-1 min-w-[220px] max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <input
@@ -308,10 +290,10 @@ function CrmPage() {
           {selected.size > 0 && (
             <div className="text-[11px] text-muted-foreground">{selected.size} selected</div>
           )}
-        </div>
+        </PageToolbar>
 
         {/* Table — full width, no card */}
-        <div className="flex-1 overflow-x-auto">
+        <PageBody className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground border-b border-border/60 bg-table-header">
               <tr>
@@ -447,8 +429,8 @@ function CrmPage() {
               )}
             </tbody>
           </table>
-        </div>
-      </div>
+        </PageBody>
+      </PageSurface>
       <SyraChatWidget />
     </>
   );

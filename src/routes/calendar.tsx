@@ -127,7 +127,7 @@ function CalendarPage() {
     <>
       <div
         className="w-full bg-background flex flex-col"
-        style={{ minHeight: "calc(100dvh - 53px)" }}
+        style={{ minHeight: "calc(100dvh - var(--topbar-h))" }}
       >
         {/* Top bar — Calendly-style */}
         <div className="px-8 pt-7 pb-5 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">

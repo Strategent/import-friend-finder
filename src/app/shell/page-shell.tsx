@@ -5,6 +5,7 @@ import { Bell, Search, Sun, Moon, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 import { useTheme } from "@/app/providers/theme-provider";
+import { PageSurface } from "@/app/shell/layout/page-surface";
 
 export function Topbar() {
   const { theme, toggleTheme } = useTheme();
@@ -120,9 +121,7 @@ export function PageHeader({
 export function PageShell({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5">
-        {children}
-      </div>
+      <PageSurface variant="padded">{children}</PageSurface>
       <SyraChatWidget />
     </>
   );
