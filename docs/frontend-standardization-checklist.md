@@ -32,7 +32,7 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 - [x] Create a standard stat/metric strip pattern. `StatStrip` (divided columns, no cards).
 - [x] Create a standard toolbar/search/filter row pattern. `PageToolbar` band.
 - [x] Create a standard data-table page pattern. Flush surface + header/stat/toolbar bands + `PageBody`; reusable table extraction is Phase 3 (`DataTable`).
-- [ ] Create a standard split-pane workflow pattern. Deferred — Inbox/Channels still hand-roll split panes; extract when those routes migrate.
+- [x] Create a standard split-pane workflow pattern. `SplitPane` (fixed rail + fluid detail) for list/detail workflows; proportional multi-column splits (e.g. Channels) stay on a CSS grid by design. Inbox/Channels keep their current markup until their Phase-4 migration.
 - [x] Create a standard full-bleed workflow pattern for special surfaces. `PageSurface variant="flush"` fills the viewport below the Topbar via the new `--topbar-h` token.
 - [~] Make every route explicitly use one approved layout variant. CRM uses `flush`; the 9 `PageShell` routes are `padded` via the shared surface. Inbox/Channels/Calendar/Syra still use bespoke full-height containers (now on `--topbar-h`) pending their own migration.
 - [~] Remove route-specific background styling where a shared surface should handle it. Done for CRM and all `PageShell` routes. Remaining full-bleed routes still set their own `bg-*`/height; replaced the hardcoded `53px` with `var(--topbar-h)` as an interim step.

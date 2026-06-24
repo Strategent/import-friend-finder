@@ -7,6 +7,7 @@
  */
 export { PageSurface } from "./page-surface";
 export { PageBandHeader, StatStrip, PageToolbar, PageBody } from "./page-band";
+export { SplitPane } from "./split-pane";
 
 // The padded surface still ships its header via the existing shell module.
 export { PageHeader } from "../page-shell";
