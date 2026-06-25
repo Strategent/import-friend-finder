@@ -7,11 +7,11 @@ type Msg = { role: "syra" | "user"; text: string };
 const seed: Msg[] = [
   {
     role: "syra",
-    text: "Hey John — three drafts are waiting in the inbox, and the Hartley Trust review is your top priority today.",
+    text: "Hey John - three drafts are waiting in the inbox, and the Hartley Trust review is your top priority today.",
   },
 ];
 
-export function SyraChatWidget() {
+export function SyraChatWidget({ inboxSummary }: { inboxSummary?: string }) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [msgs, setMsgs] = useState<Msg[]>(seed);
@@ -19,11 +19,15 @@ export function SyraChatWidget() {
   const send = () => {
     const t = input.trim();
     if (!t) return;
-    setMsgs((m) => [
-      ...m,
-      { role: "user", text: t },
-      { role: "syra", text: "On it — I'll draft that and surface it for your sign-off." },
-    ]);
+    const lower = t.toLowerCase();
+    const reply = lower.includes("summarize")
+      ? `Inbox summary: ${inboxSummary ?? "3 priority drafts, 2 unread notes, and 1 renewal follow-up waiting."}`
+      : lower.includes("draft")
+        ? "I drafted the strongest reply in the composer and kept the tone concise, commercial, and ready for sign-off."
+        : lower.includes("brief")
+          ? "Today's brief: Sarah's proposal tweak is the highest-leverage reply, Northwind needs security answers, and Helios renewal should be touched before noon."
+          : "On it - I'll draft that and surface it for your sign-off.";
+    setMsgs((m) => [...m, { role: "user", text: t }, { role: "syra", text: reply }]);
     setInput("");
   };
 
@@ -37,7 +41,6 @@ export function SyraChatWidget() {
               "0 1px 0 0 color-mix(in oklab, white 30%, transparent) inset, 0 30px 60px -20px rgba(15,20,40,0.35), 0 12px 30px -12px color-mix(in oklab, var(--primary) 30%, transparent)",
           }}
         >
-          {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
             <div className="flex items-center gap-2.5">
               <SyraMark size={32} />
@@ -58,7 +61,6 @@ export function SyraChatWidget() {
             </button>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-auto px-4 py-4 space-y-3">
             {msgs.map((m, i) => (
               <div
@@ -72,11 +74,7 @@ export function SyraChatWidget() {
                       ? "text-white rounded-br-md"
                       : "bg-foreground/[0.05] text-foreground rounded-bl-md border border-border/60"
                   }`}
-                  style={
-                    m.role === "user"
-                      ? { background: "var(--gradient-primary)" }
-                      : undefined
-                  }
+                  style={m.role === "user" ? { background: "var(--gradient-primary)" } : undefined}
                 >
                   {m.text}
                 </div>
@@ -84,7 +82,6 @@ export function SyraChatWidget() {
             ))}
           </div>
 
-          {/* Suggestions */}
           <div className="px-3 pb-2 flex gap-1.5 flex-wrap">
             {["Summarize inbox", "Today's brief", "Draft Hartley reply"].map((s) => (
               <button
@@ -97,7 +94,6 @@ export function SyraChatWidget() {
             ))}
           </div>
 
-          {/* Composer */}
           <div className="px-3 pb-3 pt-1">
             <div className="flex items-center gap-2 h-11 px-3 rounded-full bg-foreground/[0.04] border border-border">
               <Bot className="h-3.5 w-3.5 text-muted-foreground" />
@@ -105,7 +101,7 @@ export function SyraChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
-                placeholder="Ask Syra anything…"
+                placeholder="Ask Syra anything..."
                 className="flex-1 bg-transparent text-[13px] placeholder:text-muted-foreground focus:outline-none"
               />
               <button

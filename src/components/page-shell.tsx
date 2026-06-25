@@ -5,11 +5,20 @@ import { Bell, Search, Sun, Moon, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
 import { useTheme } from "@/components/theme-provider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Topbar() {
   const { theme, toggleTheme } = useTheme();
   const [now, setNow] = useState<Date | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [globalSearch, setGlobalSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setNow(new Date());
@@ -45,6 +54,8 @@ export function Topbar() {
             >
               <input
                 ref={inputRef}
+                value={globalSearch}
+                onChange={(e) => setGlobalSearch(e.target.value)}
                 placeholder="Search workflows, clients, agents…"
                 onBlur={(e) => {
                   if (!e.currentTarget.value) setSearchOpen(false);
@@ -54,6 +65,27 @@ export function Topbar() {
                 }}
                 className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-border"
               />
+              {searchOpen && globalSearch && (
+                <div className="absolute right-0 top-10 z-50 w-72 rounded-xl border border-border bg-popover p-1.5 shadow-xl">
+                  {[
+                    ["Client", "Acme Corp proposal thread"],
+                    ["Inbox", "Sarah Lin - minor tweaks"],
+                    ["Task", "Send updated SOW"],
+                  ].map(([label, text]) => (
+                    <button
+                      key={text}
+                      className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[12px] hover:bg-foreground/[0.06]"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => setGlobalSearch(text)}
+                    >
+                      <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase text-muted-foreground">
+                        {label}
+                      </span>
+                      <span className="truncate">{text}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div
@@ -80,18 +112,37 @@ export function Topbar() {
             <Sun className="h-4 w-4" fill="currentColor" />
           )}
         </button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <Bell className="h-4 w-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Bell className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-72">
+            <DropdownMenuLabel className="text-xs">Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex-col items-start gap-0.5 text-xs">
+              <span className="font-medium">Sarah replied to Proposal v2</span>
+              <span className="text-muted-foreground">Two minutes ago - draft ready in Inbox</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex-col items-start gap-0.5 text-xs">
+              <span className="font-medium">Northwind security review</span>
+              <span className="text-muted-foreground">SOC2 answer due before signing</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex-col items-start gap-0.5 text-xs">
+              <span className="font-medium">Helios renewal watch</span>
+              <span className="text-muted-foreground">14 days remaining</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
 }
-
 
 export function PageHeader({
   eyebrow,
@@ -112,13 +163,9 @@ export function PageHeader({
             {eyebrow}
           </Badge>
         )}
-        <h1 className="mt-3 text-3xl md:text-[34px] font-semibold tracking-tight">
-          {title}
-        </h1>
+        <h1 className="mt-3 text-3xl md:text-[34px] font-semibold tracking-tight">{title}</h1>
         {description && (
-          <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">
-            {description}
-          </p>
+          <p className="mt-1.5 text-sm text-muted-foreground max-w-2xl">{description}</p>
         )}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

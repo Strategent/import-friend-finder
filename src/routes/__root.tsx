@@ -14,6 +14,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Topbar } from "@/components/page-shell";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -98,11 +99,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "strategent | demo build" },
-      { name: "description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { property: "og:description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { name: "twitter:description", content: "Remix of v2 is a web application that allows users to import and integrate GitHub projects." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp" },
+      {
+        name: "description",
+        content:
+          "Remix of v2 is a web application that allows users to import and integrate GitHub projects.",
+      },
+      {
+        property: "og:description",
+        content:
+          "Remix of v2 is a web application that allows users to import and integrate GitHub projects.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Remix of v2 is a web application that allows users to import and integrate GitHub projects.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/3dhW02aB4wQmUB1Eatz5610D2Sl1/social-images/social-1781993614260-Image_6-19-26_at_12.49_AM.webp",
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -182,6 +203,7 @@ function RootComponent() {
               </main>
             </div>
           </div>
+          <Toaster />
         </SidebarProvider>
       </ThemeProvider>
     </QueryClientProvider>
