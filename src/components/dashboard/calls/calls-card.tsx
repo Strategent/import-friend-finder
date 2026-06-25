@@ -47,6 +47,7 @@ export function CallsCard() {
   return (
     <Panel
       label="Call handling"
+      to="/calls"
       bodyClassName="gap-4"
       action={
         <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-border/60 bg-foreground/[0.04] px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">

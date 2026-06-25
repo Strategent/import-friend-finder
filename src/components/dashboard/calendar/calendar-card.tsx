@@ -41,6 +41,7 @@ export function CalendarCard() {
   return (
     <Panel
       label="Calendar"
+      to="/calendar"
       bodyClassName="gap-4"
       action={
         <div className="flex items-center gap-1">

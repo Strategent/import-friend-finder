@@ -67,6 +67,7 @@ export function InboxCard() {
   return (
     <Panel
       label="Inbox"
+      to="/inbox"
       padding="none"
       action={
         <div className="flex items-center gap-1">

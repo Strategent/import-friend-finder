@@ -9,6 +9,7 @@ export function PlannerCard() {
   return (
     <Panel
       label="Planner"
+      to="/tasks"
       action={
         <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-foreground/[0.06] text-foreground/80 transition-colors hover:bg-foreground/[0.12]">
           <Plus className="h-3.5 w-3.5" />
@@ -104,7 +105,7 @@ export function RecapCard() {
 export function TeamCard() {
   const online = team.filter((t) => t.status === "online").length;
   return (
-    <Panel label="Team">
+    <Panel label="Team" to="/team">
       <div className="mb-3 shrink-0 text-[15px] font-semibold leading-none tracking-tight">
         {online} <span className="text-[11px] font-normal text-muted-foreground">online</span>
       </div>
@@ -134,7 +135,7 @@ export function TeamCard() {
 export function ChannelsCard() {
   const unread = channels.reduce((a, c) => a + c.unread, 0);
   return (
-    <Panel label="Channels">
+    <Panel label="Channels" to="/channels">
       <div className="mb-3 shrink-0 text-[15px] font-semibold leading-none tracking-tight">
         {unread} <span className="text-[11px] font-normal text-muted-foreground">unread</span>
       </div>
