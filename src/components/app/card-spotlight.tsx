@@ -1,5 +1,5 @@
 "use client";
-import { useMotionValue, motion, useMotionTemplate } from "motion/react";
+import { useMotionValue, motion, useMotionTemplate, useReducedMotion } from "motion/react";
 import React, { type MouseEvent as ReactMouseEvent, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -15,10 +15,15 @@ export const CardSpotlight = ({
   color?: string;
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>) => {
+  const prefersReducedMotion = useReducedMotion();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const spotlightBackground = useMotionTemplate`
+    radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, ${color}, transparent 80%)
+  `;
 
   function handleMouseMove({ currentTarget, clientX, clientY }: ReactMouseEvent<HTMLDivElement>) {
+    if (prefersReducedMotion) return;
     const { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
@@ -37,14 +42,12 @@ export const CardSpotlight = ({
       onMouseLeave={() => setIsHovering(false)}
       {...props}
     >
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-0 rounded-2xl opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
-        style={{
-          background: useMotionTemplate`
-            radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, ${color}, transparent 80%)
-          `,
-        }}
-      />
+      {!prefersReducedMotion && (
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-0 rounded-2xl opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
+          style={{ background: spotlightBackground }}
+        />
+      )}
       {isHovering && null}
       <div className="relative z-10">{children}</div>
     </div>

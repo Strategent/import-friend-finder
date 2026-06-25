@@ -14,6 +14,7 @@ export function DataTable<T>({
   rows,
   columns,
   getRowKey,
+  getRowLabel,
   selectedRows,
   onSelectRow,
   onSelectAll,
@@ -24,6 +25,7 @@ export function DataTable<T>({
   rows: T[];
   columns: DataTableColumn<T>[];
   getRowKey: (row: T) => string | number;
+  getRowLabel?: (row: T) => string;
   selectedRows?: Set<string | number>;
   onSelectRow?: (row: T) => void;
   onSelectAll?: () => void;
@@ -96,7 +98,7 @@ export function DataTable<T>({
                         type="checkbox"
                         checked={selected}
                         onChange={() => onSelectRow?.(row)}
-                        aria-label="Select row"
+                        aria-label={`Select ${getRowLabel?.(row) ?? `row ${rowKey}`}`}
                         className="h-3.5 w-3.5 cursor-pointer accent-primary"
                       />
                     </td>

@@ -50,6 +50,7 @@ export function Topbar() {
             >
               <input
                 ref={inputRef}
+                aria-label="Search workflows, clients, and agents"
                 placeholder="Search workflows, clients, agents…"
                 onBlur={(e) => {
                   if (!e.currentTarget.value) setSearchOpen(false);
@@ -57,7 +58,7 @@ export function Topbar() {
                 onKeyDown={(e) => {
                   if (e.key === "Escape") setSearchOpen(false);
                 }}
-                className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-border"
+                className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-border focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background"
               />
             </div>
           </div>
@@ -77,7 +78,7 @@ export function Topbar() {
           type="button"
           onClick={toggleTheme}
           aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+          className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background"
         >
           {theme === "dark" ? (
             <Moon className="h-4 w-4" fill="currentColor" />
@@ -85,7 +86,12 @@ export function Topbar() {
             <Sun className="h-4 w-4" fill="currentColor" />
           )}
         </button>
-        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Open notifications"
+          className="text-muted-foreground hover:text-foreground"
+        >
           <Bell className="h-4 w-4" />
         </Button>
       </div>

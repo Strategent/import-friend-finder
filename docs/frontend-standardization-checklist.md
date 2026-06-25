@@ -70,16 +70,16 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 5. Accessibility
 
-- [ ] Audit all icon-only buttons for `aria-label`.
-- [ ] Audit all inputs for visible labels or accessible names.
-- [ ] Audit custom tab/filter controls for keyboard support.
-- [ ] Audit menus, popovers, dialogs, and sheets for focus behavior.
-- [ ] Ensure visible focus states across all interactive components.
-- [ ] Remove `outline-none` usages without a real replacement.
-- [ ] Check color contrast for text, borders, icons, badges, and states.
-- [ ] Add reduced-motion handling for animated components.
-- [ ] Ensure heading hierarchy is logical per page.
-- [ ] Prefer native controls before custom ARIA patterns.
+- [x] Audit all icon-only buttons for `aria-label`. Added missing labels in Topbar, Channels, Inbox, and dashboard widgets; `IconButton` remains the preferred shared interface.
+- [x] Audit all inputs for visible labels or accessible names. Added names to Topbar, Inbox, Channels, Syra, Connectors, and Support inputs; DataTable row checkboxes now accept row-specific labels.
+- [x] Audit custom tab/filter controls for keyboard support. `SegmentedControl` and `FilterBar` now support arrow keys plus Home/End with roving focus.
+- [x] Audit menus, popovers, dialogs, and sheets for focus behavior. Radix-owned overlays remain on primitives; Inbox mailbox picker now exposes menu semantics, and Syra's custom model picker was replaced with a native select.
+- [x] Ensure visible focus states across all interactive components. Added focus-visible rings to shared filter/search controls and patched route-specific controls that previously suppressed or lacked focus feedback.
+- [x] Remove `outline-none` usages without a real replacement. Remaining `outline-none` scan hits are either paired with focus/data-state styling or are non-interactive Recharts selector overrides.
+- [x] Check color contrast for text, borders, icons, badges, and states. Manual token-level pass completed; automated axe coverage remains tracked in Phase 8.
+- [x] Add reduced-motion handling for animated components. Added a global `prefers-reduced-motion` fallback and reduced-motion handling for CardSpotlight/DailyBriefStack.
+- [x] Ensure heading hierarchy is logical per page. Added page-level headings for Inbox/Channels and confirmed core route heading structure.
+- [x] Prefer native controls before custom ARIA patterns. Syra model selection now uses a native `select`; custom radio-style filters are reserved for compact filter controls with keyboard support.
 
 ## 6. State And Data Patterns
 

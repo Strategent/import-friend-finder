@@ -3,6 +3,7 @@ import {
   animate,
   motion,
   useMotionValue,
+  useReducedMotion,
   useTransform,
   type MotionValue,
   type PanInfo,
@@ -214,6 +215,7 @@ function SwipeCard({
   onSwipeIntent,
   onSwipeComplete,
   total,
+  reduceMotion,
 }: {
   section: Section;
   offset: number;
@@ -225,6 +227,7 @@ function SwipeCard({
   onSwipeIntent: (dir: 1 | -1) => boolean;
   onSwipeComplete: (dir: 1 | -1) => void;
   total: number;
+  reduceMotion: boolean;
 }) {
   const x = useMotionValue(0);
   const isThrowing = useRef(false);
@@ -286,12 +289,14 @@ function SwipeCard({
         y: isTop || isPrevious || offset === 1 ? undefined : hidden ? 24 : offset * 15,
         opacity: isTop || isPrevious ? undefined : hidden || offset > 2 ? 0 : 1,
       }}
-      transition={{ type: "spring", stiffness: 360, damping: 34, mass: 0.72 }}
-      drag={isTop ? "x" : false}
+      transition={
+        reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 360, damping: 34, mass: 0.72 }
+      }
+      drag={isTop && !reduceMotion ? "x" : false}
       dragElastic={0.18}
       dragMomentum={false}
-      onDrag={isTop ? (_, info) => onDragMotion(info.offset.x) : undefined}
-      onDragEnd={isTop ? handleDragEnd : undefined}
+      onDrag={isTop && !reduceMotion ? (_, info) => onDragMotion(info.offset.x) : undefined}
+      onDragEnd={isTop && !reduceMotion ? handleDragEnd : undefined}
     >
       <div className="h-full w-full bg-surface rounded-[24px] border border-border shadow-popover px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
         {section.render()}
@@ -310,6 +315,7 @@ export function DailyBriefStack({
   const [index, setIndex] = useState(0);
   const [closingAfterSwipe, setClosingAfterSwipe] = useState(false);
   const stackDragX = useMotionValue(0);
+  const prefersReducedMotion = useReducedMotion();
   const total = SECTIONS.length;
 
   const handleSwipeIntent = (dir: 1 | -1) => {
@@ -367,6 +373,7 @@ export function DailyBriefStack({
                 onSwipeIntent={handleSwipeIntent}
                 onSwipeComplete={handleSwipeComplete}
                 total={total}
+                reduceMotion={Boolean(prefersReducedMotion)}
               />
             );
           })}

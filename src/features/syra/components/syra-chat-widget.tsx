@@ -98,10 +98,11 @@ export function SyraChatWidget() {
               <Bot className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 value={input}
+                aria-label="Ask Syra"
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
                 placeholder="Ask Syra anything…"
-                className="flex-1 bg-transparent text-[13px] placeholder:text-muted-foreground focus:outline-none"
+                className="flex-1 bg-transparent text-[13px] placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               />
               <button
                 onClick={send}

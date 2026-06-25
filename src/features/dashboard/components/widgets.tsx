@@ -10,8 +10,12 @@ export function PlannerCard() {
     <Panel
       label="Planner"
       action={
-        <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 transition-colors hover:bg-surface-hover">
-          <Plus className="h-3.5 w-3.5" />
+        <button
+          type="button"
+          aria-label="Add planner item"
+          className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        >
+          <Plus className="h-3.5 w-3.5" aria-hidden />
         </button>
       }
     >

@@ -44,11 +44,19 @@ export function CalendarCard() {
       bodyClassName="gap-4"
       action={
         <div className="flex items-center gap-1">
-          <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover">
-            <ChevronLeft className="h-3.5 w-3.5" />
+          <button
+            type="button"
+            aria-label="Previous week"
+            className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          >
+            <ChevronLeft className="h-3.5 w-3.5" aria-hidden />
           </button>
-          <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover">
-            <ChevronRight className="h-3.5 w-3.5" />
+          <button
+            type="button"
+            aria-label="Next week"
+            className="grid h-7 w-7 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          >
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
           </button>
         </div>
       }

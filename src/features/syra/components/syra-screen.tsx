@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Paperclip, FileText, Inbox, Calendar, ChevronDown, Check } from "lucide-react";
+import { Paperclip, FileText, Inbox, Calendar, ChevronDown } from "lucide-react";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 
 const quickActions = [
@@ -18,8 +18,6 @@ const models = [
 export function SyraScreen() {
   const [input, setInput] = useState("");
   const [modelId, setModelId] = useState(models[0].id);
-  const [open, setOpen] = useState(false);
-  const activeModel = models.find((m) => m.id === modelId) ?? models[0];
 
   return (
     <div
@@ -57,9 +55,10 @@ export function SyraScreen() {
           <div className="relative rounded-2xl border border-border bg-card/60 backdrop-blur-xl shadow-xl">
             <input
               value={input}
+              aria-label="Ask Syra"
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Syra anything…"
-              className="w-full bg-transparent px-5 pt-5 pb-16 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="w-full bg-transparent px-5 pt-5 pb-16 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             />
             <div className="absolute left-3 bottom-3 flex items-center gap-1.5">
               <button
@@ -68,43 +67,26 @@ export function SyraScreen() {
               >
                 <Paperclip className="h-4 w-4" />
               </button>
-              {/* Perplexity-style model switch */}
               <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setOpen((v) => !v)}
-                  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-[12.5px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                <label htmlFor="syra-model" className="sr-only">
+                  AI model
+                </label>
+                <select
+                  id="syra-model"
+                  value={modelId}
+                  onChange={(event) => setModelId(event.target.value)}
+                  className="h-9 appearance-none rounded-lg bg-transparent pl-3 pr-8 text-[12.5px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
-                  {activeModel.name}
-                  <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                </button>
-                {open && (
-                  <div
-                    className="absolute left-0 bottom-11 z-30 w-64 rounded-xl border border-border bg-popover backdrop-blur-xl p-1 shadow-2xl"
-                    onMouseLeave={() => setOpen(false)}
-                  >
-                    {models.map((m) => (
-                      <button
-                        key={m.id}
-                        onClick={() => {
-                          setModelId(m.id);
-                          setOpen(false);
-                        }}
-                        className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-left hover:bg-accent hover:text-accent-foreground transition-colors"
-                      >
-                        <div className="min-w-0">
-                          <div className="text-[13px] text-popover-foreground truncate">
-                            {m.name}
-                          </div>
-                          <div className="text-[11px] text-muted-foreground">{m.provider}</div>
-                        </div>
-                        {m.id === modelId && (
-                          <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  {models.map((model) => (
+                    <option key={model.id} value={model.id}>
+                      {model.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground opacity-70"
+                  aria-hidden
+                />
               </div>
             </div>
             <button

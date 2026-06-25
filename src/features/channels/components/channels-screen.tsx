@@ -105,8 +105,12 @@ export function ChannelsScreen() {
           <div className="px-2 mt-3">
             <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-sidebar-foreground/45">
               <span>Channels</span>
-              <button className="opacity-70 hover:opacity-100">
-                <Plus className="h-3 w-3" />
+              <button
+                type="button"
+                aria-label="Add channel"
+                className="rounded opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              >
+                <Plus className="h-3 w-3" aria-hidden />
               </button>
             </div>
             <div className="space-y-0.5 mt-1">
@@ -146,15 +150,21 @@ export function ChannelsScreen() {
           <div className="px-2 mt-4">
             <div className="flex items-center justify-between px-2 py-1 text-[12px] uppercase tracking-wider text-sidebar-foreground/45">
               <span>Direct messages</span>
-              <button className="opacity-70 hover:opacity-100">
-                <Plus className="h-3 w-3" />
+              <button
+                type="button"
+                aria-label="Start direct message"
+                className="rounded opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              >
+                <Plus className="h-3 w-3" aria-hidden />
               </button>
             </div>
             <div className="space-y-0.5 mt-1">
               {dms.map((d) => (
                 <button
                   key={d.name}
-                  className="w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px] text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  type="button"
+                  aria-label={`Open direct message with ${d.name}`}
+                  className="w-full flex items-center gap-2 px-2.5 py-1 rounded-md text-[13.5px] text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <span className="relative">
                     {d.status === "ai" ? (
@@ -190,7 +200,7 @@ export function ChannelsScreen() {
           <div className="flex items-center justify-between border-b border-border px-5 py-3">
             <div className="flex items-center gap-2 min-w-0">
               <Hash className="h-4 w-4 text-muted-foreground" />
-              <div className="font-bold text-[15px] truncate">{active}</div>
+              <h1 className="font-bold text-[15px] truncate">{active}</h1>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
             <div className="hidden items-center gap-2 rounded-md border border-border px-2 py-1 text-[12px] text-muted-foreground md:flex">
@@ -279,20 +289,29 @@ export function ChannelsScreen() {
             <div className="rounded-lg border border-border bg-surface-raised">
               <input
                 placeholder={`Message #${active}`}
-                className="w-full bg-transparent px-3.5 pt-3 pb-2 text-[14px] focus:outline-none"
+                aria-label={`Message #${active}`}
+                className="w-full bg-transparent px-3.5 pt-3 pb-2 text-[14px] focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               />
               <div className="flex items-center justify-between px-2 pb-2">
                 <div className="flex items-center gap-0.5 text-muted-foreground">
-                  {[Plus, Paperclip, AtSign, Smile].map((Ic, idx) => (
+                  {[
+                    { icon: Plus, label: "Add attachment" },
+                    { icon: Paperclip, label: "Attach file" },
+                    { icon: AtSign, label: "Mention someone" },
+                    { icon: Smile, label: "Add emoji" },
+                  ].map(({ icon: Ic, label }) => (
                     <button
-                      key={idx}
-                      className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-state-hover"
+                      key={label}
+                      type="button"
+                      aria-label={label}
+                      className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                     >
-                      <Ic className="h-3.5 w-3.5" />
+                      <Ic className="h-3.5 w-3.5" aria-hidden />
                     </button>
                   ))}
                 </div>
                 <button
+                  type="button"
                   className="grid h-7 w-7 place-items-center rounded-md bg-status-success text-primary-foreground"
                   aria-label="Send"
                 >

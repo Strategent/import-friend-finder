@@ -112,6 +112,7 @@ export function CrmTable({
       rows={clients}
       columns={columns}
       getRowKey={(client) => client.id}
+      getRowLabel={(client) => client.name}
       selectedRows={selected}
       onSelectRow={(client) => onToggleClient(client.id)}
       onSelectAll={onToggleAll}

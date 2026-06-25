@@ -70,10 +70,14 @@ function SupportPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                <label
+                  htmlFor="support-subject"
+                  className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+                >
                   Subject
                 </label>
                 <input
+                  id="support-subject"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   placeholder="Short summary of the issue or request"
@@ -81,10 +85,14 @@ function SupportPage() {
                 />
               </div>
               <div>
-                <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                <label
+                  htmlFor="support-message"
+                  className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+                >
                   Message
                 </label>
                 <textarea
+                  id="support-message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={7}

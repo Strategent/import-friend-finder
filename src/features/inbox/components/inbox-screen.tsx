@@ -155,6 +155,7 @@ export function InboxScreen() {
         className="flex w-full bg-muted/20 overflow-hidden"
         style={{ height: "calc(100dvh - var(--topbar-h))" }}
       >
+        <h1 className="sr-only">Inbox</h1>
         {/* Thread list */}
         <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 min-w-0 bg-background">
           <div className="h-12 px-4 flex items-center gap-2 border-b border-border/60">
@@ -163,6 +164,7 @@ export function InboxScreen() {
               <button
                 onClick={() => setFoldersOpen((v) => !v)}
                 aria-label="Mailboxes"
+                aria-haspopup="menu"
                 aria-expanded={foldersOpen}
                 className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full border border-border/70 bg-chrome backdrop-blur-md text-[12px] font-medium text-foreground/90 hover:bg-state-hover transition-colors shadow-sm"
               >
@@ -172,6 +174,7 @@ export function InboxScreen() {
               {foldersOpen && (
                 <div
                   className="absolute left-0 top-10 z-30 w-56 p-1.5 rounded-2xl border border-border/70 bg-popover/85 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
+                  role="menu"
                   style={{
                     boxShadow: "var(--elevation-popover)",
                   }}
@@ -182,6 +185,9 @@ export function InboxScreen() {
                     return (
                       <button
                         key={f.name}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={active}
                         onClick={() => {
                           setActiveFolder(f.name);
                           setFoldersOpen(false);
@@ -209,7 +215,8 @@ export function InboxScreen() {
               <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 placeholder="Search mail"
-                className="flex-1 bg-transparent text-[12.5px] placeholder:text-muted-foreground focus:outline-none"
+                aria-label="Search mail"
+                className="flex-1 bg-transparent text-[12.5px] placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               />
             </div>
             <button
@@ -304,8 +311,12 @@ export function InboxScreen() {
                       To: me · {selected.time} ago
                     </div>
                   </div>
-                  <button className="text-muted-foreground hover:text-foreground">
-                    <Star className="h-4 w-4" />
+                  <button
+                    type="button"
+                    aria-label="Star message"
+                    className="rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  >
+                    <Star className="h-4 w-4" aria-hidden />
                   </button>
                 </div>
                 <h2 className="mt-3 text-[22px] font-semibold tracking-tight leading-tight">

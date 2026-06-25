@@ -74,6 +74,7 @@ function ConnectorsPage() {
             </div>
           </div>
           <input
+            aria-label="Connector name"
             value={requestName}
             onChange={(e) => setRequestName(e.target.value)}
             placeholder="e.g. Salesforce, Xero, Calendly…"
