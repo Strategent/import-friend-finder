@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Reply, ReplyAll, Forward, Star, Paperclip, Archive, Check } from "lucide-react";
+import { toast } from "sonner";
 import { Panel } from "@/components/ui/panel";
 import { PillButton } from "@/components/ui/pill-button";
 import { emails } from "@/components/dashboard/data";
@@ -15,17 +16,25 @@ export function InboxCard() {
   const [selected, setSelected] = useState(0);
   const [tab, setTab] = useState<"focused" | "other">("focused");
   const [sentIds, setSentIds] = useState<Set<number>>(new Set());
+  const [archivedIds, setArchivedIds] = useState<Set<number>>(new Set());
+  const [flaggedIds, setFlaggedIds] = useState<Set<number>>(new Set());
+  const [mode, setMode] = useState<"reply" | "replyAll" | "forward">("reply");
   const [sending, setSending] = useState(false);
   const [justSent, setJustSent] = useState(false);
+  const composerRef = useRef<HTMLTextAreaElement>(null);
 
   const visibleEmails = useMemo(
-    () => emails.map((m, i) => ({ ...m, originalIndex: i })).filter((m) => !sentIds.has(m.originalIndex)),
-    [sentIds]
+    () =>
+      emails
+        .map((m, i) => ({ ...m, originalIndex: i }))
+        .filter((m) => !sentIds.has(m.originalIndex) && !archivedIds.has(m.originalIndex)),
+    [sentIds, archivedIds]
   );
 
   const selectedIdx = Math.min(selected, Math.max(visibleEmails.length - 1, 0));
   const e = visibleEmails[selectedIdx] ?? visibleEmails[0] ?? emails[0];
   const isSent = sentIds.has(e.originalIndex);
+  const isFlagged = flaggedIds.has(e.originalIndex);
 
   const defaultDraft = useMemo(
     () =>
@@ -41,6 +50,7 @@ export function InboxCard() {
   useEffect(() => {
     setJustSent(false);
     setSending(false);
+    setMode("reply");
     setDraft(defaultDraft);
   }, [e.originalIndex, defaultDraft]);
 
@@ -57,6 +67,56 @@ export function InboxCard() {
       setJustSent(true);
     }, 650);
   };
+
+  // Header actions — drive the reading-pane composer / list state.
+  const focusComposer = () =>
+    requestAnimationFrame(() => {
+      const el = composerRef.current;
+      if (!el) return;
+      el.focus();
+      el.setSelectionRange(0, 0);
+    });
+
+  const startReply = (next: "reply" | "replyAll") => {
+    if (isSent) return;
+    setMode(next);
+    setDraft(defaultDraft);
+    focusComposer();
+  };
+
+  const startForward = () => {
+    if (isSent) return;
+    setMode("forward");
+    setDraft(
+      `\n\n---------- Forwarded message ----------\nFrom: ${e.sender}\nSubject: ${e.subject}\n\n${e.preview}`,
+    );
+    focusComposer();
+  };
+
+  const handleArchive = () => {
+    const name = e.sender.split(" ")[0];
+    setArchivedIds((prev) => {
+      const nextSet = new Set(prev);
+      nextSet.add(e.originalIndex);
+      return nextSet;
+    });
+    toast.success(`Archived ${e.subject}`, { description: `Conversation with ${name} moved to Archive.` });
+  };
+
+  const toggleFlag = () => {
+    let nowFlagged = false;
+    setFlaggedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(e.originalIndex)) {
+        next.delete(e.originalIndex);
+      } else {
+        next.add(e.originalIndex);
+        nowFlagged = true;
+      }
+      return next;
+    });
+    toast.success(nowFlagged ? "Message flagged" : "Flag removed");
+  };
   const initials = (n: string) =>
     n
       .split(" ")
@@ -67,15 +127,16 @@ export function InboxCard() {
   return (
     <Panel
       label="Inbox"
+      to="/inbox"
       padding="none"
       action={
         <div className="flex items-center gap-1">
-          <IconBtn icon={Reply} label="Reply" />
-          <IconBtn icon={ReplyAll} label="Reply all" />
-          <IconBtn icon={Forward} label="Forward" />
+          <IconBtn icon={Reply} label="Reply" onClick={() => startReply("reply")} disabled={isSent} />
+          <IconBtn icon={ReplyAll} label="Reply all" onClick={() => startReply("replyAll")} disabled={isSent} />
+          <IconBtn icon={Forward} label="Forward" onClick={startForward} disabled={isSent} />
           <span className="mx-1 h-4 w-px bg-border" />
-          <IconBtn icon={Archive} label="Archive" />
-          <IconBtn icon={Star} label="Flag" />
+          <IconBtn icon={Archive} label="Archive" onClick={handleArchive} />
+          <IconBtn icon={Star} label="Flag" onClick={toggleFlag} active={isFlagged} />
         </div>
       }
       bodyClassName="overflow-hidden"
@@ -158,10 +219,15 @@ export function InboxCard() {
               {e.subject}
             </h2>
             <button
+              type="button"
+              onClick={toggleFlag}
               aria-label="Flag"
-              className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+              aria-pressed={isFlagged}
+              className={`grid h-6 w-6 shrink-0 place-items-center rounded-md transition-colors hover:bg-foreground/[0.06] ${
+                isFlagged ? "text-amber-400" : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              <Star className="h-3.5 w-3.5" strokeWidth={1.75} />
+              <Star className={`h-3.5 w-3.5 ${isFlagged ? "fill-amber-400" : ""}`} strokeWidth={1.75} />
             </button>
           </div>
 
@@ -213,13 +279,21 @@ export function InboxCard() {
             <div className="m-3 mt-2 shrink-0 rounded-lg border border-border/60 bg-foreground/[0.02]">
               <div className="flex items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10.5px] text-muted-foreground">
                 <span>
-                  Reply to <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
+                  {mode === "forward" ? (
+                    "Forward message"
+                  ) : (
+                    <>
+                      {mode === "replyAll" ? "Reply all to " : "Reply to "}
+                      <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
+                    </>
+                  )}
                 </span>
                 <button className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground">
                   <Paperclip className="h-3 w-3" /> IPS_v3.pdf
                 </button>
               </div>
               <textarea
+                ref={composerRef}
                 value={draft}
                 onChange={(ev) => setDraft(ev.target.value)}
                 rows={3}
@@ -247,14 +321,34 @@ export function InboxCard() {
   );
 }
 
-function IconBtn({ icon: Icon, label }: { icon: typeof Reply; label: string }) {
+function IconBtn({
+  icon: Icon,
+  label,
+  onClick,
+  active,
+  disabled,
+}: {
+  icon: typeof Reply;
+  label: string;
+  onClick?: () => void;
+  active?: boolean;
+  disabled?: boolean;
+}) {
   return (
     <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
       aria-label={label}
+      aria-pressed={active}
       title={label}
-      className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+      className={`grid h-7 w-7 place-items-center rounded-md transition-colors disabled:pointer-events-none disabled:opacity-40 ${
+        active
+          ? "text-amber-400 hover:bg-foreground/[0.06]"
+          : "text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground"
+      }`}
     >
-      <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
+      <Icon className={`h-3.5 w-3.5 ${active ? "fill-amber-400" : ""}`} strokeWidth={1.75} />
     </button>
   );
 }

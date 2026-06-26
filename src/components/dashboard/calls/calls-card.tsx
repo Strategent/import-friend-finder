@@ -1,12 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, Mic, Pause, PhoneForwarded, Headphones, UserPlus } from "lucide-react";
+import {
+  ChevronDown,
+  Mic,
+  MicOff,
+  Pause,
+  Play,
+  PhoneOff,
+  Headphones,
+  HeadphoneOff,
+  UserPlus,
+} from "lucide-react";
 import { Panel } from "@/components/ui/panel";
 import { callQueue } from "@/components/dashboard/data";
 
 /**
  * CallsCard — single live AI-handled call. Syra captures caller contact
  * details and logs them to the CRM as a new lead. Apple-native dev style:
- * one circle avatar, sleek status pill, no destructive controls.
+ * one circle avatar, sleek status pill, and live call controls (Discord-style
+ * mute / deafen toggles, hold, and a destructive End call).
  */
 function parseDur(d: string): number {
   const [m, s] = d.split(":").map((n) => parseInt(n, 10) || 0);
@@ -38,23 +49,70 @@ export function CallsCard() {
   const live = callQueue[0];
   const [seconds, setSeconds] = useState(() => parseDur(live.dur));
   const [showTranscript, setShowTranscript] = useState(false);
+
+  // Call controls
+  const [muted, setMuted] = useState(false);
+  const [deafened, setDeafened] = useState(false);
+  const [onHold, setOnHold] = useState(false);
+  const [callState, setCallState] = useState<"live" | "ending" | "ended">("live");
+  // Deafening also silences the mic (Discord behaviour).
+  const micMuted = muted || deafened;
+  const isLive = callState === "live";
+
+  // The duration clock only advances on a live, un-held call.
   useEffect(() => {
+    if (!isLive || onHold) return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [isLive, onHold]);
   const duration = useMemo(() => fmtDur(seconds), [seconds]);
+
+  const toggleMute = () => {
+    // Unmuting while deafened also un-deafens (Discord behaviour).
+    if (deafened) {
+      setDeafened(false);
+      setMuted(false);
+      return;
+    }
+    setMuted((m) => !m);
+  };
+  const toggleDeafen = () => {
+    const next = !deafened;
+    setDeafened(next);
+    setMuted(next); // deafen → mute, undeafen → unmute
+  };
+  const toggleHold = () => setOnHold((h) => !h);
+  const endCall = () => {
+    if (!isLive) return;
+    setCallState("ending");
+    window.setTimeout(() => setCallState("ended"), 1200);
+  };
+
+  const status =
+    callState === "ended"
+      ? { label: "Call ended", dot: "bg-muted-foreground/70", ping: false, text: "text-muted-foreground" }
+      : callState === "ending"
+        ? { label: "Ending…", dot: "bg-red-500", ping: true, text: "text-red-400" }
+        : onHold
+          ? { label: "On hold", dot: "bg-amber-500", ping: false, text: "text-amber-400" }
+          : { label: "On call", dot: "bg-emerald-500", ping: true, text: "text-muted-foreground" };
 
   return (
     <Panel
       label="Call handling"
+      to="/calls"
       bodyClassName="gap-4"
       action={
-        <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-border/60 bg-foreground/[0.04] px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <span
+          className={`inline-flex h-6 items-center gap-1.5 rounded-full border border-border/60 bg-foreground/[0.04] px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] ${status.text}`}
+        >
           <span className="relative grid h-1.5 w-1.5 place-items-center">
-            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-            <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {status.ping && (
+              <span className={`absolute inset-0 animate-ping rounded-full ${status.dot} opacity-60`} />
+            )}
+            <span className={`relative h-1.5 w-1.5 rounded-full ${status.dot}`} />
           </span>
-          On call
+          {status.label}
         </span>
       }
     >
@@ -69,7 +127,11 @@ export function CallsCard() {
               {live.name}
             </div>
             <div className="truncate text-[11.5px] text-muted-foreground">
-              Handled by Syra · AI agent
+              {callState === "ended"
+                ? "Call ended"
+                : onHold
+                  ? "On hold"
+                  : "Handled by Syra · AI agent"}
             </div>
           </div>
           <div className="text-right leading-tight">
@@ -85,12 +147,37 @@ export function CallsCard() {
           </div>
         </div>
 
-        {/* Controls — Apple-native row, no destructive end-call */}
+        {/* Controls — Discord-style mute/deafen toggles, hold, and End call. */}
         <div className="flex items-center justify-between px-1">
-          <CallAction icon={Mic} label="Mute" />
-          <CallAction icon={Pause} label="Hold" />
-          <CallAction icon={PhoneForwarded} label="Transfer" />
-          <CallAction icon={Headphones} label="Listen in" />
+          <CallAction
+            icon={micMuted ? MicOff : Mic}
+            label={micMuted ? "Unmute" : "Mute"}
+            active={micMuted}
+            disabled={!isLive}
+            onClick={toggleMute}
+          />
+          <CallAction
+            icon={deafened ? HeadphoneOff : Headphones}
+            label={deafened ? "Undeafen" : "Deafen"}
+            active={deafened}
+            disabled={!isLive}
+            onClick={toggleDeafen}
+          />
+          <CallAction
+            icon={onHold ? Play : Pause}
+            label={onHold ? "Resume" : "Hold"}
+            active={onHold}
+            disabled={!isLive}
+            onClick={toggleHold}
+          />
+          <CallAction
+            icon={PhoneOff}
+            label="End call"
+            variant="danger"
+            busy={callState === "ending"}
+            disabled={!isLive}
+            onClick={endCall}
+          />
         </div>
       </div>
 
@@ -174,12 +261,40 @@ export function CallsCard() {
   );
 }
 
-function CallAction({ icon: Icon, label }: { icon: typeof Mic; label: string }) {
+function CallAction({
+  icon: Icon,
+  label,
+  onClick,
+  active,
+  disabled,
+  busy,
+  variant = "toggle",
+}: {
+  icon: typeof Mic;
+  label: string;
+  onClick?: () => void;
+  active?: boolean;
+  disabled?: boolean;
+  busy?: boolean;
+  variant?: "toggle" | "danger";
+}) {
+  const styles =
+    variant === "danger"
+      ? "border-red-500/70 bg-red-500 text-white hover:bg-red-600"
+      : active
+        ? "border-red-500/40 bg-red-500/15 text-red-400 hover:bg-red-500/25"
+        : "border-border bg-foreground/[0.06] text-foreground/90 hover:bg-foreground/[0.12]";
   return (
     <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
       aria-label={label}
+      aria-pressed={variant === "toggle" ? !!active : undefined}
       title={label}
-      className="grid h-11 w-11 place-items-center rounded-full border border-border bg-foreground/[0.06] text-foreground/90 transition-colors hover:bg-foreground/[0.12]"
+      className={`grid h-11 w-11 place-items-center rounded-full border transition-colors disabled:pointer-events-none disabled:opacity-40 ${styles} ${
+        busy ? "animate-pulse" : ""
+      }`}
     >
       <Icon className="h-4 w-4" strokeWidth={1.75} />
     </button>

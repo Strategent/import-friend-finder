@@ -1,25 +1,95 @@
+import { useState } from "react";
 import { Plus, Paperclip } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Panel } from "@/components/ui/panel";
 import { planner, team, channels, docTemplates } from "@/components/dashboard/data";
 
-/** PlannerCard — open task list with checkboxes. */
+/** PlannerCard — open task list with checkboxes and a quick add (item + date). */
 export function PlannerCard() {
-  const open = planner.filter((p) => !p.done).length;
+  const [items, setItems] = useState(planner);
+  const [adding, setAdding] = useState(false);
+  const [label, setLabel] = useState("");
+  const [date, setDate] = useState("");
+
+  const open = items.filter((p) => !p.done).length;
+
+  // "2026-01-16" (or empty → today) → "16 Jan", matching the existing rows.
+  const fmtDate = (v: string) => {
+    let d: Date;
+    if (v) {
+      const [y, m, dd] = v.split("-").map(Number);
+      d = new Date(y, m - 1, dd);
+    } else {
+      d = new Date();
+    }
+    return d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+  };
+
+  const add = () => {
+    const text = label.trim();
+    if (!text) return;
+    setItems((prev) => [{ label: text, date: fmtDate(date), done: false }, ...prev]);
+    setLabel("");
+    setDate("");
+  };
+
   return (
     <Panel
       label="Planner"
+      to="/tasks"
       action={
-        <button className="grid h-7 w-7 place-items-center rounded-full border border-border bg-foreground/[0.06] text-foreground/80 transition-colors hover:bg-foreground/[0.12]">
-          <Plus className="h-3.5 w-3.5" />
+        <button
+          onClick={() => setAdding((v) => !v)}
+          aria-label={adding ? "Close add task" : "Add task"}
+          aria-expanded={adding}
+          className={`grid h-7 w-7 place-items-center rounded-full border transition-colors ${
+            adding
+              ? "border-foreground/40 bg-foreground/[0.1] text-foreground"
+              : "border-border bg-foreground/[0.06] text-foreground/80 hover:bg-foreground/[0.12]"
+          }`}
+        >
+          <Plus className={`h-3.5 w-3.5 transition-transform ${adding ? "rotate-45" : ""}`} />
         </button>
       }
     >
       <div className="mb-3 shrink-0 text-[20px] font-semibold leading-none tracking-tight">
         {open} <span className="text-[13px] font-normal text-muted-foreground">open today</span>
       </div>
+
+      {adding && (
+        <div className="mb-2 flex shrink-0 items-center gap-1.5">
+          <input
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") add();
+              if (e.key === "Escape") setAdding(false);
+            }}
+            placeholder="New task…"
+            autoFocus
+            className="h-7 min-w-0 flex-1 rounded-md border border-border bg-foreground/[0.03] px-2 text-[12px] outline-none placeholder:text-muted-foreground/60 focus:border-foreground/30"
+          />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && add()}
+            aria-label="Due date"
+            className="h-7 shrink-0 rounded-md border border-border bg-foreground/[0.03] px-1.5 text-[11px] text-muted-foreground outline-none focus:border-foreground/30"
+          />
+          <button
+            onClick={add}
+            disabled={!label.trim()}
+            className="h-7 shrink-0 rounded-md px-2.5 text-[11px] font-semibold text-white transition-opacity disabled:opacity-40"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            Add
+          </button>
+        </div>
+      )}
+
       <div className="flex min-h-0 flex-1 flex-col gap-1.5">
-        {planner.slice(0, 5).map((t, i) => (
+        {items.slice(0, 5).map((t, i) => (
           <div
             key={i}
             className={`group flex items-center gap-3 px-1 py-2 transition-colors hover:bg-foreground/[0.03] ${
@@ -104,7 +174,7 @@ export function RecapCard() {
 export function TeamCard() {
   const online = team.filter((t) => t.status === "online").length;
   return (
-    <Panel label="Team">
+    <Panel label="Team" to="/team">
       <div className="mb-3 shrink-0 text-[15px] font-semibold leading-none tracking-tight">
         {online} <span className="text-[11px] font-normal text-muted-foreground">online</span>
       </div>
@@ -134,7 +204,7 @@ export function TeamCard() {
 export function ChannelsCard() {
   const unread = channels.reduce((a, c) => a + c.unread, 0);
   return (
-    <Panel label="Channels">
+    <Panel label="Channels" to="/channels">
       <div className="mb-3 shrink-0 text-[15px] font-semibold leading-none tracking-tight">
         {unread} <span className="text-[11px] font-normal text-muted-foreground">unread</span>
       </div>
