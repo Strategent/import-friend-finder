@@ -21,6 +21,7 @@ import { team } from "@/components/dashboard/data";
 import { senderEmailAddress } from "@/lib/avatar";
 import {
   Phone,
+  PhoneCall,
   PhoneIncoming,
   PhoneOutgoing,
   Play,
@@ -68,8 +69,18 @@ function CallsPage() {
       <Card className="bento p-2">
         {calls.map((c, i) => (
           <div key={i} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/[0.04]">
-            <div className="h-9 w-9 rounded-lg grid place-items-center border border-border/60 bg-primary/10">
-              {c.dir === "in" ? <PhoneIncoming className="h-4 w-4 text-primary" /> : <PhoneOutgoing className="h-4 w-4 text-accent" />}
+            <div
+              className={`h-9 w-9 rounded-full grid place-items-center shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.35)] ${
+                c.dir === "in"
+                  ? "bg-[radial-gradient(120%_120%_at_50%_0%,color-mix(in_oklab,var(--primary)_30%,transparent),color-mix(in_oklab,var(--primary)_12%,transparent))]"
+                  : "bg-[radial-gradient(120%_120%_at_50%_0%,color-mix(in_oklab,var(--accent)_30%,transparent),color-mix(in_oklab,var(--accent)_12%,transparent))]"
+              }`}
+            >
+              {c.dir === "in" ? (
+                <PhoneIncoming className="h-4 w-4 text-primary" strokeWidth={2.25} fill="currentColor" fillOpacity={0.18} />
+              ) : (
+                <PhoneOutgoing className="h-4 w-4 text-accent" strokeWidth={2.25} fill="currentColor" fillOpacity={0.18} />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[13px] font-medium">{c.contact} <span className="text-muted-foreground font-normal">· {c.company}</span></div>
@@ -160,12 +171,22 @@ function ContactRow({ contact: c }: { contact: Contact }) {
     <div className="flex items-center gap-3 px-5 py-2.5 hover:bg-white/[0.03]">
       <div className="relative shrink-0">
         <div
-          className={`h-9 w-9 rounded-full grid place-items-center text-[11px] font-semibold ${
+          className={`h-9 w-9 rounded-full grid place-items-center text-[11px] font-medium tracking-[0.04em] shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_1px_2px_rgba(0,0,0,0.35)] ${
             c.variant === "client"
               ? "text-white"
-              : "bg-muted text-foreground/80 border border-border"
+              : "text-foreground/85"
           }`}
-          style={c.variant === "client" ? { background: "var(--gradient-primary)" } : undefined}
+          style={
+            c.variant === "client"
+              ? {
+                  backgroundImage:
+                    "radial-gradient(120% 120% at 50% 0%, color-mix(in oklab, var(--gradient-primary) 100%, white 18%), var(--gradient-primary))",
+                }
+              : {
+                  backgroundImage:
+                    "linear-gradient(180deg, color-mix(in oklab, var(--muted) 70%, white 14%), color-mix(in oklab, var(--muted) 88%, black 8%))",
+                }
+          }
         >
           {c.initials}
         </div>
@@ -183,7 +204,7 @@ function ContactRow({ contact: c }: { contact: Contact }) {
       </div>
       <div className="flex items-center gap-1 text-muted-foreground">
         {c.phone && (
-          <ContactAction href={`tel:${c.phone.trim()}`} label={`Call ${c.name}`} icon={Phone} />
+          <ContactAction href={`tel:${c.phone.trim()}`} label={`Call ${c.name}`} icon={PhoneCall} tone="call" />
         )}
         {c.phone && (
           <ContactAction
@@ -206,12 +227,28 @@ function ContactAction({
   label,
   icon: Icon,
   external,
+  tone,
 }: {
   href: string;
   label: string;
   icon: typeof Phone;
   external?: boolean;
+  tone?: "call";
 }) {
+  if (tone === "call") {
+    // iOS Phone-app call affordance: filled handset in a green circular button.
+    return (
+      <a
+        href={href}
+        aria-label={label}
+        title={label}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        className="grid h-7 w-7 place-items-center rounded-full text-white bg-[linear-gradient(180deg,#3ad165,#22b34d)] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_1px_2px_rgba(0,0,0,0.35)] transition-transform hover:scale-105 active:scale-95"
+      >
+        <Icon className="h-3.5 w-3.5" fill="currentColor" strokeWidth={1.75} />
+      </a>
+    );
+  }
   return (
     <a
       href={href}
