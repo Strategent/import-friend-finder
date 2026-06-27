@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PageShell, PageHeader } from "@/components/page-shell";
-import { team } from "@/components/dashboard/data";
+import { TEAMS as ORG_TEAMS, seedTeam, type TeamId } from "@/routes/team";
 import { Plus, Check, Users, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/tasks")({
@@ -37,18 +37,20 @@ const initialsOf = (name: string) => {
 };
 const A = (name: string): Assignee => ({ initials: initialsOf(name), name });
 
-// Assignable roster — the org's team plus the Syra agent.
+// Assignable roster — the org's team (from the Team page) plus the Syra agent.
+// Derived from team.tsx so the people here always match the Team page.
 const PEOPLE: { initials: string; name: string; role: string }[] = [
-  ...team.map((m) => ({ initials: m.initials, name: m.name, role: m.role })),
+  ...seedTeam.map((m) => ({ initials: initialsOf(m.name), name: m.name, role: m.role })),
   { initials: "SY", name: "Syra", role: "AI agent" },
 ];
 
-// Functional teams that expand to their members on assignment.
-const TEAMS: { name: string; members: string[] }[] = [
-  { name: "Advisory", members: ["David Mensah", "Olivia Park"] },
-  { name: "Research", members: ["Marcus Lee"] },
-  { name: "Operations", members: ["Rina Cho"] },
-];
+// Functional teams that expand to their members on assignment — built by
+// grouping the Team page's roster by team id (the "invited" pseudo-team is
+// excluded since ORG_TEAMS only contains the four real teams).
+const TEAMS: { name: string; members: string[] }[] = ORG_TEAMS.map((t) => ({
+  name: t.name,
+  members: seedTeam.filter((m) => m.team === (t.id as TeamId)).map((m) => m.name),
+}));
 
 const assigneeFor = (name: string): Assignee => {
   const p = PEOPLE.find((pp) => pp.name === name);

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,22 +24,54 @@ export const Route = createFileRoute("/team")({
   head: () => ({ meta: [{ title: "Team — Harwick & Sterne" }] }),
 });
 
-type Member = {
+export type TeamId = "advisory" | "research" | "operations" | "client-services" | "invited";
+
+export type Member = {
   name: string;
   role: string;
   status: string;
   tasks: number;
   score: number;
+  team: TeamId;
   pending?: boolean;
+  inviteRole?: Role;
 };
 
-const seedTeam: Member[] = [
-  { name: "Elena Smith", role: "Associate, Harwick & Sterne", status: "Online", tasks: 12, score: 96 },
-  { name: "Emma Reeves", role: "Trustee, Hartley Family Trust", status: "Online", tasks: 9, score: 91 },
-  { name: "Adrian Engman", role: "CFO, Sterling Holdings LLC", status: "Away", tasks: 7, score: 88 },
-  { name: "Claire Bennett", role: "Principal, Caldwell Estate", status: "Online", tasks: 5, score: 94 },
-  { name: "Daniel Brooks", role: "Managing Partner, Marlow Capital", status: "Offline", tasks: 3, score: 90 },
-  { name: "Lena Foster", role: "Family Office Director, Beaumont Group", status: "Online", tasks: 4, score: 92 },
+export type TeamDef = {
+  id: TeamId;
+  name: string;
+  tagline: string;
+  accent: string;
+};
+
+// Per-team accents — small, intentional pops of color layered on top of the
+// app's neutral bento palette. Each is used for the team chip + avatar ring.
+export const TEAMS: TeamDef[] = [
+  { id: "advisory", name: "Advisory", tagline: "Client strategy & relationships", accent: "#6366F1" },
+  { id: "research", name: "Research", tagline: "Markets, diligence & analysis", accent: "#0EA5E9" },
+  { id: "operations", name: "Operations", tagline: "Workflow, compliance & ops", accent: "#10B981" },
+  { id: "client-services", name: "Client Services", tagline: "Onboarding & account care", accent: "#F59E0B" },
+];
+
+// Pseudo-team for freshly invited members who haven't been assigned yet.
+const INVITED_TEAM: TeamDef = {
+  id: "invited",
+  name: "Invited",
+  tagline: "Awaiting sign-up",
+  accent: "#9CA3AF",
+};
+
+function teamById(id: TeamId): TeamDef {
+  return TEAMS.find((t) => t.id === id) ?? INVITED_TEAM;
+}
+
+export const seedTeam: Member[] = [
+  { name: "Elena Smith", role: "Associate, Harwick & Sterne", status: "Online", tasks: 12, score: 96, team: "advisory" },
+  { name: "Daniel Brooks", role: "Managing Partner, Marlow Capital", status: "Offline", tasks: 3, score: 90, team: "advisory" },
+  { name: "Adrian Engman", role: "CFO, Sterling Holdings LLC", status: "Away", tasks: 7, score: 88, team: "research" },
+  { name: "Claire Bennett", role: "Principal, Caldwell Estate", status: "Online", tasks: 5, score: 94, team: "operations" },
+  { name: "Emma Reeves", role: "Trustee, Hartley Family Trust", status: "Online", tasks: 9, score: 91, team: "client-services" },
+  { name: "Lena Foster", role: "Family Office Director, Beaumont Group", status: "Online", tasks: 4, score: 92, team: "client-services" },
 ];
 
 function statusDotColor(status: string) {
@@ -59,12 +91,49 @@ function statusDotColor(status: string) {
 
 function TeamPage() {
   const [team, setTeam] = useState<Member[]>(seedTeam);
+  // null === "All" — show every member regardless of team.
+  const [activeTeam, setActiveTeam] = useState<TeamId | null>(null);
 
-  const addInvite = (name: string, via: string) =>
+  const addInvite = (name: string, via: string, inviteRole: Role) => {
     setTeam((prev) => [
-      { name, role: `Invited via ${via}`, status: "Pending", tasks: 0, score: 0, pending: true },
+      {
+        name,
+        role: `Invited via ${via}`,
+        status: "Pending",
+        tasks: 0,
+        score: 0,
+        team: "invited",
+        pending: true,
+        inviteRole,
+      },
       ...prev,
     ]);
+    // Surface the new invite immediately by clearing any active filter.
+    setActiveTeam(null);
+  };
+
+  const counts = useMemo(() => {
+    const map = new Map<TeamId, Member[]>();
+    for (const m of team) {
+      const list = map.get(m.team) ?? [];
+      list.push(m);
+      map.set(m.team, list);
+    }
+    return map;
+  }, [team]);
+
+  // Only render the "Invited" tile when there's actually someone in it.
+  const visibleTeams = useMemo(
+    () => [...TEAMS, ...(counts.get("invited")?.length ? [INVITED_TEAM] : [])],
+    [counts],
+  );
+
+  const filtered = useMemo(
+    () => (activeTeam === null ? team : team.filter((m) => m.team === activeTeam)),
+    [team, activeTeam],
+  );
+
+  const activeLabel = activeTeam === null ? "All members" : teamById(activeTeam).name;
 
   return (
     <PageShell>
@@ -74,59 +143,285 @@ function TeamPage() {
         description="Employees, workload and accountability at a glance."
         actions={<InviteDialog onInvite={addInvite} />}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {team.map((m) => (
-          <Card key={m.name} className="bento p-5">
-            <div className="flex items-center gap-3">
-              <img
-                src={avatarUrl(m.name, 128)}
-                alt={m.name}
-                loading="lazy"
-                className={`h-11 w-11 rounded-full object-cover border border-border/60 ${m.pending ? "grayscale opacity-80" : ""}`}
-              />
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold truncate">{m.name}</div>
-                <div className="text-xs text-muted-foreground truncate">{m.role}</div>
-              </div>
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1.5 border-border/60 text-muted-foreground"
+
+      {/* Teams — filter the people grid below by clicking a team. */}
+      <section aria-label="Teams">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <h2 className="text-[13px] font-semibold tracking-tight text-foreground/90">
+            Teams <span className="text-muted-foreground font-normal">· {visibleTeams.length}</span>
+          </h2>
+          {activeTeam !== null && (
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTeam(null)}
+              className="h-7 px-2.5 -mr-2 text-[12px] text-muted-foreground hover:text-foreground"
+            >
+              Clear filter
+            </Button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {/* "All" tile */}
+          <AllTeamsCard
+            active={activeTeam === null}
+            members={team}
+            onClick={() => setActiveTeam(null)}
+          />
+          {visibleTeams.map((t) => {
+            const members = counts.get(t.id) ?? [];
+            const active = activeTeam === t.id;
+            const realMembers = members.filter((m) => !m.pending);
+            const openTasks = realMembers.reduce((s, m) => s + m.tasks, 0);
+            const avgScore = realMembers.length
+              ? Math.round(realMembers.reduce((s, m) => s + m.score, 0) / realMembers.length)
+              : 0;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setActiveTeam(active ? null : t.id)}
+                className={`bento group relative p-5 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 ${
+                  active ? "ring-2 ring-offset-2 ring-offset-background" : "hover:bg-foreground/[0.02]"
+                }`}
+                style={active ? ({ ["--tw-ring-color" as string]: t.accent } as CSSProperties) : undefined}
               >
+                {/* accent rail */}
                 <span
-                  className="inline-block h-1.5 w-1.5 rounded-full"
-                  style={{ background: statusDotColor(m.status) }}
+                  aria-hidden
+                  className="absolute left-0 top-5 bottom-5 w-1 rounded-full"
+                  style={{ background: t.accent }}
                 />
-                {m.status}
-              </Badge>
-            </div>
-            {m.pending ? (
-              <div className="mt-4 rounded-lg border border-dashed border-border/70 bg-foreground/[0.02] px-3 py-3 text-[12px] text-muted-foreground">
-                Invitation sent — awaiting sign-up to the dashboard.
-              </div>
-            ) : (
-              <>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Open tasks</div>
-                    <div className="mt-1 text-xl font-semibold">{m.tasks}</div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="inline-block h-2 w-2 rounded-full shrink-0"
+                        style={{ background: t.accent }}
+                      />
+                      <span className="text-sm font-semibold truncate">{t.name}</span>
+                    </div>
+                    <div className="mt-0.5 text-[12px] text-muted-foreground truncate">{t.tagline}</div>
                   </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Accountability</div>
-                    <div className="mt-1 text-xl font-semibold">{m.score}%</div>
-                  </div>
+                  <Badge
+                    variant="outline"
+                    className="shrink-0 border-border/60 text-muted-foreground tabular-nums"
+                  >
+                    {members.length}
+                  </Badge>
                 </div>
-                <div className="mt-3 h-1.5 w-full rounded-full bg-border/60 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-foreground"
-                    style={{ width: `${m.score}%`, opacity: 0.85 }}
+
+                <AvatarStack members={members} accent={t.accent} />
+
+                <div className="mt-4 flex items-center gap-4 text-[12px] text-muted-foreground">
+                  {t.id === "invited" ? (
+                    <span>Awaiting sign-up</span>
+                  ) : (
+                    <>
+                      <span>
+                        <span className="font-semibold text-foreground tabular-nums">{openTasks}</span> open tasks
+                      </span>
+                      <span className="h-3 w-px bg-border" aria-hidden />
+                      <span>
+                        <span className="font-semibold text-foreground tabular-nums">{avgScore}%</span> avg
+                      </span>
+                    </>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Members — reflects the current team filter. */}
+      <section aria-label="Members">
+        <div className="flex items-center gap-2 mb-3">
+          <h2 className="text-[13px] font-semibold tracking-tight text-foreground/90">
+            Members <span className="text-muted-foreground font-normal">· {filtered.length}</span>
+          </h2>
+          {activeTeam !== null && (
+            <Badge
+              className="border-0 text-white text-[11px]"
+              style={{ background: teamById(activeTeam).accent }}
+            >
+              {activeLabel}
+            </Badge>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {filtered.map((m) => {
+            const t = teamById(m.team);
+            return (
+              <Card key={m.name} className="bento p-5">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={avatarUrl(m.name, 128)}
+                    alt={m.name}
+                    loading="lazy"
+                    className={`h-11 w-11 rounded-full object-cover border border-border/60 ${m.pending ? "grayscale opacity-80" : ""}`}
                   />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold truncate">{m.name}</div>
+                    <div className="text-xs text-muted-foreground truncate">{m.role}</div>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1.5 border-border/60 text-muted-foreground"
+                  >
+                    <span
+                      className="inline-block h-1.5 w-1.5 rounded-full"
+                      style={{ background: statusDotColor(m.status) }}
+                    />
+                    {m.status}
+                  </Badge>
                 </div>
-              </>
-            )}
-          </Card>
-        ))}
-      </div>
+
+                {/* Team chip — ties the member back to their team accent. */}
+                <button
+                  type="button"
+                  onClick={() => setActiveTeam(m.team)}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors hover:bg-foreground/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30"
+                  style={{
+                    borderColor: `color-mix(in oklab, ${t.accent} 40%, transparent)`,
+                    color: t.accent,
+                  }}
+                >
+                  <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: t.accent }} />
+                  {t.name}
+                </button>
+
+                {m.pending ? (
+                  <div className="mt-3 rounded-lg border border-dashed border-border/70 bg-foreground/[0.02] px-3 py-3 text-[12px] text-muted-foreground">
+                    {m.inviteRole
+                      ? `Invited as ${m.inviteRole} — awaiting sign-up to the dashboard.`
+                      : "Invitation sent — awaiting sign-up to the dashboard."}
+                  </div>
+                ) : (
+                  <>
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Open tasks</div>
+                        <div className="mt-1 text-xl font-semibold">{m.tasks}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Accountability</div>
+                        <div className="mt-1 text-xl font-semibold">{m.score}%</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 h-1.5 w-full rounded-full bg-border/60 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-foreground"
+                        style={{ width: `${m.score}%`, opacity: 0.85 }}
+                      />
+                    </div>
+                  </>
+                )}
+              </Card>
+            );
+          })}
+        </div>
+      </section>
     </PageShell>
+  );
+}
+
+/**
+ * Overlapping avatar stack for a team card — shows up to 4 faces ringed in the
+ * team accent, plus a "+N" chip when the team is larger.
+ */
+function AvatarStack({ members, accent }: { members: Member[]; accent: string }) {
+  const shown = members.slice(0, 4);
+  const extra = members.length - shown.length;
+  return (
+    <div className="mt-4 flex items-center">
+      <div className="flex -space-x-2.5">
+        {shown.map((m) => (
+          <img
+            key={m.name}
+            src={avatarUrl(m.name, 96)}
+            alt={m.name}
+            title={m.name}
+            loading="lazy"
+            className={`h-8 w-8 rounded-full object-cover ring-2 ring-card bg-card ${m.pending ? "grayscale opacity-80" : ""}`}
+            style={{ boxShadow: `0 0 0 1px color-mix(in oklab, ${accent} 50%, transparent)` }}
+          />
+        ))}
+        {extra > 0 && (
+          <span
+            className="grid h-8 w-8 place-items-center rounded-full ring-2 ring-card bg-foreground/[0.06] text-[10px] font-semibold text-muted-foreground tabular-nums"
+            title={`+${extra} more`}
+          >
+            +{extra}
+          </span>
+        )}
+        {members.length === 0 && (
+          <span className="text-[12px] text-muted-foreground">No members yet</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * "All" tile — selected by default, shows the whole roster as one stack.
+ */
+function AllTeamsCard({
+  active,
+  members,
+  onClick,
+}: {
+  active: boolean;
+  members: Member[];
+  onClick: () => void;
+}) {
+  const total = members.length;
+  const real = members.filter((m) => !m.pending);
+  const openTasks = real.reduce((s, m) => s + m.tasks, 0);
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={`bento group relative p-5 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 ${
+        active ? "ring-2 ring-foreground/40 ring-offset-2 ring-offset-background" : "hover:bg-foreground/[0.02]"
+      }`}
+    >
+      <span
+        aria-hidden
+        className="absolute left-0 top-5 bottom-5 w-1 rounded-full"
+        style={{ background: "var(--gradient-primary)" }}
+      />
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span
+              className="inline-block h-2 w-2 rounded-full shrink-0"
+              style={{ background: "var(--gradient-primary)" }}
+            />
+            <span className="text-sm font-semibold truncate">All teams</span>
+          </div>
+          <div className="mt-0.5 text-[12px] text-muted-foreground truncate">Everyone across the firm</div>
+        </div>
+        <Badge variant="outline" className="shrink-0 border-border/60 text-muted-foreground tabular-nums">
+          {total}
+        </Badge>
+      </div>
+
+      <AvatarStack members={members} accent="#6366F1" />
+
+      <div className="mt-4 flex items-center gap-4 text-[12px] text-muted-foreground">
+        <span>
+          <span className="font-semibold text-foreground tabular-nums">{openTasks}</span> open tasks
+        </span>
+        <span className="h-3 w-px bg-border" aria-hidden />
+        <span>
+          <span className="font-semibold text-foreground tabular-nums">{TEAMS.length}</span> teams
+        </span>
+      </div>
+    </button>
   );
 }
 
@@ -138,6 +433,10 @@ const CHANNELS: { id: Channel; label: string; Icon: typeof Mail; dot: string }[]
   { id: "whatsapp", label: "WhatsApp", Icon: MessageCircle, dot: "bg-emerald-500" },
 ];
 
+export type Role = "Admin" | "Co-owner" | "Member";
+
+const ROLES: Role[] = ["Admin", "Co-owner", "Member"];
+
 const INVITE_LINK = "https://app.harwicksterne.com/join";
 
 /**
@@ -145,9 +444,10 @@ const INVITE_LINK = "https://app.harwicksterne.com/join";
  * WhatsApp. Each channel passes a prefilled invite + join link through to the
  * native app so the recipient can create their account.
  */
-function InviteDialog({ onInvite }: { onInvite: (name: string, via: string) => void }) {
+function InviteDialog({ onInvite }: { onInvite: (name: string, via: string, role: Role) => void }) {
   const [open, setOpen] = useState(false);
   const [channel, setChannel] = useState<Channel>("email");
+  const [role, setRole] = useState<Role>("Member");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -159,13 +459,14 @@ function InviteDialog({ onInvite }: { onInvite: (name: string, via: string) => v
 
   const reset = () => {
     setChannel("email");
+    setRole("Member");
     setName("");
     setEmail("");
     setPhone("");
   };
 
   const message = () =>
-    `${name.trim() ? `Hi ${name.trim()}, ` : ""}you're invited to join the Harwick & Sterne dashboard on Syra. Create your account here: ${INVITE_LINK}`;
+    `${name.trim() ? `Hi ${name.trim()}, ` : ""}you're invited to join the Harwick & Sterne dashboard on Syra as ${/^[aeiou]/i.test(role) ? "an" : "a"} ${role}. Create your account here: ${INVITE_LINK}`;
 
   const copyLink = async () => {
     try {
@@ -191,9 +492,9 @@ function InviteDialog({ onInvite }: { onInvite: (name: string, via: string) => v
     } else {
       window.location.href = `sms:${phone.trim()}?&body=${encodeURIComponent(text)}`;
     }
-    onInvite(name.trim() || (isEmail ? email.trim() : phone.trim()), channelLabel);
+    onInvite(name.trim() || (isEmail ? email.trim() : phone.trim()), channelLabel, role);
     toast.success("Invitation sent", {
-      description: `${name.trim() || "New member"} · via ${channelLabel}`,
+      description: `${name.trim() || "New member"} · ${role} · via ${channelLabel}`,
     });
     reset();
     setOpen(false);
@@ -242,6 +543,29 @@ function InviteDialog({ onInvite }: { onInvite: (name: string, via: string) => v
                 </button>
               );
             })}
+          </div>
+
+          {/* Role */}
+          <div className="space-y-1.5">
+            <Label>Role</Label>
+            <div className="flex items-center gap-1 rounded-lg border border-border bg-muted/50 p-0.5">
+              {ROLES.map((r) => {
+                const active = role === r;
+                return (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRole(r)}
+                    aria-pressed={active}
+                    className={`h-7 flex-1 rounded-full px-2 text-[11px] font-medium transition-colors ${
+                      active ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Name */}
