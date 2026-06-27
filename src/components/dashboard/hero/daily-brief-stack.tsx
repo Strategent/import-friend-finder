@@ -282,45 +282,45 @@ export function DailyBriefStack({ open, onOpenChange }: { open: boolean; onOpenC
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-[440px] p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
         <DialogTitle className="sr-only">Daily brief</DialogTitle>
-        <div className="relative h-[620px] w-full select-none">
+        <div className="relative w-full select-none" style={{ height: "min(620px, calc(90svh - 80px))" }}>
           {SECTIONS.map((section, i) => {
-              if (i > index + 2) return null;
-              return (
-                <SwipeCard
-                  key={i}
-                  section={section}
-                  offset={Math.max(0, i - index)}
-                  hidden={i < index}
-                  isPrevious={i === index - 1}
-                  isTop={i === index}
-                  stackDragX={stackDragX}
-                  onDragMotion={(value) => stackDragX.set(value)}
-                  onSwipeIntent={handleSwipeIntent}
-                  onSwipeComplete={handleSwipeComplete}
-                  total={total}
-                />
-              );
-            })}
+            if (i > index + 2) return null;
+            return (
+              <SwipeCard
+                key={i}
+                section={section}
+                offset={Math.max(0, i - index)}
+                hidden={i < index}
+                isPrevious={i === index - 1}
+                isTop={i === index}
+                stackDragX={stackDragX}
+                onDragMotion={(value) => stackDragX.set(value)}
+                onSwipeIntent={handleSwipeIntent}
+                onSwipeComplete={handleSwipeComplete}
+                total={total}
+              />
+            );
+          })}
         </div>
 
         {!closingAfterSwipe && (
-        <div className="flex justify-center gap-1.5 mt-5">
-          {SECTIONS.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => {
-                setClosingAfterSwipe(false);
-                setIndex(i);
-              }}
-              className={cn(
-                "h-1.5 rounded-full transition-all",
-                i === index ? "w-7 bg-white" : "w-1.5 bg-white/35 hover:bg-white/55"
-              )}
-              aria-label={`Go to ${SECTIONS[i].label}`}
-            />
-          ))}
-        </div>
+          <div className="flex justify-center gap-1.5 mt-5">
+            {SECTIONS.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => {
+                  setClosingAfterSwipe(false);
+                  setIndex(i);
+                }}
+                className={cn(
+                  "h-1.5 rounded-full transition-all",
+                  i === index ? "w-7 bg-white" : "w-1.5 bg-white/35 hover:bg-white/55"
+                )}
+                aria-label={`Go to ${SECTIONS[i].label}`}
+              />
+            ))}
+          </div>
         )}
       </DialogContent>
     </Dialog>

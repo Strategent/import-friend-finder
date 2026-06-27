@@ -4,6 +4,67 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Panel } from "@/components/ui/panel";
 import { planner, team, channels, docTemplates } from "@/components/dashboard/data";
 
+// 5 coloured segments + 1 dim segment = 6 total, matching the HTML mockup
+const SPEC_COLORS = ["#7a2a2a", "#7a4a1a", "#6a5a10", "#2a6a2a", "#2a3a7a", "rgba(255,255,255,0.06)"];
+
+/** MobileWorkloadCard — compact bento tile matching the mobile HTML mockup. */
+export function MobileWorkloadCard() {
+  const value = 56;
+  const active = Math.round((value / 100) * (SPEC_COLORS.length - 1));
+  return (
+    <section className="origin-card flex flex-col p-4">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/[0.22]">
+        Workload
+      </span>
+      <div className="mt-1 flex items-baseline gap-1.5">
+        <span className="text-[28px] font-semibold leading-none tracking-[-0.04em]">{value}</span>
+        <span className="text-[13px] text-foreground/40">of 93h</span>
+      </div>
+      <div className="mt-2.5 grid grid-cols-6 gap-[3px]">
+        {SPEC_COLORS.map((color, i) => (
+          <span
+            key={i}
+            className="h-[3px] rounded-full"
+            style={{ background: i < active ? color : "rgba(255,255,255,0.06)" }}
+          />
+        ))}
+      </div>
+      <span className="mt-2.5 inline-flex h-6 w-fit items-center rounded-full border border-border bg-foreground/[0.05] px-2.5 text-[11px] font-semibold text-foreground/70">
+        Healthy
+      </span>
+    </section>
+  );
+}
+
+/** MobileTeamCard — compact bento tile matching the mobile HTML mockup. */
+export function MobileTeamCard() {
+  const online = team.filter((t) => t.status === "online").length;
+  return (
+    <section className="origin-card flex flex-col p-4">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/[0.22]">
+        Team
+      </span>
+      <div className="mt-1 text-[13.5px] font-semibold">
+        {online} <span className="text-[11px] font-normal text-foreground/40">online</span>
+      </div>
+      <div className="mt-2 flex flex-col gap-0">
+        {team.slice(0, 4).map((m) => (
+          <div key={m.name} className="grid items-center gap-2 py-[4px]" style={{ gridTemplateColumns: "24px 1fr auto" }}>
+            <div className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border bg-foreground/[0.06] text-[9.5px] font-semibold text-foreground/40">
+              {m.initials}
+            </div>
+            <span className="truncate text-[12px] font-medium text-foreground/80">{m.name}</span>
+            <span
+              className="h-[6px] w-[6px] shrink-0 rounded-full"
+              style={{ background: m.status === "online" ? "#3a9a3a" : "#c4930a" }}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /** PlannerCard — open task list with checkboxes and a quick add (item + date). */
 export function PlannerCard() {
   const [items, setItems] = useState(planner);

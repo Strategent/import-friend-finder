@@ -13,10 +13,13 @@ import { PillButton } from "@/components/ui/pill-button";
 import {
   RecapCard,
   WorkloadCard,
+  MobileWorkloadCard,
   PlannerCard,
   TeamCard,
+  MobileTeamCard,
   ChannelsCard,
 } from "@/components/dashboard/widgets";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -31,10 +34,63 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+function MobileHome({ setupDone, finishSetup }: { setupDone: boolean; finishSetup: () => void }) {
+  return (
+    <PageShell>
+      <div className="flex flex-col gap-3 pb-6">
+        {/* 1. Hero */}
+        <div data-density="compact" className="w-full h-[220px] overflow-hidden rounded-2xl">
+          <DailyBriefHero />
+        </div>
+
+        {/* 2. Workload + Team side by side */}
+        <div className="grid grid-cols-2 gap-3">
+          <MobileWorkloadCard />
+          <MobileTeamCard />
+        </div>
+
+        {/* 3. Onboarding */}
+        {!setupDone && (
+          <div className="[&>section]:rounded-2xl">
+            <GradientFeatureCard
+              label="Get started"
+              title="Make the most of Syra"
+              description="Connect your inbox, calendar and phone line to unlock automated drafting and call handling."
+              progress={99}
+              cta={
+                <PillButton variant="primary" onClick={finishSetup}>
+                  Finish setup
+                </PillButton>
+              }
+              onDismiss={finishSetup}
+            />
+          </div>
+        )}
+
+        {/* 4. Inbox */}
+        <InboxCard />
+
+        {/* 5. Calendar */}
+        <CalendarCard />
+
+        {/* 6. Recap + Bulletin */}
+        <RecapCard />
+        <BulletinCard />
+
+        {/* 7. Calls + Planner + Channels */}
+        <CallsCard />
+        <PlannerCard />
+        <ChannelsCard />
+      </div>
+    </PageShell>
+  );
+}
+
 function Home() {
   // Onboarding state — once "Finish setup" is clicked, the onboarding card
   // is removed from the rail and the hero in the main grid extends downward
   // to reclaim the visual weight.
+  const isMobile = useIsMobile();
   const [setupDone, setSetupDone] = useState(false);
   useEffect(() => {
     try {
@@ -124,6 +180,10 @@ function Home() {
     },
     [setupDone],
   );
+
+  if (isMobile) {
+    return <MobileHome setupDone={setupDone} finishSetup={finishSetup} />;
+  }
 
   return (
     <PageShell>

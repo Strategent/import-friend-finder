@@ -5,6 +5,7 @@ import { Bell, Search, Sun, Moon, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SyraChatWidget } from "@/components/syra-chat-widget";
 import { useTheme } from "@/components/theme-provider";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function Topbar() {
+  const isMobile = useIsMobile();
   const { theme, toggleTheme } = useTheme();
   const [now, setNow] = useState<Date | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -31,6 +33,64 @@ export function Topbar() {
   const time = now
     ? now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })
     : "—";
+
+  if (isMobile) {
+    return (
+      <header className="sticky top-0 z-20 relative flex items-center bg-background px-4 pb-4 pt-[22px]">
+        <div className="absolute bottom-0 left-4 right-4 h-px bg-white/[0.14]" />
+        <div>
+          <div className="text-[10.5px] font-medium uppercase tracking-[0.13em] text-foreground/[0.22]">
+            Harwick &amp; Sterne
+          </div>
+          <div className="font-serif-display mt-0.5 text-[22px] font-normal leading-[1.1] tracking-[-0.01em] text-foreground/[0.92]">
+            Strategent
+          </div>
+        </div>
+        <div className="ml-auto flex items-center gap-1">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className="grid h-9 w-9 place-items-center rounded-full text-foreground/60 transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+          >
+            {theme === "dark" ? (
+              <Moon className="h-[18px] w-[18px]" fill="currentColor" />
+            ) : (
+              <Sun className="h-[18px] w-[18px]" fill="currentColor" />
+            )}
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label="Notifications"
+                className="grid h-9 w-9 place-items-center rounded-full text-foreground/60 transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+              >
+                <Bell className="h-[18px] w-[18px]" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-72">
+              <DropdownMenuLabel className="text-xs">Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="flex-col items-start gap-0.5 text-xs">
+                <span className="font-medium">Sarah replied to Proposal v2</span>
+                <span className="text-muted-foreground">Two minutes ago - draft ready in Inbox</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex-col items-start gap-0.5 text-xs">
+                <span className="font-medium">Northwind security review</span>
+                <span className="text-muted-foreground">SOC2 answer due before signing</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex-col items-start gap-0.5 text-xs">
+                <span className="font-medium">Helios renewal watch</span>
+                <span className="text-muted-foreground">14 days remaining</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <div className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="px-6 py-3 flex items-center gap-3">
@@ -176,7 +236,7 @@ export function PageHeader({
 export function PageShell({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 py-5 md:py-6 space-y-4 md:space-y-5">
+      <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 pt-5 md:pt-6 pb-28 md:pb-6 space-y-4 md:space-y-5">
         {children}
       </div>
       <SyraChatWidget />
