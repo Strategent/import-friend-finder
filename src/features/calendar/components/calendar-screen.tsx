@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { ChevronLeft, ChevronRight, Clock, Video, Globe, Check } from "lucide-react";
+import { PageSurface } from "@/app/shell/layout";
 import { SegmentedControl } from "@/components/app";
 import { formatMonthYear, formatWeekdayMonthDay } from "@/lib/formatters";
 import { toDateParam } from "@/lib/url-search-params";
@@ -70,10 +71,7 @@ export function CalendarScreen({
 
   return (
     <>
-      <div
-        className="w-full bg-background flex flex-col"
-        style={{ minHeight: "calc(100dvh - var(--topbar-h))" }}
-      >
+      <PageSurface variant="flush">
         <div className="px-8 pt-7 pb-5 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
           <div>
             <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
@@ -256,7 +254,7 @@ export function CalendarScreen({
             </div>
           </section>
         </div>
-      </div>
+      </PageSurface>
       <SyraChatWidget />
     </>
   );

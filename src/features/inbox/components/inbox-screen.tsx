@@ -28,6 +28,7 @@ import {
   Minus,
   X,
 } from "lucide-react";
+import { PageSurface } from "@/app/shell/layout";
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 import { folders, threads } from "../fixtures";
 import { filterThreads, initials } from "../model";
@@ -71,10 +72,7 @@ export function InboxScreen({
 
   return (
     <>
-      <div
-        className="flex w-full overflow-hidden bg-background"
-        style={{ height: "calc(100dvh - var(--topbar-h))" }}
-      >
+      <PageSurface variant="fill" className="flex">
         <h1 className="sr-only">Inbox</h1>
         <section className="w-[380px] shrink-0 flex flex-col border-r border-border/60 min-w-0 bg-background">
           <div className="h-12 px-4 flex items-center gap-2 border-b border-border/60">
@@ -256,7 +254,7 @@ export function InboxScreen({
             <ComposeWindow selectedFrom={selected.from} selectedSubject={selected.subject} />
           </div>
         </section>
-      </div>
+      </PageSurface>
       <SyraChatWidget />
     </>
   );

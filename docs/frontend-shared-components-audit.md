@@ -27,7 +27,7 @@ These are composed/product-facing patterns rather than primitives:
 - `GradientFeatureCard`
 - `ScoreBar`
 
-The old `components/ui/*` paths now re-export from `components/app/*` as transitional shims. New code should import these from `@/components/app`.
+These components now live only under `components/app`. The transitional `components/ui/*` re-export shims were removed in Phase 9 — import them from `@/components/app`.
 
 ## New App Patterns
 

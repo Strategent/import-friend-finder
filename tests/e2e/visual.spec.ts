@@ -8,6 +8,11 @@ const routes = [
   { path: "/channels", name: "channels" },
 ];
 
+// Pixel comparison is sensitive to render timing. Running many dev-server-backed
+// Chrome instances in parallel starves animation/font settling and produces
+// false full-frame diffs, so these snapshots run serially.
+test.describe.configure({ mode: "serial" });
+
 test.describe("visual regression baselines", () => {
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {

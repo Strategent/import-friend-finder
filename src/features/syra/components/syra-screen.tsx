@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Paperclip, ChevronDown } from "lucide-react";
+import { PageSurface } from "@/app/shell/layout";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { models, quickActions } from "../fixtures";
 
@@ -8,10 +9,7 @@ export function SyraScreen() {
   const [modelId, setModelId] = useState(models[0].id);
 
   return (
-    <div
-      className="relative w-full overflow-hidden"
-      style={{ height: "calc(100dvh - var(--topbar-h))" }}
-    >
+    <PageSurface variant="fill">
       <style>{`
         .font-radley { font-family: 'Radley', Georgia, serif; }
       `}</style>
@@ -98,6 +96,6 @@ export function SyraScreen() {
           </div>
         </div>
       </div>
-    </div>
+    </PageSurface>
   );
 }

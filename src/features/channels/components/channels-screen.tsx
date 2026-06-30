@@ -13,6 +13,7 @@ import {
   Search,
   X,
 } from "lucide-react";
+import { PageSurface } from "@/app/shell/layout";
 import { avatarUrl } from "@/lib/avatar";
 import { SyraMark } from "@/features/syra/components/syra-mark";
 import { cn } from "@/lib/utils";
@@ -23,10 +24,7 @@ export function ChannelsScreen() {
   const [showSyraTip, setShowSyraTip] = useState(true);
 
   return (
-    <div
-      className="w-full overflow-hidden bg-background"
-      style={{ height: "calc(100dvh - var(--topbar-h))" }}
-    >
+    <PageSurface variant="fill">
       <div className="grid grid-cols-12 h-full w-full">
         {/* Workspace sidebar */}
         <aside className="col-span-12 flex flex-col bg-sidebar text-sidebar-foreground md:col-span-3 lg:col-span-3">
@@ -282,6 +280,6 @@ export function ChannelsScreen() {
           </div>
         </section>
       </div>
-    </div>
+    </PageSurface>
   );
 }

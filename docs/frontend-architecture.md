@@ -84,7 +84,10 @@ Routes are the public URL interface. Keep them thin:
 
 - Define `createFileRoute`, `head`, and route-level loading or guards.
 - Compose feature modules from `src/features`.
-- Use `PageShell` and `PageHeader` from `src/app/shell/page-shell`.
+- Render every page into exactly one approved surface from `src/app/shell/layout`
+  instead of hand-rolling page background or viewport math (see Layout System below).
+  Padded content pages use `PageShell` + `PageHeader`; full-bleed workflows use
+  `PageSurface`.
 - Do not place reusable widgets, mock data, or layout engines directly in a route
   file unless the code is truly route-only and small.
 - Do not define raw hex colors, one-off route palettes, or design-system
@@ -97,8 +100,28 @@ Routes are the public URL interface. Keep them thin:
 `src/app` owns the chrome around pages:
 
 - `src/app/shell/app-sidebar.tsx` owns global navigation.
-- `src/app/shell/page-shell.tsx` owns the top bar, page wrapper, and shared page header.
+- `src/app/shell/page-shell.tsx` owns the top bar (with the `--topbar-h` token) and
+  `PageShell`/`PageHeader` (the padded content surface used by most routes).
+- `src/app/shell/layout/` owns the canonical layout primitives, re-exported from one
+  index: `PageSurface`, the page bands (`PageBandHeader`, `StatStrip`, `PageToolbar`,
+  `PageBody`), and `SplitPane`.
 - `src/app/providers/theme-provider.tsx` owns theme state and the `useTheme` hook.
+
+### Layout System
+
+`PageSurface` is the canonical page frame. Every route renders into exactly one
+variant rather than setting its own background or computing viewport height:
+
+- `padded` — comfortable scrolling content page (forms, settings, dashboards).
+  `PageShell` wraps this variant.
+- `flush` — full-height surface that grows with content and scrolls the whole page
+  (CRM, Calendar).
+- `fill` — full-height surface locked to the area below the Topbar (fixed height +
+  `overflow-hidden`), so an inner pane scrolls instead of the page (Inbox, Channels,
+  Syra).
+
+All three derive their height from the `--topbar-h` token; routes never hardcode
+`100dvh` math or `bg-*` on the page root.
 
 The app layer can import shared UI primitives and feature entry points. Feature
 modules should not mutate app-level state directly; expose an explicit prop or

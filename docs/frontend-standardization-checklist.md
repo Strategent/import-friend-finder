@@ -41,7 +41,7 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 ## 3. Shared Components
 
 - [x] Audit `src/components/ui` and separate primitives from product-specific visuals. See `docs/frontend-shared-components-audit.md`.
-- [x] Keep Radix/shadcn-style primitives in `components/ui`. Transitional re-export shims remain for moved app components.
+- [x] Keep Radix/shadcn-style primitives in `components/ui`. Moved app components now live only in `components/app` (the transitional `ui/*` re-export shims were removed in Phase 9).
 - [x] Move branded or decorative components out of generic UI. Moved product-facing components into `src/components/app`.
 - [x] Add `components/app` for composed reusable app patterns.
 - [x] Create `SearchField`.
@@ -117,14 +117,14 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 9. Definition Of Done
 
-- [ ] No Lovable references remain.
-- [ ] No route owns raw design-system decisions.
-- [ ] Every page uses an approved layout surface.
-- [ ] Shared primitives are clearly separated from product-specific components.
-- [ ] CRM is refactored as the reference implementation.
-- [ ] Accessibility checks pass for the core routes.
-- [ ] Visual snapshots confirm consistent surfaces/backgrounds.
-- [ ] Frontend architecture docs match the actual codebase.
+- [x] No Lovable references remain. Verified: zero matches in `src/`, `index.html`, `package.json`.
+- [x] No route owns raw design-system decisions. No raw hex/rgba in `src/routes/`; remaining inline `style` in routes is dynamic data (`width: ${score}%`) or status→semantic-token mapping (`statusDotColor` returns `var(--status-*)`).
+- [x] Every page uses an approved layout surface. Added a `fill` variant to `PageSurface` (fixed height + overflow-hidden + relative) and migrated Inbox/Channels/Syra onto it; Calendar moved to `flush`. No feature screen hand-rolls `100dvh - var(--topbar-h)` containers anymore.
+- [x] Shared primitives are clearly separated from product-specific components. `components/ui` holds Radix/shadcn primitives only; product components live in `components/app`. The 9 transitional `ui/*` re-export shims were removed (they had no remaining importers).
+- [x] CRM is refactored as the reference implementation. Thin route + `features/crm` + `PageSurface`/band primitives + URL state; used as the pilot throughout.
+- [x] Accessibility checks pass for the core routes. `npm run test:a11y` (axe) passes with zero violations on /, /crm, /inbox, /calendar, /channels.
+- [x] Visual snapshots confirm consistent surfaces/backgrounds. Full visual suite passes after the Phase 9 surface migration (no visual change). Fixed a pre-existing flake: the visual spec now runs `mode: "serial"` so parallel render-timing starvation no longer produces false full-frame diffs.
+- [x] Frontend architecture docs match the actual codebase. Updated `docs/frontend-architecture.md` to document `PageSurface` and its three variants (padded/flush/fill) and the `--topbar-h` token; previously it only mentioned `PageShell`.
 
 ## Recommended First Milestone
 

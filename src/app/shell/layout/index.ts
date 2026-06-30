@@ -3,7 +3,7 @@
  *
  * Every route composes its frame from these instead of hand-rolling page
  * backgrounds, viewport math, or header markup. See page-surface.tsx for the
- * two approved surface variants ("padded" | "flush").
+ * three approved surface variants ("padded" | "flush" | "fill").
  */
 export { PageSurface } from "./page-surface";
 export { PageBandHeader, StatStrip, PageToolbar, PageBody } from "./page-band";
