@@ -44,7 +44,7 @@ export function DataTable<T>({
         <thead className="border-b border-border/60 bg-table-header text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
           <tr>
             {selectable && (
-              <th className="w-8 py-3 pl-4 pr-2">
+              <th className="h-10 w-8 py-2 pl-4 pr-2">
                 <input
                   type="checkbox"
                   checked={allSelected}
@@ -58,7 +58,7 @@ export function DataTable<T>({
               <th
                 key={column.id}
                 className={cn(
-                  "px-2 py-3 font-medium",
+                  "h-10 px-2 py-2 font-medium",
                   column.align === "right" && "text-right",
                   column.align === "center" && "text-center",
                   column.headerClassName,
@@ -88,12 +88,12 @@ export function DataTable<T>({
                   key={rowKey}
                   data-state={selected ? "selected" : undefined}
                   className={cn(
-                    "border-b border-border/40 transition-colors hover:bg-table-row-hover data-[state=selected]:bg-table-row-selected",
+                    "h-14 border-b border-border/40 transition-colors hover:bg-table-row-hover data-[state=selected]:bg-table-row-selected",
                     rowClassName?.(row),
                   )}
                 >
                   {selectable && (
-                    <td className="py-3 pl-4 pr-2">
+                    <td className="py-2.5 pl-4 pr-2">
                       <input
                         type="checkbox"
                         checked={selected}
@@ -107,7 +107,7 @@ export function DataTable<T>({
                     <td
                       key={column.id}
                       className={cn(
-                        "px-2 py-3",
+                        "px-2 py-2.5",
                         column.align === "right" && "text-right",
                         column.align === "center" && "text-center",
                         column.className,

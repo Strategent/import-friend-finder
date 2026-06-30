@@ -58,7 +58,7 @@ export function Topbar() {
                 onKeyDown={(e) => {
                   if (e.key === "Escape") setSearchOpen(false);
                 }}
-                className="w-full h-8 px-3 rounded-lg bg-card/60 border border-border/60 text-[13px] placeholder:text-muted-foreground focus:outline-none focus:border-border focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+                className="h-8 w-full rounded-md border border-border/60 bg-surface-raised px-3 text-[13px] placeholder:text-muted-foreground focus:border-focus focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background"
               />
             </div>
           </div>

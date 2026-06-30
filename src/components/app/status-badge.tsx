@@ -54,7 +54,7 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center gap-1.5 rounded-full border px-2 text-[10px] font-medium",
+        "inline-flex h-6 items-center gap-1.5 rounded-md border px-2 text-[10px] font-medium",
         variantClass[variant],
         className,
       )}

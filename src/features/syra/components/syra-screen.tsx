@@ -16,7 +16,7 @@ export function SyraScreen() {
         .font-radley { font-family: 'Radley', Georgia, serif; }
       `}</style>
 
-      {/* Animated on-brand monotone + subtle purple fluid background */}
+      {/* Syra uses only the approved brand gradient tokens for its distinct surface. */}
       <div className="absolute inset-0 pointer-events-none">
         <BackgroundGradientAnimation
           interactive={false}
@@ -40,7 +40,7 @@ export function SyraScreen() {
 
         {/* Input bar */}
         <div className="mt-10 w-full max-w-3xl">
-          <div className="relative rounded-2xl border border-border bg-card/60 backdrop-blur-xl shadow-xl">
+          <div className="relative rounded-lg border border-border bg-card/80 shadow-panel backdrop-blur-xl">
             <input
               value={input}
               aria-label="Ask Syra"
@@ -51,7 +51,7 @@ export function SyraScreen() {
             <div className="absolute left-3 bottom-3 flex items-center gap-1.5">
               <button
                 aria-label="Attach"
-                className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-state-hover transition-colors"
               >
                 <Paperclip className="h-4 w-4" />
               </button>
@@ -63,7 +63,7 @@ export function SyraScreen() {
                   id="syra-model"
                   value={modelId}
                   onChange={(event) => setModelId(event.target.value)}
-                  className="h-9 appearance-none rounded-lg bg-transparent pl-3 pr-8 text-[12.5px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  className="h-9 appearance-none rounded-md bg-transparent pl-3 pr-8 text-[12.5px] text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   {models.map((model) => (
                     <option key={model.id} value={model.id}>
@@ -79,7 +79,7 @@ export function SyraScreen() {
             </div>
             <button
               aria-label="Send"
-              className="absolute right-3 bottom-3 h-9 px-4 rounded-lg bg-primary text-primary-foreground text-[12.5px] font-medium hover:bg-primary/90 transition-colors"
+              className="absolute right-3 bottom-3 h-9 rounded-md bg-primary px-4 text-[12.5px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Send
             </button>
@@ -90,7 +90,7 @@ export function SyraScreen() {
             {quickActions.map((a) => (
               <button
                 key={a.label}
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3.5 py-1.5 text-[12.5px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-raised px-3.5 py-1.5 text-[12.5px] text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"
               >
                 <a.icon className="h-3.5 w-3.5" /> {a.label}
               </button>

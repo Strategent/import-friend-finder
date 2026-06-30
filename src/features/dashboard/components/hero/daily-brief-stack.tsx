@@ -298,7 +298,7 @@ function SwipeCard({
       onDrag={isTop && !reduceMotion ? (_, info) => onDragMotion(info.offset.x) : undefined}
       onDragEnd={isTop && !reduceMotion ? handleDragEnd : undefined}
     >
-      <div className="h-full w-full bg-surface rounded-[24px] border border-border shadow-popover px-7 pt-7 pb-6 overflow-hidden cursor-grab active:cursor-grabbing">
+      <div className="h-full w-full cursor-grab overflow-hidden rounded-lg border border-border bg-surface px-7 pb-6 pt-7 shadow-popover active:cursor-grabbing">
         {section.render()}
       </div>
     </motion.div>

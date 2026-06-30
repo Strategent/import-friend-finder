@@ -34,7 +34,7 @@ export const CardSpotlight = ({
   return (
     <div
       className={cn(
-        "group/spotlight relative rounded-2xl border border-border bg-card p-5",
+        "group/spotlight relative rounded-lg border border-border bg-card p-5",
         className,
       )}
       onMouseMove={handleMouseMove}
@@ -44,7 +44,7 @@ export const CardSpotlight = ({
     >
       {!prefersReducedMotion && (
         <motion.div
-          className="pointer-events-none absolute inset-0 z-0 rounded-2xl opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
+          className="pointer-events-none absolute inset-0 z-0 rounded-lg opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
           style={{ background: spotlightBackground }}
         />
       )}

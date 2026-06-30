@@ -94,15 +94,15 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 7. Visual Consistency
 
-- [ ] Remove one-off route palettes.
-- [ ] Normalize table row height, density, borders, hover states, and selected states.
-- [ ] Normalize page spacing and section rhythm.
-- [ ] Normalize card/panel radius.
-- [ ] Normalize shadows and elevation.
-- [ ] Normalize form field sizing.
-- [ ] Normalize badge shapes and colors.
-- [ ] Reduce decorative gradients/orbs where they conflict with admin-tool clarity.
-- [ ] Keep Syra visually distinct only through approved brand tokens.
+- [x] Remove one-off route palettes. Replaced ordinary route action/avatar gradient fills with `bg-primary`, aligned Inbox to `bg-background`, and left only approved brand/special-purpose gradients.
+- [x] Normalize table row height, density, borders, hover states, and selected states. `DataTable` and the shadcn table primitive now share table tokens, row height, hover, and selected-state treatment.
+- [x] Normalize page spacing and section rhythm. Topbar, Inbox, Connectors, Support, and full-height workflow surfaces now use the shared background/control rhythm established by the page shell.
+- [x] Normalize card/panel radius. Reduced radius primitives and patched oversized app cards/popovers/widgets to the shared radius scale.
+- [x] Normalize shadows and elevation. Replaced ad hoc popover/card shadows with `shadow-popover`, `shadow-panel`, or semantic elevation tokens.
+- [x] Normalize form field sizing. Shared `Input`, topbar search, Inbox search, Connectors request input, Support input, and Support textarea now use the same compact control height/focus treatment.
+- [x] Normalize badge shapes and colors. `StatusBadge`, `FilterBar`, and base `Badge` now use rectangular app/admin badge geometry and semantic focus/color tokens.
+- [x] Reduce decorative gradients/orbs where they conflict with admin-tool clarity. Removed generic primary gradients from admin routes; retained only dashboard feature/score visuals and Syra's scoped brand surface.
+- [x] Keep Syra visually distinct only through approved brand tokens. Syra page/widget styling now uses `--brand-syra`, `--syra-*`, and semantic surfaces instead of generic decorative gradients for normal controls.
 
 ## 8. Testing And Tooling
 

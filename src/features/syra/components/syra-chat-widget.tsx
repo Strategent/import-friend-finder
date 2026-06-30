@@ -23,7 +23,7 @@ export function SyraChatWidget() {
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3">
       {open && (
         <div
-          className="w-[360px] max-w-[calc(100vw-2.5rem)] h-[480px] rounded-[26px] bg-card/95 backdrop-blur-2xl border border-border flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200"
+          className="w-[360px] max-w-[calc(100vw-2.5rem)] h-[480px] rounded-xl bg-card/95 backdrop-blur-2xl border border-border flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200"
           style={{
             boxShadow: "var(--elevation-syra-chat)",
           }}
@@ -58,12 +58,12 @@ export function SyraChatWidget() {
               >
                 {m.role === "syra" && <SyraMark size={28} className="shrink-0" />}
                 <div
-                  className={`max-w-[80%] px-3 py-2 rounded-2xl text-[13px] leading-snug ${
+                  className={`max-w-[80%] rounded-lg px-3 py-2 text-[13px] leading-snug ${
                     m.role === "user"
                       ? "text-primary-foreground rounded-br-md"
                       : "bg-surface-raised text-foreground rounded-bl-md border border-border/60"
                   }`}
-                  style={m.role === "user" ? { background: "var(--gradient-primary)" } : undefined}
+                  style={m.role === "user" ? { background: "var(--brand-syra)" } : undefined}
                 >
                   {m.text}
                 </div>
@@ -77,7 +77,7 @@ export function SyraChatWidget() {
               <button
                 key={s}
                 onClick={() => setInput(s)}
-                className="h-6 px-2.5 rounded-full text-[10.5px] font-medium border border-border bg-surface-raised text-muted-foreground hover:text-foreground hover:bg-state-hover transition-colors"
+                className="h-6 rounded-md border border-border bg-surface-raised px-2.5 text-[10.5px] font-medium text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"
               >
                 {s}
               </button>
@@ -86,7 +86,7 @@ export function SyraChatWidget() {
 
           {/* Composer */}
           <div className="px-3 pb-3 pt-1">
-            <div className="flex items-center gap-2 h-11 px-3 rounded-full bg-surface-raised border border-border">
+            <div className="flex items-center gap-2 h-11 rounded-lg border border-border bg-surface-raised px-3">
               <Bot className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 value={input}
@@ -99,8 +99,8 @@ export function SyraChatWidget() {
               <button
                 onClick={send}
                 aria-label="Send"
-                className="h-7 w-7 grid place-items-center rounded-full text-primary-foreground"
-                style={{ background: "var(--gradient-primary)" }}
+                className="h-7 w-7 grid place-items-center rounded-md text-primary-foreground"
+                style={{ background: "var(--brand-syra)" }}
               >
                 <Send className="h-3 w-3" />
               </button>

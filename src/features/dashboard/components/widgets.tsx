@@ -188,10 +188,7 @@ export function DocumentsCard() {
               </div>
               <div className="mt-0.5 text-[9.5px] text-muted-foreground">{d.uses} uses</div>
             </div>
-            <button
-              className="mt-2 h-6 self-stretch rounded-md text-[10px] font-semibold text-primary-foreground"
-              style={{ background: "var(--gradient-primary)" }}
-            >
+            <button className="mt-2 h-6 self-stretch rounded-md bg-primary text-[10px] font-semibold text-primary-foreground hover:bg-primary/90">
               Autofill
             </button>
           </div>

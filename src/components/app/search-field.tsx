@@ -35,7 +35,7 @@ export const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
           placeholder={placeholder}
           aria-label={ariaLabel ?? placeholder ?? "Search"}
           className={cn(
-            "h-9 w-full rounded-lg border border-border bg-surface-raised pl-9 pr-3 text-[13px] placeholder:text-muted-foreground focus:border-focus focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+            "h-9 w-full rounded-md border border-border bg-surface-raised pl-9 pr-3 text-[13px] placeholder:text-muted-foreground focus:border-focus focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background",
             onClear && hasValue && "pr-9",
             className,
           )}

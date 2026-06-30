@@ -72,7 +72,7 @@ export function InboxScreen({
   return (
     <>
       <div
-        className="flex w-full bg-muted/20 overflow-hidden"
+        className="flex w-full overflow-hidden bg-background"
         style={{ height: "calc(100dvh - var(--topbar-h))" }}
       >
         <h1 className="sr-only">Inbox</h1>
@@ -84,16 +84,15 @@ export function InboxScreen({
                 aria-label="Mailboxes"
                 aria-haspopup="menu"
                 aria-expanded={foldersOpen}
-                className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full border border-border/70 bg-chrome backdrop-blur-md text-[12px] font-medium text-foreground/90 hover:bg-state-hover transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md border border-border/70 bg-surface-raised text-[12px] font-medium text-foreground/90 hover:bg-state-hover transition-colors"
               >
                 <ActiveIcon className="h-3.5 w-3.5" strokeWidth={1.75} />
                 <span>{activeFolder}</span>
               </button>
               {foldersOpen && (
                 <div
-                  className="absolute left-0 top-10 z-30 w-56 p-1.5 rounded-2xl border border-border/70 bg-popover/85 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
+                  className="absolute left-0 top-10 z-30 w-56 rounded-lg border border-border/70 bg-popover p-1.5 shadow-popover animate-in fade-in slide-in-from-top-2 duration-150"
                   role="menu"
-                  style={{ boxShadow: "var(--elevation-popover)" }}
                 >
                   {folders.map((folder) => {
                     const Icon = folder.icon;
@@ -127,7 +126,7 @@ export function InboxScreen({
                 </div>
               )}
             </div>
-            <div className="flex-1 flex items-center gap-2 h-8 px-2.5 rounded-md bg-muted/50 border border-border/60">
+            <div className="flex-1 flex items-center gap-2 h-8 px-2.5 rounded-md bg-surface-raised border border-border/60">
               <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 value={search.q}
@@ -316,10 +315,7 @@ function ComposeWindow({
 }) {
   const firstName = selectedFrom.split(" ")[0];
   return (
-    <div
-      className="mt-8 max-w-2xl bg-card border border-border/70 rounded-xl overflow-hidden"
-      style={{ boxShadow: "var(--elevation-popover)" }}
-    >
+    <div className="mt-8 max-w-2xl overflow-hidden rounded-lg border border-border/70 bg-card shadow-popover">
       <div className="flex items-center justify-between px-3.5 h-9 bg-surface-raised border-b border-border/60">
         <div className="flex items-center gap-2 text-[12px] font-medium text-foreground/85">
           <CornerUpLeft className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.85} />

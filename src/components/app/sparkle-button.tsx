@@ -16,7 +16,7 @@ export function SparkleButton({
       aria-label={label}
       title={label}
       className={cn(
-        "group grid h-8 w-8 shrink-0 place-items-center rounded-[10px] border transition-all hover:scale-[1.05] active:scale-95",
+        "group grid h-8 w-8 shrink-0 place-items-center rounded-lg border transition-all hover:scale-[1.05] active:scale-95",
         className,
       )}
       style={{

@@ -78,9 +78,9 @@ function ConnectorsPage() {
             value={requestName}
             onChange={(e) => setRequestName(e.target.value)}
             placeholder="e.g. Salesforce, Xero, Calendly…"
-            className="h-10 px-3 rounded-lg bg-surface-raised border border-border text-[13px] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 md:w-72"
+            className="h-9 rounded-md border border-border bg-surface-raised px-3 text-[13px] placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-background md:w-72"
           />
-          <Button className="h-10 px-4 text-[13px]">Submit request</Button>
+          <Button className="h-9 px-4 text-[13px]">Submit request</Button>
         </div>
       )}
 
@@ -88,7 +88,7 @@ function ConnectorsPage() {
         {connectors.map((c) => {
           return (
             <div key={c.name} className="col-span-12 sm:col-span-6 lg:col-span-4">
-              <div className="p-5 h-full flex flex-col gap-4 bg-card border border-border">
+              <div className="flex h-full flex-col gap-4 rounded-lg border border-border bg-card p-5">
                 <div className="flex items-start justify-between">
                   <ConnectorIcon slug={c.slug} name={c.name} />
                   {c.connected ? (

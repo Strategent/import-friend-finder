@@ -66,10 +66,7 @@ function CallsPage() {
         title="Calls"
         description="Inbound and outbound calls handled by your team and the Syra voice agent."
         actions={
-          <Button
-            className="text-primary-foreground border-0"
-            style={{ background: "var(--gradient-primary)" }}
-          >
+          <Button className="border-0 bg-primary text-primary-foreground hover:bg-primary/90">
             <Phone className="h-4 w-4 mr-2" /> Place Call
           </Button>
         }

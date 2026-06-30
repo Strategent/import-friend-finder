@@ -98,10 +98,7 @@ export function CalendarScreen({
         <div className="flex-1 grid grid-cols-12">
           <aside className="col-span-12 md:col-span-3 border-r border-border/60 px-8 py-7 flex flex-col gap-5">
             <div className="flex items-center gap-3">
-              <div
-                className="h-10 w-10 rounded-full grid place-items-center text-[12px] font-semibold text-primary-foreground"
-                style={{ background: "var(--gradient-primary)" }}
-              >
+              <div className="h-10 w-10 rounded-full grid place-items-center bg-primary text-[12px] font-semibold text-primary-foreground">
                 HS
               </div>
               <div>

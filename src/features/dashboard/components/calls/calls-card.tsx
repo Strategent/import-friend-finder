@@ -121,7 +121,7 @@ export function CallsCard() {
                 className={`flex ${line.who === "agent" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-3 py-1.5 text-[12px] leading-snug ${
+                  className={`max-w-[80%] rounded-lg px-3 py-1.5 text-[12px] leading-snug ${
                     line.who === "agent"
                       ? "bg-state-selected text-foreground/95"
                       : "bg-surface-raised text-foreground/85"

@@ -73,10 +73,7 @@ function SettingsPage() {
                 key={u.name}
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-state-hover"
               >
-                <div
-                  className="h-8 w-8 rounded-full grid place-items-center text-[11px] font-semibold text-primary-foreground"
-                  style={{ background: "var(--gradient-primary)" }}
-                >
+                <div className="h-8 w-8 rounded-full grid place-items-center bg-primary text-[11px] font-semibold text-primary-foreground">
                   {u.name
                     .split(" ")
                     .map((p) => p[0])

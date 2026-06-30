@@ -27,10 +27,7 @@ const columns: DataTableColumn<Client>[] = [
     ),
     cell: (client) => (
       <div className="flex min-w-0 items-center gap-3">
-        <div
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-primary-foreground"
-          style={{ background: "var(--gradient-primary)" }}
-        >
+        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
           {client.name
             .split(" ")
             .map((namePart) => namePart[0])
