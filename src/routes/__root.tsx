@@ -132,7 +132,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="scroll-slim">
+    // The inline script below adds `dark` to <html> before hydration to avoid a
+    // theme flash, so the server ("scroll-slim") and pre-hydration client
+    // ("scroll-slim dark") class lists differ by design. suppressHydrationWarning
+    // silences the expected, harmless mismatch on this element only.
+    <html lang="en" className="scroll-slim" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script
