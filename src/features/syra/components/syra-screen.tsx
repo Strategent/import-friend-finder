@@ -1,19 +1,7 @@
 import { useState } from "react";
-import { Paperclip, FileText, Inbox, Calendar, ChevronDown } from "lucide-react";
+import { Paperclip, ChevronDown } from "lucide-react";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
-
-const quickActions = [
-  { icon: FileText, label: "Draft Email" },
-  { icon: Inbox, label: "Triage Inbox" },
-  { icon: Calendar, label: "Schedule Meeting" },
-];
-
-const models = [
-  { id: "claude-sonnet-4.5", name: "Claude Sonnet 4.5", provider: "Anthropic" },
-  { id: "claude-opus-4", name: "Claude Opus 4", provider: "Anthropic" },
-  { id: "gpt-5", name: "GPT-5", provider: "OpenAI" },
-  { id: "gpt-5-mini", name: "GPT-5 Mini", provider: "OpenAI" },
-];
+import { models, quickActions } from "../fixtures";
 
 export function SyraScreen() {
   const [input, setInput] = useState("");

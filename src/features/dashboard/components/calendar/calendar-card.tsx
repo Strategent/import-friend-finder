@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Video } from "lucide-react";
 import { Panel } from "@/components/app/panel";
 import { todaysMeetings } from "@/features/dashboard/components/data";
+import { formatShortMonth } from "@/lib/formatters";
 
 /**
  * CalendarCard — Monday-start week strip + today's meetings with Join buttons.
@@ -31,7 +32,7 @@ export function CalendarCard() {
   const weekRangeLabel = (() => {
     const end = week[6];
     const sameMonth = startOfWeek.getMonth() === end.getMonth();
-    const fmtMonth = (d: Date) => d.toLocaleDateString("en-US", { month: "short" });
+    const fmtMonth = formatShortMonth;
     return sameMonth
       ? `${fmtMonth(startOfWeek)} ${startOfWeek.getDate()} – ${end.getDate()}, ${end.getFullYear()}`
       : `${fmtMonth(startOfWeek)} ${startOfWeek.getDate()} – ${fmtMonth(end)} ${end.getDate()}, ${end.getFullYear()}`;

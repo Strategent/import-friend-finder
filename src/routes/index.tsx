@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { PageShell } from "@/app/shell/layout";
 import { DashboardShell } from "@/features/dashboard/layout/dashboard-shell";
 import { BentoGridStack, type BentoItem } from "@/features/dashboard/layout/bento-grid-stack";
+import {
+  DASHBOARD_LAYOUT_KEYS,
+  DASHBOARD_PREFERENCE_KEYS,
+} from "@/features/dashboard/layout/persistence";
 import { DailyBriefHero } from "@/features/dashboard/components/hero/daily-brief-hero";
 import { InboxCard } from "@/features/dashboard/components/inbox/inbox-card";
 import { CalendarCard } from "@/features/dashboard/components/calendar/calendar-card";
@@ -17,6 +21,7 @@ import {
   TeamCard,
   ChannelsCard,
 } from "@/features/dashboard/components/widgets";
+import { usePersistentPreference } from "@/lib/preferences";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -31,26 +36,24 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+const serializeSetupDone = (value: boolean) => (value ? "1" : "0");
+const deserializeSetupDone = (value: string) => value === "1" || value === "true";
+
 function Home() {
   // Onboarding state — once "Finish setup" is clicked, the onboarding card
   // is removed from the rail and the hero in the main grid extends downward
   // to reclaim the visual weight.
-  const [setupDone, setSetupDone] = useState(false);
-  useEffect(() => {
-    try {
-      if (localStorage.getItem("hs-setup-done") === "1") setSetupDone(true);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-  const finishSetup = () => {
+  const [setupDone, setSetupDone] = usePersistentPreference(
+    DASHBOARD_PREFERENCE_KEYS.setupDone,
+    false,
+    {
+      serialize: serializeSetupDone,
+      deserialize: deserializeSetupDone,
+    },
+  );
+  const finishSetup = useCallback(() => {
     setSetupDone(true);
-    try {
-      localStorage.setItem("hs-setup-done", "1");
-    } catch {
-      /* ignore */
-    }
-  };
+  }, [setSetupDone]);
 
   // Stable item arrays — built once. The bento grids init gridstack against
   // these DOM nodes, so the lists must not change identity on re-render.
@@ -138,7 +141,7 @@ function Home() {
       { id: "channels", x: 0, y: offset + 15, w: 1, h: 4, minH: 3, node: <ChannelsCard /> },
     ];
     return setupDone ? rest : [onboarding, ...rest];
-  }, [setupDone]);
+  }, [finishSetup, setupDone]);
 
   return (
     <PageShell>
@@ -148,7 +151,9 @@ function Home() {
             key={setupDone ? "rail-v4-done" : "rail-v4-setup"}
             items={railItems}
             column={1}
-            storageKey={setupDone ? "hs-rail-layout-v4-done" : "hs-rail-layout-v4"}
+            storageKey={
+              setupDone ? DASHBOARD_LAYOUT_KEYS.railDone : DASHBOARD_LAYOUT_KEYS.railSetup
+            }
             resizeHandles="s"
             className="-mx-2.5"
           />
@@ -158,7 +163,7 @@ function Home() {
           key={setupDone ? "main-v6-done" : "main-v6-setup"}
           items={mainItems}
           column={12}
-          storageKey={setupDone ? "hs-main-layout-v6-done" : "hs-main-layout-v6"}
+          storageKey={setupDone ? DASHBOARD_LAYOUT_KEYS.mainDone : DASHBOARD_LAYOUT_KEYS.mainSetup}
           className="-mx-2.5"
         />
       </DashboardShell>

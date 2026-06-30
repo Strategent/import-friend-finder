@@ -2,6 +2,11 @@ export type Stage = "Lead" | "Qualified" | "Proposal" | "Negotiation" | "Closed"
 
 export type StageFilter = "All" | Stage;
 
+export type CrmSearch = {
+  q: string;
+  stage: StageFilter;
+};
+
 export type Client = {
   id: number;
   name: string;

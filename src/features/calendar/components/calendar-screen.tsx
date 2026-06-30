@@ -1,121 +1,72 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ChevronLeft, ChevronRight, Clock, Video, Globe, Check } from "lucide-react";
+import { SegmentedControl } from "@/components/app";
+import { formatMonthYear, formatWeekdayMonthDay } from "@/lib/formatters";
+import { toDateParam } from "@/lib/url-search-params";
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
+import { bookings, CALENDAR_MODES, TIME_SLOTS } from "../fixtures";
+import type { CalendarMode, CalendarSearch } from "../types";
 
-type Meeting = { time: string; client: string; status: "Confirmed" | "Pending"; zoom: string };
+const modeOptions = CALENDAR_MODES.map((mode) => ({
+  value: mode,
+  label: mode === "month" ? "Month" : "Agenda",
+}));
 
-// Booked meetings keyed by day-of-month (assumes current viewing month)
-const bookings: Record<number, Meeting[]> = {
-  7: [
-    {
-      time: "10:00",
-      client: "Hartley Family Review",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000001",
-    },
-  ],
-  16: [
-    {
-      time: "09:00",
-      client: "Hartley Family Trust",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000010",
-    },
-    {
-      time: "11:30",
-      client: "Denis Marlow — Rebalance",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000011",
-    },
-    {
-      time: "14:00",
-      client: "Sterling Holdings Review",
-      status: "Pending",
-      zoom: "https://zoom.us/j/0000000012",
-    },
-    {
-      time: "16:30",
-      client: "Caldwell Estate Planning",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000013",
-    },
-  ],
-  20: [
-    {
-      time: "09:00",
-      client: "CIO Roundtable — Valdai Fund",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000020",
-    },
-  ],
-  22: [
-    {
-      time: "13:30",
-      client: "Sterling Holdings Estate Review",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000022",
-    },
-  ],
-  28: [
-    {
-      time: "16:00",
-      client: "All-Hands — Q1 Planning",
-      status: "Confirmed",
-      zoom: "https://zoom.us/j/0000000028",
-    },
-  ],
-};
+function parseCalendarDate(value: string) {
+  return new Date(`${value}T00:00:00`);
+}
 
-const TIME_SLOTS = [
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-];
+function daysInMonth(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+}
 
-export function CalendarScreen() {
+function clampDay(year: number, month: number, day: number) {
+  return Math.min(day, daysInMonth(new Date(year, month, 1)));
+}
+
+export function CalendarScreen({
+  search,
+  onSearchChange,
+}: {
+  search: CalendarSearch;
+  onSearchChange: (search: Partial<CalendarSearch>) => void;
+}) {
   const today = new Date(2026, 0, 16);
-  const [viewMonth, setViewMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
-  const [selectedDay, setSelectedDay] = useState<number>(16);
-
-  const monthLabel = viewMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const selectedDate = useMemo(() => parseCalendarDate(search.date), [search.date]);
+  const viewMonth = useMemo(
+    () => new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1),
+    [selectedDate],
+  );
+  const selectedDay = selectedDate.getDate();
+  const monthLabel = formatMonthYear(viewMonth);
 
   const grid = useMemo(() => {
     const first = new Date(viewMonth);
-    const lastDay = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0).getDate();
-    const startOffset = (first.getDay() + 6) % 7; // Monday-start
+    const lastDay = daysInMonth(viewMonth);
+    const startOffset = (first.getDay() + 6) % 7;
     const cells: { d: number | null; inMonth: boolean }[] = [];
+
     for (let i = 0; i < startOffset; i++) cells.push({ d: null, inMonth: false });
     for (let d = 1; d <= lastDay; d++) cells.push({ d, inMonth: true });
     while (cells.length % 7 !== 0) cells.push({ d: null, inMonth: false });
+
     return cells;
   }, [viewMonth]);
 
   const dayMeetings = bookings[selectedDay] ?? [];
-  const bookedSet = new Set(dayMeetings.map((m) => m.time));
+  const bookedSet = new Set(dayMeetings.map((meeting) => meeting.time));
+  const selectedLabel = formatWeekdayMonthDay(selectedDate);
+  const visibleSlots =
+    search.mode === "agenda" ? TIME_SLOTS.filter((slot) => bookedSet.has(slot)) : TIME_SLOTS;
 
-  const selectedDate = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), selectedDay);
-  const selectedLabel = selectedDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-
-  const navMonth = (delta: number) =>
-    setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() + delta, 1));
+  const setSelectedDate = (date: Date) => onSearchChange({ date: toDateParam(date) });
+  const setMode = (mode: CalendarMode) => onSearchChange({ mode });
+  const navMonth = (delta: number) => {
+    const nextMonth = viewMonth.getMonth() + delta;
+    const nextYear = viewMonth.getFullYear();
+    const nextDate = new Date(nextYear, nextMonth, clampDay(nextYear, nextMonth, selectedDay));
+    setSelectedDate(nextDate);
+  };
 
   return (
     <>
@@ -123,22 +74,28 @@ export function CalendarScreen() {
         className="w-full bg-background flex flex-col"
         style={{ minHeight: "calc(100dvh - var(--topbar-h))" }}
       >
-        {/* Top bar — Calendly-style */}
         <div className="px-8 pt-7 pb-5 border-b border-border/60 flex items-end justify-between flex-wrap gap-4">
           <div>
             <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
-              Harwick & Sterne · Scheduling
+              Harwick & Sterne - Scheduling
             </div>
             <h1 className="mt-2 text-[28px] font-semibold tracking-tight">Book a meeting</h1>
           </div>
-          <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
-            <Globe className="h-3.5 w-3.5" />
-            America / New York (GMT-5)
+          <div className="flex items-center gap-4">
+            <SegmentedControl
+              ariaLabel="Calendar mode"
+              options={modeOptions}
+              value={search.mode}
+              onValueChange={setMode}
+            />
+            <div className="hidden items-center gap-2 text-[12px] text-muted-foreground sm:flex">
+              <Globe className="h-3.5 w-3.5" />
+              America / New York (GMT-5)
+            </div>
           </div>
         </div>
 
         <div className="flex-1 grid grid-cols-12">
-          {/* Left — event info */}
           <aside className="col-span-12 md:col-span-3 border-r border-border/60 px-8 py-7 flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <div
@@ -161,11 +118,11 @@ export function CalendarScreen() {
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Video className="h-3.5 w-3.5 text-muted-foreground" />
-                  Zoom · details shared on booking
+                  Zoom - details shared on booking
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Globe className="h-3.5 w-3.5 text-muted-foreground" />
-                  Mayfair office · also remote
+                  Mayfair office - also remote
                 </li>
               </ul>
             </div>
@@ -175,22 +132,23 @@ export function CalendarScreen() {
             </p>
           </aside>
 
-          {/* Middle — month calendar */}
           <section className="col-span-12 md:col-span-6 border-r border-border/60 px-8 py-7">
             <div className="flex items-center justify-between mb-5">
               <div className="text-[16px] font-semibold tracking-tight">{monthLabel}</div>
               <div className="flex items-center gap-1">
                 <button
+                  type="button"
                   onClick={() => navMonth(-1)}
                   aria-label="Previous month"
-                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover"
+                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => navMonth(1)}
                   aria-label="Next month"
-                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover"
+                  className="grid h-8 w-8 place-items-center rounded-full border border-border bg-surface-raised text-foreground/80 hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -198,23 +156,31 @@ export function CalendarScreen() {
             </div>
 
             <div className="grid grid-cols-7 gap-y-2 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/80 mb-3">
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-                <div key={d}>{d}</div>
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                <div key={day}>{day}</div>
               ))}
             </div>
 
             <div className="grid grid-cols-7 gap-y-1.5 text-center">
-              {grid.map((cell, i) => {
-                if (!cell.d) return <div key={i} />;
-                const d = cell.d;
-                const isToday = d === today.getDate() && viewMonth.getMonth() === today.getMonth();
-                const isSelected = d === selectedDay;
-                const hasMeeting = !!bookings[d];
+              {grid.map((cell, index) => {
+                if (!cell.d) return <div key={index} />;
+
+                const day = cell.d;
+                const isToday =
+                  day === today.getDate() && viewMonth.getMonth() === today.getMonth();
+                const isSelected = day === selectedDay;
+                const hasMeeting = Boolean(bookings[day]);
+
                 return (
-                  <div key={i} className="flex flex-col items-center justify-center py-1">
+                  <div key={index} className="flex flex-col items-center justify-center py-1">
                     <button
-                      onClick={() => setSelectedDay(d)}
-                      className={`relative flex h-11 w-11 items-center justify-center rounded-full text-[14px] tabular-nums transition-colors ${
+                      type="button"
+                      onClick={() =>
+                        setSelectedDate(
+                          new Date(viewMonth.getFullYear(), viewMonth.getMonth(), day),
+                        )
+                      }
+                      className={`relative flex h-11 w-11 items-center justify-center rounded-full text-[14px] tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
                         isSelected
                           ? "bg-primary text-primary-foreground font-semibold"
                           : isToday
@@ -222,7 +188,7 @@ export function CalendarScreen() {
                             : "text-foreground/85 hover:bg-state-hover"
                       }`}
                     >
-                      {d}
+                      {day}
                       {hasMeeting && !isSelected && (
                         <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-primary" />
                       )}
@@ -233,17 +199,16 @@ export function CalendarScreen() {
             </div>
           </section>
 
-          {/* Right — time slots / meetings */}
           <section className="col-span-12 md:col-span-3 px-6 py-7 flex flex-col min-h-0">
             <div className="px-2 mb-4">
               <div className="text-[13px] font-semibold tracking-tight">{selectedLabel}</div>
               <div className="text-[11px] text-muted-foreground mt-0.5">
-                {dayMeetings.length} booked · {TIME_SLOTS.length - bookedSet.size} open
+                {dayMeetings.length} booked - {TIME_SLOTS.length - bookedSet.size} open
               </div>
             </div>
             <div className="flex-1 overflow-y-auto pr-1 space-y-2">
-              {TIME_SLOTS.map((slot) => {
-                const meeting = dayMeetings.find((m) => m.time === slot);
+              {visibleSlots.map((slot) => {
+                const meeting = dayMeetings.find((item) => item.time === slot);
                 if (meeting) {
                   return (
                     <div
@@ -280,10 +245,12 @@ export function CalendarScreen() {
                     </div>
                   );
                 }
+
                 return (
                   <button
                     key={slot}
-                    className="w-full h-10 px-3 rounded-lg border border-border text-[12.5px] font-medium tabular-nums text-foreground/85 hover:border-primary/40 hover:bg-state-hover transition-colors text-left"
+                    type="button"
+                    className="w-full h-10 px-3 rounded-lg border border-border text-[12.5px] font-medium tabular-nums text-foreground/85 hover:border-primary/40 hover:bg-state-hover transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                   >
                     {slot}
                   </button>

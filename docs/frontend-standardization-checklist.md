@@ -83,14 +83,14 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 6. State And Data Patterns
 
-- [ ] Standardize URL search params for filters, tabs, sorting, and pagination.
-- [ ] Apply URL state to CRM search/filter/stage selection.
-- [ ] Apply URL state to Inbox views where useful.
-- [ ] Apply URL state to Calendar mode/date selection where useful.
-- [ ] Create a shared pattern for persisted user preferences.
-- [ ] Formalize dashboard layout persistence.
-- [ ] Centralize date, currency, number, and relative-time formatting helpers.
-- [ ] Separate mock data from render components.
+- [x] Standardize URL search params for filters, tabs, sorting, and pagination. Added `src/lib/url-search-params.ts` with typed string, enum, integer, and date readers.
+- [x] Apply URL state to CRM search/filter/stage selection. CRM validates and drives `q` and `stage` from route search state.
+- [x] Apply URL state to Inbox views where useful. Inbox validates and drives `folder` (label only — no per-folder fixture data yet), `thread`, and `q` from route search state.
+- [x] Apply URL state to Calendar mode/date selection where useful. Calendar now validates and drives `date` and `mode` from route search state.
+- [x] Create a shared pattern for persisted user preferences. Added `usePersistentPreference` in `src/lib/preferences.ts`.
+- [x] Formalize dashboard layout persistence. Added dashboard preference/layout keys plus layout read/write/clear helpers in `features/dashboard/layout/persistence.ts`.
+- [x] Centralize date, currency, number, and relative-time formatting helpers. Added `src/lib/formatters.ts`; CRM AUM and calendar date labels now use it.
+- [x] Separate mock data from render components. CRM, Inbox, Calendar, Channels, Syra, and Dashboard data now live in feature-local fixture/data modules where practical.
 
 ## 7. Visual Consistency
 

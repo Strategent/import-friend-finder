@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { GridStack, GridStackOptions } from "gridstack";
 // gridstack base CSS is imported in styles.css (before our Origin overrides).
 import { cn } from "@/lib/utils";
+import { clearDashboardLayout, readDashboardLayout, writeDashboardLayout } from "./persistence";
 
 /** Drag/resize is disabled and cards stack below this viewport width. */
 const STATIC_QUERY = "(max-width: 1023px)";
@@ -101,12 +102,8 @@ function BentoGridStackImpl({
       const defaultLayout = grid.save(false);
 
       // Restore a previously saved layout (positions only; match by id).
-      try {
-        const raw = localStorage.getItem(storageKey);
-        if (raw) grid.load(JSON.parse(raw), false);
-      } catch {
-        /* ignore malformed/absent layout */
-      }
+      const savedLayout = readDashboardLayout<Parameters<typeof grid.load>[0]>(storageKey);
+      if (savedLayout) grid.load(savedLayout, false);
 
       // Apple-like default: always start cleanly stacked — no incongruent
       // gaps inherited from a previous layout or an out-of-date seed.
@@ -118,11 +115,7 @@ function BentoGridStackImpl({
       }
 
       const persist = () => {
-        try {
-          localStorage.setItem(storageKey, JSON.stringify(grid.save(false)));
-        } catch {
-          /* storage may be unavailable */
-        }
+        writeDashboardLayout(storageKey, grid.save(false));
       };
       // Compact after every change so reordering/resizing never leaves
       // empty rows above an item — cards always shift up to maintain
@@ -178,11 +171,7 @@ function BentoGridStackImpl({
 
       // Reset to the default layout (and clear storage) on demand — no reload.
       const onReset = () => {
-        try {
-          localStorage.removeItem(storageKey);
-        } catch {
-          /* ignore */
-        }
+        clearDashboardLayout(storageKey);
         grid.load(defaultLayout as Parameters<typeof grid.load>[0], false);
       };
       window.addEventListener("bento:reset", onReset);

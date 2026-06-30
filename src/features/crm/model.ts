@@ -1,4 +1,5 @@
 import type { StatusBadgeVariant } from "@/components/app";
+import { formatCompactCurrency } from "@/lib/formatters";
 import type { Client, Stage, StageFilter } from "./types";
 
 export const STAGES: StageFilter[] = [
@@ -11,6 +12,10 @@ export const STAGES: StageFilter[] = [
 ];
 
 export const stageOptions = STAGES.map((stage) => ({ value: stage, label: stage }));
+export const CRM_DEFAULT_SEARCH = {
+  q: "",
+  stage: "All" as StageFilter,
+};
 
 export const stageVariant: Record<Stage, StatusBadgeVariant> = {
   Lead: "lead",
@@ -21,9 +26,7 @@ export const stageVariant: Record<Stage, StatusBadgeVariant> = {
 };
 
 export function formatAum(value: number) {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}k`;
-  return `$${value}`;
+  return formatCompactCurrency(value);
 }
 
 export function filterClients(clients: Client[], query: string, stage: StageFilter) {

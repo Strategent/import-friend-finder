@@ -1,20 +1,12 @@
 import { useState } from "react";
 import { Send, X, Bot } from "lucide-react";
 import { SyraMark } from "@/features/syra/components/syra-mark";
-
-type Msg = { role: "syra" | "user"; text: string };
-
-const seed: Msg[] = [
-  {
-    role: "syra",
-    text: "Hey John — three drafts are waiting in the inbox, and the Hartley Trust review is your top priority today.",
-  },
-];
+import { seedMessages, type SyraMessage } from "../fixtures";
 
 export function SyraChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [msgs, setMsgs] = useState<Msg[]>(seed);
+  const [msgs, setMsgs] = useState<SyraMessage[]>(seedMessages);
 
   const send = () => {
     const t = input.trim();

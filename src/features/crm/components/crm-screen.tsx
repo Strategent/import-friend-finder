@@ -3,18 +3,25 @@ import { PageBandHeader, PageBody, PageSurface, PageToolbar } from "@/app/shell/
 import { SyraChatWidget } from "@/features/syra/components/syra-chat-widget";
 import { clients } from "../fixtures";
 import { filterClients, getCrmTotals } from "../model";
-import type { StageFilter } from "../types";
+import type { CrmSearch } from "../types";
 import { CrmHeaderActions } from "./crm-header-actions";
 import { CrmStats } from "./crm-stats";
 import { CrmTable } from "./crm-table";
 import { CrmToolbar } from "./crm-toolbar";
 
-export function CrmScreen() {
-  const [query, setQuery] = useState("");
-  const [stage, setStage] = useState<StageFilter>("All");
+export function CrmScreen({
+  search,
+  onSearchChange,
+}: {
+  search: CrmSearch;
+  onSearchChange: (search: Partial<CrmSearch>) => void;
+}) {
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
-  const filtered = useMemo(() => filterClients(clients, query, stage), [query, stage]);
+  const filtered = useMemo(
+    () => filterClients(clients, search.q, search.stage),
+    [search.q, search.stage],
+  );
   const totals = useMemo(() => getCrmTotals(clients, filtered), [filtered]);
 
   const allChecked = filtered.length > 0 && filtered.every((client) => selected.has(client.id));
@@ -55,11 +62,11 @@ export function CrmScreen() {
         <CrmStats {...totals} />
         <PageToolbar>
           <CrmToolbar
-            query={query}
-            stage={stage}
+            query={search.q}
+            stage={search.stage}
             selectedCount={selected.size}
-            onQueryChange={setQuery}
-            onStageChange={setStage}
+            onQueryChange={(q) => onSearchChange({ q })}
+            onStageChange={(stage) => onSearchChange({ stage })}
           />
         </PageToolbar>
         <PageBody>
