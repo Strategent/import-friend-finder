@@ -167,13 +167,16 @@ function RootComponent() {
         <SidebarProvider>
           <div className="min-h-screen flex w-full bg-background text-foreground">
             <div
+              aria-hidden="true"
               className="pointer-events-none fixed inset-0 opacity-0 dark:opacity-40"
               style={{
                 background:
                   "radial-gradient(60% 50% at 20% 0%, oklch(0.3 0.15 270 / 0.35), transparent), radial-gradient(40% 40% at 100% 30%, oklch(0.3 0.18 295 / 0.25), transparent)",
               }}
             />
-            <AppSidebar />
+            <nav aria-label="Primary navigation">
+              <AppSidebar />
+            </nav>
             <div className="relative flex-1 min-w-0 flex flex-col">
               <Topbar />
               <main className="flex-1 min-w-0">

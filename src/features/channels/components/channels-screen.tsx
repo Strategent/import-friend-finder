@@ -149,7 +149,10 @@ export function ChannelsScreen() {
         </aside>
 
         {/* Main pane */}
-        <main className="col-span-12 flex min-w-0 flex-col bg-background text-foreground md:col-span-9 lg:col-span-9">
+        <section
+          className="col-span-12 flex min-w-0 flex-col bg-background text-foreground md:col-span-9 lg:col-span-9"
+          aria-label="Channel detail"
+        >
           {/* Channel header */}
           <div className="flex items-center justify-between border-b border-border px-5 py-3">
             <div className="flex items-center gap-2 min-w-0">
@@ -277,7 +280,7 @@ export function ChannelsScreen() {
               Tip: type <span className="font-semibold">@Syra</span> to delegate a task.
             </div>
           </div>
-        </main>
+        </section>
       </div>
     </div>
   );

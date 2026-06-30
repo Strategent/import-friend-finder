@@ -88,12 +88,14 @@ export function InboxCard() {
         {(["focused", "other"] as const).map((t) => (
           <button
             key={t}
+            type="button"
             onClick={() => setTab(t)}
+            aria-pressed={tab === t}
             className={`relative h-6 px-2.5 text-[12px] font-medium capitalize transition-colors ${
               tab === t ? "text-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            {t === "other" ? "\n" : t}
+            {t}
             {tab === t && (
               <span className="absolute -bottom-[8px] left-2.5 right-2.5 h-[2px] rounded-full bg-primary" />
             )}
@@ -110,6 +112,7 @@ export function InboxCard() {
             return (
               <button
                 key={m.originalIndex}
+                type="button"
                 onClick={() => setSelected(i)}
                 className={`relative flex items-start gap-2.5 px-3 py-1.5 text-left transition-colors ${
                   active ? "bg-state-selected" : "hover:bg-state-hover"
@@ -163,6 +166,7 @@ export function InboxCard() {
               {e.subject}
             </h2>
             <button
+              type="button"
               aria-label="Flag"
               className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"
             >
@@ -222,7 +226,10 @@ export function InboxCard() {
                 <span>
                   Reply to <span className="text-foreground/80">{e.sender.split(" ")[0]}</span>
                 </span>
-                <button className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
+                >
                   <Paperclip className="h-3 w-3" /> IPS_v3.pdf
                 </button>
               </div>
@@ -252,6 +259,7 @@ export function InboxCard() {
 function IconBtn({ icon: Icon, label }: { icon: typeof Reply; label: string }) {
   return (
     <button
+      type="button"
       aria-label={label}
       title={label}
       className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-state-hover hover:text-foreground"

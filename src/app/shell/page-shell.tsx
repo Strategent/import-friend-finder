@@ -25,7 +25,7 @@ export function Topbar() {
     ? now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })
     : "—";
   return (
-    <div className="sticky top-0 z-20 border-b border-border/60 bg-chrome backdrop-blur-xl">
+    <header className="sticky top-0 z-20 border-b border-border/60 bg-chrome backdrop-blur-xl">
       {/* Fixed height so flush page surfaces can subtract it reliably via the
           --topbar-h token. Keep this height and --topbar-h in src/styles/tokens.css
           in sync (60px row + 1px border = 61px). */}
@@ -95,7 +95,7 @@ export function Topbar() {
           <Bell className="h-4 w-4" />
         </Button>
       </div>
-    </div>
+    </header>
   );
 }
 

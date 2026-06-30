@@ -16,6 +16,7 @@ import { Route as SupportRouteImport } from './routes/support'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as ConnectorsRouteImport } from './routes/connectors'
 import { Route as ChannelsRouteImport } from './routes/channels'
@@ -57,6 +58,11 @@ const InboxRoute = InboxRouteImport.update({
 const DocumentsRoute = DocumentsRouteImport.update({
   id: '/documents',
   path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmRoute = CrmRouteImport.update({
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/channels': typeof ChannelsRoute
   '/connectors': typeof ConnectorsRoute
   '/crm': typeof CrmRoute
+  '/design-system': typeof DesignSystemRoute
   '/documents': typeof DocumentsRoute
   '/inbox': typeof InboxRoute
   '/settings': typeof SettingsRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/channels': typeof ChannelsRoute
   '/connectors': typeof ConnectorsRoute
   '/crm': typeof CrmRoute
+  '/design-system': typeof DesignSystemRoute
   '/documents': typeof DocumentsRoute
   '/inbox': typeof InboxRoute
   '/settings': typeof SettingsRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/channels': typeof ChannelsRoute
   '/connectors': typeof ConnectorsRoute
   '/crm': typeof CrmRoute
+  '/design-system': typeof DesignSystemRoute
   '/documents': typeof DocumentsRoute
   '/inbox': typeof InboxRoute
   '/settings': typeof SettingsRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/channels'
     | '/connectors'
     | '/crm'
+    | '/design-system'
     | '/documents'
     | '/inbox'
     | '/settings'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/channels'
     | '/connectors'
     | '/crm'
+    | '/design-system'
     | '/documents'
     | '/inbox'
     | '/settings'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/channels'
     | '/connectors'
     | '/crm'
+    | '/design-system'
     | '/documents'
     | '/inbox'
     | '/settings'
@@ -203,6 +215,7 @@ export interface RootRouteChildren {
   ChannelsRoute: typeof ChannelsRoute
   ConnectorsRoute: typeof ConnectorsRoute
   CrmRoute: typeof CrmRoute
+  DesignSystemRoute: typeof DesignSystemRoute
   DocumentsRoute: typeof DocumentsRoute
   InboxRoute: typeof InboxRoute
   SettingsRoute: typeof SettingsRoute
@@ -261,6 +274,13 @@ declare module '@tanstack/react-router' {
       path: '/documents'
       fullPath: '/documents'
       preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm': {
@@ -323,6 +343,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChannelsRoute: ChannelsRoute,
   ConnectorsRoute: ConnectorsRoute,
   CrmRoute: CrmRoute,
+  DesignSystemRoute: DesignSystemRoute,
   DocumentsRoute: DocumentsRoute,
   InboxRoute: InboxRoute,
   SettingsRoute: SettingsRoute,

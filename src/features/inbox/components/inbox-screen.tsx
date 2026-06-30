@@ -198,7 +198,7 @@ export function InboxScreen({
           </div>
         </section>
 
-        <main className="flex-1 flex flex-col min-w-0 bg-background">
+        <section className="flex-1 flex flex-col min-w-0 bg-background" aria-label="Thread detail">
           <div className="h-12 px-4 flex items-center justify-between border-b border-border/60">
             <div className="flex items-center gap-1">
               <ToolbarBtn icon={Archive} label="Archive" />
@@ -255,7 +255,7 @@ export function InboxScreen({
 
             <ComposeWindow selectedFrom={selected.from} selectedSubject={selected.subject} />
           </div>
-        </main>
+        </section>
       </div>
       <SyraChatWidget />
     </>

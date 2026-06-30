@@ -7,7 +7,7 @@ import { ClientRowActions } from "./client-row-actions";
 const columns: DataTableColumn<Client>[] = [
   {
     id: "starred",
-    header: "",
+    header: <span className="sr-only">Starred</span>,
     className: "w-6",
     headerClassName: "w-6",
     cell: (client) => (

@@ -106,14 +106,14 @@ Use this checklist to track the frontend cleanup and design-system work. The int
 
 ## 8. Testing And Tooling
 
-- [ ] Fix existing Fast Refresh lint warnings or document acceptable exceptions.
-- [ ] Add Playwright smoke tests for key routes.
-- [ ] Add visual regression screenshots for CRM, Inbox, Calendar, Channels, Dashboard.
-- [ ] Add axe accessibility checks.
-- [ ] Add a design-system/component catalog, likely Storybook or a local docs route.
-- [ ] Add tests for URL-state behavior.
-- [ ] Add tests for core table/filter interactions.
-- [ ] Track bundle/chunk warnings and decide whether to split large route chunks.
+- [x] Fix existing Fast Refresh lint warnings or document acceptable exceptions. Documented accepted warnings in `docs/frontend-testing-and-tooling.md`.
+- [x] Add Playwright smoke tests for key routes.
+- [x] Add visual regression screenshots for CRM, Inbox, Calendar, Channels, Dashboard.
+- [x] Add axe accessibility checks.
+- [x] Add a design-system/component catalog, likely Storybook or a local docs route. Added `/design-system`.
+- [x] Add tests for URL-state behavior.
+- [x] Add tests for core table/filter interactions.
+- [x] Track bundle/chunk warnings and decide whether to split large route chunks. Documented the current build warning and deferred route-level splitting in `docs/frontend-testing-and-tooling.md`.
 
 ## 9. Definition Of Done
 

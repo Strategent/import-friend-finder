@@ -32,6 +32,7 @@ export function PlannerCard() {
           >
             <Checkbox
               checked={t.done}
+              aria-label={`Toggle planner item: ${t.label}`}
               className="h-4 w-4 rounded-full border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
             />
             <div
@@ -188,7 +189,10 @@ export function DocumentsCard() {
               </div>
               <div className="mt-0.5 text-[9.5px] text-muted-foreground">{d.uses} uses</div>
             </div>
-            <button className="mt-2 h-6 self-stretch rounded-md bg-primary text-[10px] font-semibold text-primary-foreground hover:bg-primary/90">
+            <button
+              type="button"
+              className="mt-2 h-6 self-stretch rounded-md bg-primary text-[10px] font-semibold text-primary-foreground hover:bg-primary/90"
+            >
               Autofill
             </button>
           </div>
